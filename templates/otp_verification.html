@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify OTP</title>
+     <style>
+        body, html {
+            min-height: 2000px;
+        }
+
+        header {
+            min-height: 150px; /* Increase the height of the header */
+            padding-left: 200px;
+            display: flex;
+            align-items: center; /* Vertically center the header content */
+        }
+
+        .main-body {
+            margin-top: 50px; /* Add space from the top to the body content */
+            margin-left: 200px;
+        }
+
+        /* Styling for the input elements */
+        input[type="text"]
+        {
+            background-color: lightgray;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            width: 300px; /* Increase the width of the text boxes */
+        }
+
+        /* Styling for the email and password labels */
+
+        label[for="otp"] {
+            color: gray;
+            margin-right: 10px;
+        }
+
+        /* Styling for the login button */
+        button[type="submit"] {
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .cart-icon{margin-right: 10px; }
+        /* Style for the link texts */
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+         .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Hover effect for link texts */
+        a:hover {
+            text-decoration: underline;
+            background-color: red;
+
+        }
+    </style>
+</head>
+<body>
+<header>
+    <i class="fa fa-shopping-cart cart-icon" style="font-size: 48px; color: red;"></i>
+    <span style="color: black; font-weight: bold; font-size: 36px; font-family: cursive;">   Shopwise</span>
+</header>
+   <div class="main-body">
+            <h2 class="title text-center">Verify OTP</h2>
+                <form id="otpForm" method="post" action="/verify_otp">
+                    {% csrf_token %}
+                    <label for="otp" >Enter OTP:</label>
+                    <input type="text"  name="otp" id="otp" required><br>
+
+                    <input type="submit"  value="Verify">
+                </form>
+   </div>
+
+</body>
+</html>

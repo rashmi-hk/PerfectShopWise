@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ed1c06d3-2bd8-42aa-9589-70d7a996d0cb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../base_project/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../flask_project/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../puresite/Onefile/analize_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../puresite/Onefile/circularlinklist.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../puresite/Onefile/doublelinklist.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../puresite/notification_resturant/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../puresite/notification_resturant/notification.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/django.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/errors.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/menu_app/api/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/menu_app/api/views/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/menu_app/api/views/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/menu_app/api/views/utils/email_helper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/menu_app/async_tasks/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/restaurants/celery.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/restaurants/settings/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/restaurants/settings/base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/restaurants/settings/development.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/restaurants/settings/production.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../restaurants/restaurants_app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../base_project/base_project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../base_project/base_project/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../base_project/django.log" beforeDir="false" afterPath="$PROJECT_DIR$/../../base_project/django.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/GetAccountSettingProductData.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/GetAccountSettingProductData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/Onefile/BedtimeNotification.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/Onefile/BedtimeNotification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/Onefile/daily_quota_phase2" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/Onefile/daily_quota_phase2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/Onefile/notification whitelist.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/Onefile/notification whitelist.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/Onefile/ticktok" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/Onefile/ticktok" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/Onefile/whats new popup.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/Onefile/whats new popup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/ajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/ajax.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/aparna.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/aparna.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/arentAppSettingAppTime.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/arentAppSettingAppTime.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/bedtime_binary.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/bedtime_binary.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/bitwise.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/bitwise.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/bootstrapo_popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/bootstrapo_popup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/buildjson.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/buildjson.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/changeAccountPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/changeAccountPassword.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/checkbox28.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/checkbox28.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/checkboxCheck.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/checkboxCheck.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/comp.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/comp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/copm.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/copm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/correct_ajax.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/correct_ajax.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/correct_html_child_code.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/correct_html_child_code.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/correctjson" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/correctjson" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/dailyquata.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/dailyquata.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/db_backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/db_backend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/enforceappbyticks.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/enforceappbyticks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/getBedTime.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/getBedTime.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/getwebfilter30.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/getwebfilter30.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/getwebfilter_code" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/getwebfilter_code" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/getwebfilter_rashmi.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/getwebfilter_rashmi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/jan16.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/jan16.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/javascript31oct.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/javascript31oct.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/nov3_javascript.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/nov3_javascript.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/p1.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/p1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/parenttimesettingapptime_sep11_js.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/parenttimesettingapptime_sep11_js.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/popup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/practice.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/practice.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/proddb_update.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/proddb_update.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/psaccount_rashmi_new2.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/psaccount_rashmi_new2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/psaccountproduct_rashmi_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/psaccountproduct_rashmi_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/python_script_childsetting" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/python_script_childsetting" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/rrr.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/rrr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/second_parentapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/second_parentapp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/set_bedtime_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/set_bedtime_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/start.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/start.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/appTime_24.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/appTime_24.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/apptimezair.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/apptimezair.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/bedTimeNotification.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/bedTimeNotification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/checkapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/checkapp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/display.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/display.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/interview.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/interview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/javascript_checkbox_8nov.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/javascript_checkbox_8nov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/js/appinfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/js/appinfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/js/start_js.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/js/start_js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/output_parrentappapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/output_parrentappapi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/static/setdailyquata.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/static/setdailyquata.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/time.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/time.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/timeappicationpopup.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/timeappicationpopup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/track_catagory_event.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/track_catagory_event.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../puresite/validateAccountPassCode.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../puresite/validateAccountPassCode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../redbus/redbusapps/api/views/bus.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../redbus/redbusapps/api/views/bus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../redbus/redbusapps/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../redbus/redbusapps/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../redbus/redbusapps/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../redbus/redbusapps/urls.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="2Sp7eV4v2x5efcTdxJmnTtPgP8a" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/home/rashmihk/work/Clothing_ecommerce",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ed1c06d3-2bd8-42aa-9589-70d7a996d0cb" name="Changes" comment="" />
+      <created>1689831763566</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1689831763566</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
