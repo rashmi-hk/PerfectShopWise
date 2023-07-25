@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f0f0f0;
+      padding: 10px;
+    }
+
+    .serch_bar{
+      style: padding-left:70px;
+      }
+
+
+    .top-bar .cart-and-search {
+      display: flex;
+      align-items: center;
+    }
+    .top-bar .cart-icon {
+      font-size: 24px;
+      color: red;
+      margin-right: 10px;
+    }
+    .shop-logo {
+      color: black;
+      font-weight: bold;
+      font-size: 24px;
+      font-family: cursive;
+    }
+    .search-input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-right: 10px;
+      padding-left: 10px;
+    }
+    .search-button {
+      padding: 6px 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .nav-bar {
+      background-color: black;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: #f0f0f0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .red-footer {
+      background-color: red;
+      color: white;
+    }
+    /* New CSS for language-and-wishlist */
+    .language-and-wishlist {
+      display: flex;
+      align-items: center;
+    }
+    .language-and-wishlist a {
+      color: black;
+      text-decoration: none;
+      padding: 5px 10px;
+      margin-right: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+     .language-and-currency-bar {
+      background-color: white;
+      color: black;
+      text-align: center;
+      padding: 5px 0;
+      margin: 8px;
+    }
+    .language-and-currency-bar a {
+      color: black;
+      text-decoration: none;
+      padding: 5px 10px;
+      margin: 0 5px;
+    }
+    .wishlist-and-language {
+      display: flex;
+      align-items: center;
+    }
+    .wishlist-and-language a {
+      color: black;
+      text-decoration: none;
+      padding: 5px 10px;
+      margin-right: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="language-and-currency-bar">
+    <a href="#">English</a>
+    <a href="#">USD</a>
+  </div>
+  <div class="top-bar">
+    <div class="cart-and-search">
+      <i class="fa fa-shopping-cart cart-icon"></i>
+      <span class="shop-logo">Shopwise</span>
+<!--      <input type="text" class="search-input" placeholder="Search...">-->
+      <div class="serch_bar"  style="padding-left:70px;">
+      <input type="text" class="search-input" placeholder="Search..." list="suggestions">
+        </div>
+      <datalist id="suggestions">
+        <option value="Suggestion 1">
+        <option value="Suggestion 2">
+        <option value="Suggestion 3">
+        <!-- Add more suggestions as needed -->
+      </datalist>
+      <button class="search-button">Search</button>
+    </div>
+    <div class="language-and-wishlist">
+
+      <a href="#">Wishlist</a>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <a href="#">Home</a>
+    <a href="#">About Us</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Blog</a>
+    <a href="#">Products</a>
+  </div>
+
+  <!-- Your Main Content Goes Here -->
+
+  <div class="footer red-footer">
+    <div>Red Footer</div>
+    <div class="black-footer">Black Footer</div>
+  </div>
+
+</body>
+</html>
