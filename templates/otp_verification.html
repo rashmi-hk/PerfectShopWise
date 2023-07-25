@@ -7,7 +7,9 @@
         body, html {
             min-height: 2000px;
         }
-
+  .error-message {
+            color: red;
+        }
 .submit-button {
 
                 background-color: red;
@@ -73,6 +75,12 @@
 
         }
     </style>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.alert-error').fadeOut(4000);
+        });
+    </script>
 </head>
 <body>
 <header>
@@ -85,10 +93,70 @@
                     {% csrf_token %}
                     <label for="otp" >Enter OTP :</label>
                     <input type="text"  name="otp" id="otp" required><br>
-
-                    <input type="submit" class="submit-button" value="Verify">
+                     <input type="hidden" name="email" id="email"   value="{{ email }}">
+                    <input type="submit" onclick="sendOtp('{{email}}')" class="submit-button" value="Verify">
                 </form>
+       {% if error_message %}
+        <p class="error-message alert-error">{{ error_message }}</p>
+    {% endif %}
    </div>
 
 </body>
+<script>
+
+
+    function sendOtp(email) {
+            console.log("email",email)
+
+            // Create a form dynamically
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/verify_otp';
+
+            // Create an input field for the table name
+            var inputEmail = document.createElement('input');
+            inputEmail.type = 'hidden';
+            inputEmail.name = 'email';
+            inputEmail.value = email;
+
+            // Append the input fields to the form
+            form.appendChild(inputEmail);
+
+            // Append the form to the document
+            document.body.appendChild(form);
+
+            // Prevent the default form submission behavior
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                sendOtp(form);
+            });
+
+            // Submit the form asynchronously
+            function sendOtpAsync(form) {
+                // Send a POST request to the varify otp API
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    // Check if the response was successful
+                    if (response.ok) {
+                        // Redirect to image.html
+                        window.location.href = 'image.html';
+                    } else {
+                        // Handle unsuccessful response if needed
+                        console.error('Error otp sent:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error otp sent', error);
+                });
+            }
+
+            // Submit the form
+            form.submit();
+        }
+
+</script>
 </html>

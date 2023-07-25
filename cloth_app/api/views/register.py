@@ -36,46 +36,40 @@ class RegisterAPIList(APIView):
     def post(self,request):
         print("Inside sign up post", request)
         print("Inside sign up", request.data)
-        if request.data:
-            print("****", request.data["username"])
-            otp = get_random_string(length=6, allowed_chars='1234567890')
-            password = request.data["password"]
-            username = request.data["username"]
-            email = request.data["email"]
-            phone_number = request.data["phone_number"]
-            address = request.data["address"]
-            otp = otp
+        try:
+            if request.data:
+                print("****", request.data["username"])
+                otp = get_random_string(length=6, allowed_chars='1234567890')
+                password = request.data["password"]
+                username = request.data["username"]
+                email = request.data["email"]
+                phone_number = request.data["phone_number"]
+                address = request.data["address"]
+                otp = otp
+
+                check_existence = CustomUser.objects.filter(email=email).first()
+                if not check_existence:
+                    # Assuming 'user_dict' contains the necessary user information including 'email'
+                    user = CustomUser.objects.create_user(username=username, email=email,
+                                                          password=password,otp=otp,phone_number=phone_number,address=address)
+
+                    print("db save password",user.password)
 
 
-            # Assuming 'user_dict' contains the necessary user information including 'email'
-            user = CustomUser.objects.create_user(username=username, email=email,
-                                                  password=password,otp=otp,phone_number=phone_number,address=address)
+                    # Send email with OTP
+                    subject = 'Verify your email'
+                    message = f'Your OTP is {otp}'
+                    from_email = config('email_from')
+                    recipient_list = [email]
+                    send_mail(subject, message, from_email, recipient_list)
+                    # Redirect to verify page
+                    context = {"email": email}
+                    return render(request, 'otp_verification.html', context)
+                else:
+                    error_message = 'CustomUser with this email id already exist,Please try with different one'
+                    return render(request, 'sign_up.html', {'error_message': error_message})
+        except  Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
-            print("db save password",user.password)
-            # print("Created customer")
-            # # to create a token
-            # try:
-            #     token = Token.objects.get(user=user)
-            #     print("token get",token)
-            # except Token.DoesNotExist:
-            #     token = Token(user=user)
-            #     print("token create", token)
-            #
-            # token.key = secrets.token_urlsafe(32)
-            # token.created = timezone.now()
-            # token.expires = token.created + timedelta(days=7)
-            # token.save()
 
-            # Send email with OTP asynchronously
-
-            # Send email with OTP
-            subject = 'Verify your email'
-            message = f'Your OTP is {otp}'
-            from_email = config('email_from')
-            recipient_list = [email]
-            send_mail(subject, message, from_email, recipient_list)
-            # Redirect to verify page
-
-            return render(request, 'otp_verification.html')
-
-        # return HttpResponse('Notification sent successfully')
+# return HttpResponse('Notification sent successfully')

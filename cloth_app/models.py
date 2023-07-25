@@ -34,6 +34,80 @@ class CustomUser(AbstractUser, PermissionsMixin):
     class Meta:
         db_table = 'CustomUser'
 
+class Categories(models.Model):
+    categoryName = models.CharField(max_length=255)
+    category_img = CloudinaryField(blank=True)
+
+    def __str__(self):
+        return self.categoryName
+
+    class Meta:
+        managed = True
+        db_table = 'categories'
+
+class Product(models.Model):
+    GENDER_CHOICES = (
+        ('G', 'Girls'),
+        ('B', 'Boys'),
+        ('K', 'Kids'),
+    )
+    name = models.CharField(max_length=200)
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    images = models.ManyToManyField('ProductImage', blank=True, related_name='products_with_images')
+    variants = models.ManyToManyField('ProductVariant', blank=True, related_name='products_with_variants')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='G')  # Default to 'Girls'
+
+    def __str__(self):
+        return self.name
+
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    size_choices = (
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+        ('XL', 'Extra Large'),
+    )
+    size = models.CharField(max_length=2, choices=size_choices)
+    color = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.product.name} - Size: {self.get_size_display()}, Color: {self.color}"
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image =CloudinaryField(blank=True)
+
+    def __str__(self):
+        return f"Image for {self.product.name}"
+
+
+class Inventory(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    in_stock = models.PositiveIntegerField(default=0)
+    out_stock = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Inventory for {self.product.name}"
+
+class Order(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    products = models.ManyToManyField(ProductVariant, through='OrderItem')
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    is_ordered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Order #{self.id} - CustomUser: {self.user.username}"
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product_variant.product.name} - Size: {self.product_variant.get_size_display()}, Color: {self.product_variant.color} in Order #{self.order.id}"
 
 
 # Create your models here.
