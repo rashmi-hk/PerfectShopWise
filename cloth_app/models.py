@@ -35,8 +35,15 @@ class CustomUser(AbstractUser, PermissionsMixin):
         db_table = 'CustomUser'
 
 class Categories(models.Model):
+    GENDER_CHOICES = (
+        ('M', 'Men'),
+        ('W', 'Women'),
+        ('K', 'Kids'),
+    )
     categoryName = models.CharField(max_length=255)
     category_img = CloudinaryField(blank=True)
+    subcategories = models.ManyToManyField('Subcategory', blank=True, related_name='Subcategory_detail')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='K')
 
     def __str__(self):
         return self.categoryName
@@ -44,6 +51,20 @@ class Categories(models.Model):
     class Meta:
         managed = True
         db_table = 'categories'
+
+
+class Subcategory(models.Model):
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    subcategoryName = models.CharField(max_length=255)
+    sub_category_img = CloudinaryField(blank=True)
+
+    def __str__(self):
+        return self.subcategoryName
+
+    class Meta:
+        managed = True
+        db_table = 'subcategories'
+
 
 class Product(models.Model):
     GENDER_CHOICES = (
@@ -53,14 +74,21 @@ class Product(models.Model):
     )
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    subcategoryName = models.ForeignKey(Subcategory, on_delete=models.CASCADE, default=None)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     images = models.ManyToManyField('ProductImage', blank=True, related_name='products_with_images')
     variants = models.ManyToManyField('ProductVariant', blank=True, related_name='products_with_variants')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='G')  # Default to 'Girls'
+    offer = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,
+                                help_text="Discount percentage for the offer")
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        managed = True
+        db_table = 'product'
 
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -72,9 +100,14 @@ class ProductVariant(models.Model):
     )
     size = models.CharField(max_length=2, choices=size_choices)
     color = models.CharField(max_length=50)
+    quantity = models.IntegerField(null=True, blank=False, default=1)
 
     def __str__(self):
         return f"{self.product.name} - Size: {self.get_size_display()}, Color: {self.color}"
+
+    class Meta:
+        managed = True
+        db_table = 'product_variant'
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -82,6 +115,9 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
+
+    class Meta:
+        db_table = 'product_image'
 
 
 class Inventory(models.Model):
@@ -92,6 +128,10 @@ class Inventory(models.Model):
     def __str__(self):
         return f"Inventory for {self.product.name}"
 
+    class Meta:
+        managed = True
+        db_table = 'inventory'
+
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     products = models.ManyToManyField(ProductVariant, through='OrderItem')
@@ -101,6 +141,10 @@ class Order(models.Model):
     def __str__(self):
         return f"Order #{self.id} - CustomUser: {self.user.username}"
 
+    class Meta:
+        managed = True
+        db_table = 'order'
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
@@ -109,5 +153,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.quantity} x {self.product_variant.product.name} - Size: {self.product_variant.get_size_display()}, Color: {self.product_variant.color} in Order #{self.order.id}"
 
-
+    class Meta:
+        managed = True
+        db_table = 'orderitem'
 # Create your models here.

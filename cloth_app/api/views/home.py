@@ -22,12 +22,12 @@ class HomeAPIList(APIView):
 
     def get(self,request):
         print("Inside get homeapi")
-        # return render(request, 'base.html')
+        return render(request, 'base.html')
         # return render(request, 'email_templet.html')
         # return render(request, 'forgot_password.html')
         # return render(request, 'reset_password.html')
         # return render(request, 'index.html')
-        return render(request, 'login.html')
+        # return render(request, 'login.html')
         # return render(request, 'otp_verification.html')
 
     def post(self,request):

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+   {% load static %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body {
@@ -112,6 +113,24 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      padding: 12px 16px;
+      z-index: 1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -142,15 +161,16 @@
   </div>
 
   <div class="nav-bar">
-    <a href="#">Woman</a>
-    <a href="#">Men</a>
-    <a href="#">Kids</a>
+    <a href="http://127.0.0.1:8000/categories/W/">Woman</a>
+    <a href="http://127.0.0.1:8000/categories/M/">Men</a>
+    <a href="http://127.0.0.1:8000/categories/W/">Kids</a>
     <a href="#">About Us</a>
     <a href="#">Contact Us</a>
     <a href="#">Blog</a>
     <a href="#">Products</a>
   </div>
-
+{% block content %}
+  {% endblock %}
   <!-- Your Main Content Goes Here -->
 
   <div class="footer red-footer">

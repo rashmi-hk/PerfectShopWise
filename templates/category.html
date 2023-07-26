@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Categories</title>
+    <style>
+        .category-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Add box shadow */
+        }
+
+        .subcategory-box {
+            display: inline-block;
+            margin-right: 10px;
+            width: 24%;
+            box-sizing: border-box;
+              border-radius: 8px;
+            transition: background-color 0.3s; /* Add transition for smooth effect */
+        }
+
+        .subcategory-box:hover {
+            background-color: #f0f0f0; /* Change the background color on hover */
+        }
+
+        /* Clear the right margin of the last subcategory box in each category */
+        .category-box ul:after {
+            content: "";
+            display: block;
+            clear: right;
+        }
+    </style>
+</head>
+
+<body>
+
+ <form id="productForm" action="{% url 'product_api' %}" method="GET">
+        <input type="hidden" name="main_category" id="mainCategoryIdInput">
+        <input type="hidden" name="sub_category" id="subCategoryIdInput">
+    </form>
+
+    {% for category in categories %}
+        <div class="category-box">
+            <h2>{{ category.categoryName }}</h2>
+            {% if category.category_img %}
+                <!-- Add category image here if available -->
+            {% endif %}
+            <ul>
+                {% for subcategory in category.subcategories %}
+                    {% if subcategory.sub_category_img %}
+                        <div class="subcategory-box" onclick="submitProductForm('{{ category.categoryId }}', '{{ subcategory.subCategoryId }}')">
+<!--                        <div class="subcategory-box" onclick="callProductAPI('{{ category.categoryId }}', '{{ subcategory.subCategoryId }}')">-->
+                            <img src="{{ subcategory.sub_category_img }}" alt="{{ subcategory.subcategoryName }} Image">
+                            <h3>{{ subcategory.subcategoryName }}</h3>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+
+    <!-- JavaScript function to call the product API -->
+   <script>
+        function submitProductForm(mainCategoryId, subCategoryId) {
+            const mainCategoryIdInput = document.getElementById('mainCategoryIdInput');
+            const subCategoryIdInput = document.getElementById('subCategoryIdInput');
+
+            mainCategoryIdInput.value = mainCategoryId;
+            subCategoryIdInput.value = subCategoryId;
+
+            const productForm = document.getElementById('productForm');
+            productForm.submit();
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
