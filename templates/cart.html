@@ -1,0 +1,150 @@
+<!-- cart.html -->
+
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <!-- Add any CSS or external stylesheets here -->
+    <style>
+          .cart-item {
+        /* Define your cart item styles */
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        width: 50%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .quantity-container {
+        /* Make the quantity buttons appear inline */
+        display: flex;
+
+        gap:5px;
+        justify-content: center;
+         align-items:center;
+    }
+
+    .place-order-btn {
+        /* Define your "Place Order" button styles */
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+
+    <div>
+        {% for item in result_list %}
+        <div class="cart-item">
+            <img src="{{ item.images }}" alt="Product Image">
+            <p>Product: {{ item.product }}</p>
+            <p>Variant: {{ item.product_variant }}</p>
+<!--            <p>Quantity: {{ item.quantity }}</p>-->
+            <div class="quantity-container">
+
+             <button class="btn btn-primary" onclick="addItem('{{ item.product_id }}')">+</button>
+                        <p>{{ item.quantity }}</p>
+            <button class="btn btn-primary" onclick="removeItem('{{ item.product_id }}')">-</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Place Order Button -->
+    <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+
+    <!-- Optional: Add any additional content or elements you want -->
+
+    <!-- Add your JavaScript logic here (if required) -->
+    <script>
+        // Define the JavaScript function to handle placing the order
+        function placeOrder(product_id) {
+               // Send a POST request to the cart API
+            fetch('/order', {
+                method: 'POST',
+                body: JSON.stringify({ product_id: product_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error adding item to cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error adding item to cart:', error);
+            });
+        }
+         function addItem(product_id) {
+
+            // Send a POST request to the cart API
+            fetch('/cart', {
+                method: 'PATCH',
+                body: JSON.stringify({ product_id: product_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error adding item to cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error adding item to cart:', error);
+            });
+        }
+
+        function removeItem(product_id) {
+            // Send a DELETE request to the cart API
+            console.log("IN function",product_id)
+            fetch('/cart', {
+                method: 'DELETE',
+                body: JSON.stringify({ product_id: product_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error removing item from cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error removing item from cart:', error);
+            });
+        }
+
+    </script>
+</body>
+</html>
+{% endblock %}

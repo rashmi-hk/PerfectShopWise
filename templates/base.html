@@ -9,6 +9,8 @@
       margin: 0;
       font-family: Arial, sans-serif;
     }
+
+
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -202,29 +204,44 @@
   {% endblock %}
   <!-- Your Main Content Goes Here -->
 
-  <div class="footer red-footer">
-    <div>Red Footer</div>
-    <div class="black-footer">Black Footer</div>
-  </div>
+<!--  <div class="footer red-footer">-->
+<!--    <div>Red Footer</div>-->
+<!--    <div class="black-footer">Black Footer</div>-->
+<!--  </div>-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    // Function to fetch cart count and update the cart icon
-    function updateCartCount() {
-        $.ajax({
-            url: "{% url 'cart' %}",
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                // Update the cart count in the cart icon
-                var cartCount = data.prod_obj;
-                $("#cartCountOverlay").text(cartCount);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching cart count:", error);
-            }
-        });
+   // Set the default headers for AJAX requests
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!settings.crossDomain) {
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        }
     }
+});
+
+// Function to fetch cart count and update the cart icon
+function updateCartCount() {
+    $.ajax({
+        url: "{% url 'cart' %}",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            // Update the cart count in the cart icon
+            var cartCount = data.prod_obj;
+            $("#cartCountOverlay").text(cartCount);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching cart count:", error);
+        }
+    });
+}
+
+// Call the function when the page loads to get the initial cart count
+$(document).ready(function () {
+    updateCartCount();
+});
+
 
     // Call the function when the page loads to get the initial cart count
     $(document).ready(function () {

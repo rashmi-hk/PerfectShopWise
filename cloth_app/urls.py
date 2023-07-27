@@ -4,6 +4,7 @@ from cloth_app.api.views.categories import CategoryAPIList
 from cloth_app.api.views.product_api import ProductAPIList
 from cloth_app.api.views.register import RegisterAPIList
 from cloth_app.api.views.cart import CartAPIList
+from cloth_app.api.views.order import OrderApiView
 from cloth_app.api.views.verify_otp import VerifyOtpAPIList
 # from allauth.account.views import PasswordResetView
 from django.contrib.auth import views as auth_views
@@ -17,6 +18,7 @@ urlpatterns = [
     path('categories/<str:gender>/', CategoryAPIList.as_view() , name='categories'),
     path('product_api/', ProductAPIList.as_view() , name='product_api'),
     path('register', RegisterAPIList.as_view() , name='register'),
+    path('order', OrderApiView.as_view() , name='order'),
     path('cart', CartAPIList.as_view() , name='cart'),
     path('verify_otp', VerifyOtpAPIList.as_view() , name='verify_otp'),
     path('password_reset/',auth_views.PasswordResetView.as_view(template_name='forgot_password.html'),name='password_reset'),

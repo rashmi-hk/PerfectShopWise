@@ -137,9 +137,9 @@ class Inventory(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    products = models.ManyToManyField(ProductVariant, through='OrderItem')
     ordered_date = models.DateTimeField(auto_now_add=True)
     is_ordered = models.BooleanField(default=False)
+    total_price = models.IntegerField(null=False, blank=False)
 
     def __str__(self):
         return f"Order #{self.id} - CustomUser: {self.user.username}"
@@ -162,10 +162,13 @@ class Cart(models.Model):
         db_table = 'cart'
 
 
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    order_item_price = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.quantity} x {self.product_variant.product.name} - Size: {self.product_variant.get_size_display()}, Color: {self.product_variant.color} in Order #{self.order.id}"
