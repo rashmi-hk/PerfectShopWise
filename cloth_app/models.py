@@ -120,6 +120,9 @@ class ProductImage(models.Model):
         db_table = 'product_image'
 
 
+
+
+
 class Inventory(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     in_stock = models.PositiveIntegerField(default=0)
@@ -144,6 +147,20 @@ class Order(models.Model):
     class Meta:
         managed = True
         db_table = 'order'
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
+    quantity = models.IntegerField(null=True, blank=False, default=1)
+    orderid = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    cart_created = models.BooleanField(default=False)
+
+    class Meta:
+        managed = True
+        db_table = 'cart'
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

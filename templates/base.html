@@ -2,6 +2,7 @@
 <html>
 <head>
    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body {
@@ -131,6 +132,28 @@
     .dropdown:hover .dropdown-content {
       display: block;
     }
+    /* New CSS for the cart icon and count */
+  #cartContainer {
+      position: relative;
+    }
+
+    #cartIcon {
+      font-size: 24px;
+      color: red; /* Change the color to red */
+    }
+
+    #cartCountOverlay {
+      position: absolute;
+      top: -10px; /* Reduce the top distance */
+      right: -12px; /* Reduce the right distance */
+      background-color: #ff0000;
+      color: #ffffff;
+      padding: 2px 5px;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
@@ -168,6 +191,12 @@
     <a href="#">Contact Us</a>
     <a href="#">Blog</a>
     <a href="#">Products</a>
+    <div id="cartContainer">
+    <a id="cartLink" href="{% url 'cart' %}">
+            <i id="cartIcon" class="fas fa-shopping-cart"></i>
+            <span id="cartCountOverlay">{{prod_obj}}</span>
+    </a>
+      </div>
   </div>
 {% block content %}
   {% endblock %}
@@ -177,6 +206,30 @@
     <div>Red Footer</div>
     <div class="black-footer">Black Footer</div>
   </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
+    // Function to fetch cart count and update the cart icon
+    function updateCartCount() {
+        $.ajax({
+            url: "{% url 'cart' %}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                // Update the cart count in the cart icon
+                var cartCount = data.prod_obj;
+                $("#cartCountOverlay").text(cartCount);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching cart count:", error);
+            }
+        });
+    }
+
+    // Call the function when the page loads to get the initial cart count
+    $(document).ready(function () {
+        updateCartCount();
+    });
+</script>
 </body>
 </html>

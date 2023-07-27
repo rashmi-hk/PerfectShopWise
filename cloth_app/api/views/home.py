@@ -22,12 +22,12 @@ class HomeAPIList(APIView):
 
     def get(self,request):
         print("Inside get homeapi")
-        return render(request, 'base.html')
+        # return render(request, 'base.html')
         # return render(request, 'email_templet.html')
         # return render(request, 'forgot_password.html')
         # return render(request, 'reset_password.html')
         # return render(request, 'index.html')
-        # return render(request, 'login.html')
+        return render(request, 'login.html')
         # return render(request, 'otp_verification.html')
 
     def post(self,request):
@@ -54,7 +54,7 @@ class HomeAPIList(APIView):
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
                 return_list = []
-            return redirect('cart')
+            return render(request, 'base.html')
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response

@@ -66,22 +66,27 @@ body, ul, li {
     margin-top: 10px;
     margin-bottom: 5px;
 }
+ .image-scroll-container {
+            max-height: 200px; /* Set the maximum height for the scrolling window */
+            overflow: hidden; /* Hide the overflow to create the scrolling effect */
+            white-space: nowrap; /* Prevent images from wrapping to a new line */
+            display: flex; /* Use flexbox to align images */
+            align-items: center; /* Center images vertically */
+            transition: transform 0.3s; /* Smooth scrolling transition */
+        }
 
-.image-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
+        /* Style the individual image item */
+        .image-item {
+            padding: 5px;
+            /* Optionally, you can add a fixed width to each image to keep them in a grid-like layout */
+            max-width: 100px;
+            display: inline-block; /* Display images side by side */
+        }
 
-.image-item {
-    padding: 5px;
-}
-
-.image-item img {
-    max-width: 100px;
-    max-height: 100px;
-}
-
+        .image-item img {
+            max-width: 100%;
+            max-height: 100px;
+        }
 .variant-list {
     margin-top: 10px;
 }
@@ -90,38 +95,141 @@ body, ul, li {
     font-size: 14px;
     color: #666;
 }
+.variant-list {
+        margin-top: 10px;
+    }
+
+.variant-item {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Style the size checkbox */
+.size-checkbox {
+    margin-right: 10px;
+}
+.image-scroll-container {
+    max-height: 200px; /* Set the maximum height for the scrolling window */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
 
     </style>
 </head>
 <body>
   <div class="container">
-        <h1>Products in Category</h1>
+        
         <ul class="product-list">
             {% for product in result_list %}
             <li class="product-item">
                 <h2 class="product-name">{{ product.name }}</h2>
                 <p class="product-description">{{ product.description }}</p>
                 <p class="product-price">Price: ${{ product.price }}</p>
+
                 {% if product.images %}
                     <h3 class="product-subtitle">Images:</h3>
+                <div class="image-scroll-container">
                     <ul class="image-list">
                         {% for image in product.images %}
                             <li class="image-item"><img src="{{ image }}" alt="Product Image"></li>
                         {% endfor %}
                     </ul>
+                </div>
                 {% endif %}
+
+                 <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})">Add to cart</button>
+                <button class="addToWishlistButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToWishlist({{ product.product_id }})">WishList</button>
                 {% if product.variants %}
                     <h3 class="product-subtitle">Variants:</h3>
                     <ul class="variant-list">
                         {% for variant in product.variants %}
-                            <li class="variant-item">Size: {{ variant.size }}, Color: {{ variant.color }}</li>
+                          <li class="variant-item">
+                            <input type="checkbox" class="size-checkbox" name="size" value="{{ variant.size }}">
+                            <label>Size: {{ variant.size }}</label>
+                               <input type="checkbox" class="color-checkbox" name="color" value="{{ variant.color }}">
+                            <label>Color: {{ variant.color }}</label>
+                          </li>
                         {% endfor %}
                     </ul>
                 {% endif %}
             </li>
+
             {% endfor %}
+
         </ul>
     </div>
+
+<script>
+       function addToCart(productId) {
+
+        const selectedSizes = document.querySelectorAll('input[type="checkbox"].size-checkbox:checked');
+        const selectedColors = document.querySelectorAll('input[type="checkbox"].color-checkbox:checked');
+        if (selectedSizes.length === 0 || selectedColors.length === 0) {
+            alert('Please select a size and a color before adding to the cart.');
+            return;
+        }
+
+        // Create arrays to store the selected size and color variants
+        const selectedSizeVariants = [];
+        const selectedColorVariants = [];
+
+        selectedSizes.forEach((checkbox) => {
+            selectedSizeVariants.push(checkbox.value);
+        });
+
+        selectedColors.forEach((checkbox) => {
+            selectedColorVariants.push(checkbox.value);
+        });
+
+        // Prepare the data to be sent in the POST request
+        const data = {
+            product_id: productId,
+            size_variants: selectedSizeVariants,
+            color_variants: selectedColorVariants,
+        };
+
+        // Send the POST request to the cart API endpoint
+        fetch('/cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token if you are using it for CSRF protection
+            },
+            body: JSON.stringify(data),
+        })
+       .then((response) => {
+            if (response.ok) {
+                return response.json()
+                    .catch((error) => {
+                        throw new Error('Failed to parse JSON response from the server.');
+                    })
+                    .then((responseData) => {
+                        console.log("Response Data:", responseData);
+                        return responseData; // Return the parsed JSON data
+                    });
+            } else {
+                throw new Error('Failed to add the product to the cart.');
+            }
+        })
+        .then((responseData) => {
+            console.log("Inside hear")
+            // Process the responseData and update the cart view accordingly
+            // Optionally, you can display a success message to the user indicating that the product has been added to the cart.
+            alert('Product added to cart successfully.');
+
+            // Reload the page after displaying the success message
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.error("this is the error", error);
+            alert('Failed to add the product to the cart. Please try again.');
+        });
+    }
+
+    function addToWishlist(productId) {
+        // Add the product to the wishlist here (you can handle this part according to your application logic).
+        console.log('Product with ID ' + productId + ' added to wishlist.');
+    }
+    </script>
 </body>
 </html>
 {% endblock %}
