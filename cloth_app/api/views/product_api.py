@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Product,ProductVariant,Cart,CustomUser
+from ...models import Product,ProductVariant,Cart,CustomUser,WishList
 from django.http import JsonResponse
 import os
 # from ...serializers import ItemsSerializer
@@ -39,12 +39,19 @@ class ProductAPIList(APIView):
 
             try:
                 print("cart item check")
-                cart = Cart.objects.get(product=data.id, orderid__isnull=True)
+                cart = Cart.objects.get(user=cust_obj.id,product=data.id, orderid__isnull=True)
                 print("cart item is present in cart", cart)
             except Cart.DoesNotExist:
                 print("cart not exist")
                 cart = None
 
+            try:
+                print("wishlist item check")
+                wish_status = WishList.objects.filter(user=cust_obj.id,product=data.id,add_to_cart=False).first()
+                print("cart item is present in cart", cart)
+            except WishList.DoesNotExist:
+                print("WishList not exist")
+                wish_status = None
 
             images = [image.image.url for image in data.images.all()]
 
@@ -68,6 +75,11 @@ class ProductAPIList(APIView):
                 result_dict.update({"disable": True})
             else:
                 result_dict.update({"disable": False})
+
+            if wish_status is not None:
+                result_dict.update({"wish_status_disable": True})
+            else:
+                result_dict.update({"wish_status_disable": False})
 
             result_list.append(result_dict)
         # return Response(context=result_list, status=status.HTTP_200_OK)

@@ -161,6 +161,15 @@ class Cart(models.Model):
         managed = True
         db_table = 'cart'
 
+class WishList(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    add_to_cart =  models.BooleanField(default=False)
+
+
+    class Meta:
+        managed = True
+        db_table = 'wishlist'
 
 
 

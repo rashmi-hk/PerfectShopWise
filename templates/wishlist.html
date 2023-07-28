@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wish Listing</title>
+    <style>
+        /* Add your CSS styles here */
+        /* ... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wish list</h1>
+        <!-- Loop through the result_list to display each product -->
+        {% for product in result_list %}
+            <div class="product-item">
+                <h2 class="product-name">{{ product.product }}</h2>
+                <p class="product-price">Price: ${{ product.price }}</p>
+
+                {% if product.images %}
+                    <div class="product-image">
+                        <img src="{{ product.images }}" alt="Product Image">
+                    </div>
+                {% endif %}
+
+                {% if product.product_variant %}
+                    <p class="product-variant">Variant: {{ product.product_variant }}</p>
+                {% endif %}
+
+                <p class="product-quantity">Quantity: {{ product.quantity }}</p>
+
+                <!-- Add any other product details you want to display -->
+            </div>
+                        <button class="addToCartButton" data-item-id="{{ product.product_id }}"  onclick="addToCart({{ product.product_id }})" >Add to cart</button>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Add your JavaScript code here if needed
+        // ...
+    </script>
+</body>
+</html>

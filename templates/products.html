@@ -148,7 +148,10 @@ body, ul, li {
 <!--                 <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})">Add to cart</button>-->
                 <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
 
-                <button class="addToWishlistButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToWishlist({{ product.product_id }})">WishList</button>
+<!--                <button id="apiButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" >WishList</button>-->
+                <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" {% if product.wish_status_disable %}disabled{% endif %}>WishList</button>
+
+
                 {% if product.variants %}
                     <h3 class="product-subtitle">Variants:</h3>
                     <ul class="variant-list">
@@ -171,12 +174,15 @@ body, ul, li {
     </div>
 
 <script>
-
+     apiCallCount = 0
      function isCartButtonDisabled(productId)
       {
             // Check if the button is already disabled for the specific product
             return localStorage.getItem(`cartButtonDisabled_${productId}`) === 'true';
       }
+
+
+
 
      function setItemAddedText(productId)
      {
@@ -220,6 +226,9 @@ body, ul, li {
         cartButton.disabled = true;
     }
 
+
+
+
        function addToCart(productId) {
        console.log("*****",isCartButtonDisabled(productId))
         if (isCartButtonDisabled(productId)) {
@@ -229,10 +238,6 @@ body, ul, li {
         if (isCheckboxesDisabled(productId)) {
            return;
         }
-
-<!--        const selectedSizes = document.querySelectorAll('input[type="checkbox"].size-checkbox:checked');-->
-<!--        const selectedColors = document.querySelectorAll('input[type="checkbox"].color-checkbox:checked');-->
-<!--        -->
 
         const selectedSizes = document.querySelectorAll(`input[type="checkbox"].size-checkbox[data-item-id="${productId}"]:checked`);
         const selectedColors = document.querySelectorAll(`input[type="checkbox"].color-checkbox[data-item-id="${productId}"]:checked`);
@@ -303,6 +308,58 @@ body, ul, li {
         });
     }
 
+
+
+     function addToWishlist(productId) {
+       console.log("*****",isCartButtonDisabled(productId))
+
+
+
+        // Prepare the data to be sent in the POST request
+        const data = {
+            product_id: productId,
+        };
+
+        // Send the POST request to the cart API endpoint
+        fetch('/wishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token if you are using it for CSRF protection
+            },
+            body: JSON.stringify(data),
+        })
+       .then((response) => {
+            console.log("response ******",response)
+            if (response.ok) {
+                return response.json()
+                    .catch((error) => {
+                        throw new Error('Failed to parse JSON response from the server.');
+                    })
+                    .then((responseData) => {
+                        console.log("Response Data:", responseData);
+                        window.location.reload();
+                        return responseData; // Return the parsed JSON data
+                    });
+            } else {
+                throw new Error('Failed to add the product to the wishlist.');
+            }
+        })
+        .then((responseData) => {
+            console.log("Inside hear")
+
+
+        })
+        .catch((error) => {
+            console.error("this is the error", error);
+            alert('Failed to add the product to the wishlist. Please try again.');
+        });
+    }
+
+
+
+
+
      document.addEventListener('DOMContentLoaded', () => {
         const cartButtons = document.querySelectorAll('button.addToCartButton');
         cartButtons.forEach((cartButton) => {
@@ -314,10 +371,7 @@ body, ul, li {
         });
     });
 
-    function addToWishlist(productId) {
-        // Add the product to the wishlist here (you can handle this part according to your application logic).
-        console.log('Product with ID ' + productId + ' added to wishlist.');
-    }
+
     </script>
 
 </body>
