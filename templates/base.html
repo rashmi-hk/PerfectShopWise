@@ -4,6 +4,8 @@
    {% load static %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
   <style>
     body {
       margin: 0;
@@ -82,6 +84,7 @@
     .language-and-wishlist {
       display: flex;
       align-items: center;
+
     }
     .language-and-wishlist a {
       color: black;
@@ -181,14 +184,17 @@
     </div>
     <div class="language-and-wishlist">
 
-      <a href="#">Wishlist</a>
+      <button style="font-size:15px;color:red;background-color:black;font-weight:bold;">Wishlist <i class="fa fa-heart"></i></button>
+       <a id="editAddress" href="{% url  'register_variant' variant=1 %}">
+          <i class='fas fa-user-alt' style='font-size:24px;color:red'></i>
+       </a>
     </div>
   </div>
 
   <div class="nav-bar">
     <a href="http://127.0.0.1:8000/categories/W/">Woman</a>
     <a href="http://127.0.0.1:8000/categories/M/">Men</a>
-    <a href="http://127.0.0.1:8000/categories/W/">Kids</a>
+    <a href="http://127.0.0.1:8000/categories/K/">Kids</a>
     <a href="#">About Us</a>
     <a href="#">Contact Us</a>
     <a href="#">Blog</a>

@@ -69,6 +69,7 @@
     <script>
         // Define the JavaScript function to handle placing the order
         function placeOrder(product_id) {
+             localStorage.clear();
                // Send a POST request to the cart API
             fetch('/order', {
                 method: 'POST',

@@ -96,7 +96,7 @@ class CartAPIList(APIView):
         cust_obj = CustomUser.objects.get(email=user)
 
         try:
-            cart_item = Cart.objects.filter(user=cust_obj,product=product_id, cart_created=True).first()
+            cart_item = Cart.objects.filter(user=cust_obj,product=product_id, cart_created=True,orderid__isnull=True).first()
             print("cart_item", cart_item)
 
             if cart_item:
@@ -123,7 +123,7 @@ class CartAPIList(APIView):
             user = request.session.get('email')
             cust_obj = CustomUser.objects.get(email=user)
 
-            cart_items = Cart.objects.filter(user=cust_obj,product=product_id, cart_created=True).first()
+            cart_items = Cart.objects.filter(user=cust_obj,product=product_id, cart_created=True,orderid__isnull=True).first()
             print("cart_items", cart_items)
 
 

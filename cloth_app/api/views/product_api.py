@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Product,ProductVariant
+from ...models import Product,ProductVariant,Cart,CustomUser
 from django.http import JsonResponse
 import os
 # from ...serializers import ItemsSerializer
@@ -10,8 +10,9 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 import json
 import logging
+from django.http import HttpResponseBadRequest
+from django.http import HttpResponse
 
-LOGGER = logging.getLogger(__name__)
 
 # Item api
 class ProductAPIList(APIView):
@@ -22,6 +23,9 @@ class ProductAPIList(APIView):
         main_category_id = request.query_params['main_category']
         print("main_category_id", main_category_id)
 
+        user = request.session.get('email')
+        cust_obj = CustomUser.objects.get(email=user)
+
         sub_category_id = request.query_params['sub_category']
         print("sub_category_id", sub_category_id)
 
@@ -29,8 +33,19 @@ class ProductAPIList(APIView):
         print("categories", categories)
 
 
+
         result_list = []
         for data in categories:
+
+            try:
+                print("cart item check")
+                cart = Cart.objects.get(product=data.id, orderid__isnull=True)
+                print("cart item is present in cart", cart)
+            except Cart.DoesNotExist:
+                print("cart not exist")
+                cart = None
+
+
             images = [image.image.url for image in data.images.all()]
 
             variants = []
@@ -49,6 +64,11 @@ class ProductAPIList(APIView):
                 "images": images,
                 "variants": variants
             }
+            if cart is not None:
+                result_dict.update({"disable": True})
+            else:
+                result_dict.update({"disable": False})
+
             result_list.append(result_dict)
         # return Response(context=result_list, status=status.HTTP_200_OK)
         context = {"result_list": result_list}

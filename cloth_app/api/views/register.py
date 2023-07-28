@@ -20,7 +20,7 @@ import logging
 import secrets
 from django.utils import timezone
 from datetime import timedelta
-
+from rest_framework import status
 from django.http import HttpResponseRedirect
 
 LOGGER = logging.getLogger(__name__)
@@ -28,9 +28,20 @@ LOGGER = logging.getLogger(__name__)
 # Item api
 class RegisterAPIList(APIView):
 
-    def get(self,request):
+    def get(self,request,variant=None):
         print("Inside  get   register")
-        return render(request, 'sign_up.html')
+        if variant:
+            user = request.session.get('email')
+            cust_obj = CustomUser.objects.get(email=user)
+            result_dict = {"name": cust_obj.username,
+                           "phone_number": cust_obj.phone_number,
+                           "address": cust_obj.address,
+                           "user_id": cust_obj.id,
+                           }
+            context = {"result_dict": result_dict}
+            return render(request, 'user_profile.html', context=context)
+        else:
+            return render(request, 'sign_up.html')
         # return render(request, 'new_lohin.html')
 
     def post(self,request):
@@ -71,5 +82,28 @@ class RegisterAPIList(APIView):
         except  Exception as e:
             print(f"An unexpected error occurred: {e}")
 
+    def patch(self, request):
+
+        try:
+            print("register patch ", request.data)
+            user_id = request.data['user_id']
+            name = request.data['name']
+            phone_number = request.data['phone_number']
+            address = request.data['address']
+
+            user = CustomUser.objects.get(id=user_id)
+            if name:
+                user.username = name
+            if phone_number:
+                user.phone_number = phone_number
+            if address:
+                user.address = address
+
+                # Save the updated user data
+            user.save()
+
+            return Response(status=status.HTTP_200_OK)
+        except  Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
 # return HttpResponse('Notification sent successfully')

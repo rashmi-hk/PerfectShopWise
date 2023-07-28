@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Information</title>
+</head>
+<body>
+    <h1>User Information</h1>
+    <form id="userForm">
+        <p><strong>Name:</strong> <input type="text" id="name" value="{{ result_dict.name }}"></p>
+        <p><strong>Phone Number:</strong> <input type="text" id="phone" value="{{ result_dict.phone_number }}"></p>
+        <p><strong>Address:</strong> <input type="text" id="address" value="{{ result_dict.address }}"></p>
+        <button type="button" class="btn btn-primary" onclick="editItem('{{ result_dict.user_id }}')">Submit</button>
+    </form>
+</body>
+<script>
+function editItem(user_id) {
+    // Get the values from the input fields
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+
+    // Prepare the data to be sent in the request body
+    const userData = {
+        user_id: user_id,
+        name: name,
+        phone_number: phone,
+        address: address
+    };
+
+    // Send a PATCH request to update the user profile
+    fetch('/register', {
+        method: 'PATCH',
+        body: JSON.stringify(userData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        // Check if the response was successful
+        if (response.ok) {
+            // Handle successful response (e.g., display a success message)
+            alert('Profile updated successfully!');
+        } else {
+            // Handle unsuccessful response if needed
+            console.error('Error updating profile:', response.statusText);
+        }
+    })
+    .catch(error => {
+        // Handle any errors
+        console.error('Error updating profile:', error);
+    });
+}
+</script>
+</html>

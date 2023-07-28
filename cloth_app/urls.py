@@ -18,6 +18,7 @@ urlpatterns = [
     path('categories/<str:gender>/', CategoryAPIList.as_view() , name='categories'),
     path('product_api/', ProductAPIList.as_view() , name='product_api'),
     path('register', RegisterAPIList.as_view() , name='register'),
+    path('register/<int:variant>', RegisterAPIList.as_view() , name='register_variant'),
     path('order', OrderApiView.as_view() , name='order'),
     path('cart', CartAPIList.as_view() , name='cart'),
     path('verify_otp', VerifyOtpAPIList.as_view() , name='verify_otp'),

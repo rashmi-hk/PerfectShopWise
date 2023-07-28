@@ -145,23 +145,20 @@ body, ul, li {
                 </div>
                 {% endif %}
 
-<!--                 <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})">Add to cart</button>-->
-                <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
-
+                 <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})">Add to cart</button>
                 <button class="addToWishlistButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToWishlist({{ product.product_id }})">WishList</button>
                 {% if product.variants %}
                     <h3 class="product-subtitle">Variants:</h3>
                     <ul class="variant-list">
                         {% for variant in product.variants %}
-                        <li class="variant-item">
-                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="size-checkbox" name="size" value="{{ variant.size }}" {% if product.disable %}disabled{% endif %}>
-                            <label {% if product.disable %}style="color: blue;"{% endif %}>Size: {{ variant.size }}</label>
-                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="color-checkbox" name="color" value="{{ variant.color }}" {% if product.disable %}disabled{% endif %}>
-                            <label {% if product.disable %}style="color: blue;"{% endif %}>Color: {{ variant.color }}</label>
-                        </li>
+                          <li class="variant-item">
+                            <input type="checkbox" class="size-checkbox" data-item-id="{{ product.product_id }}" name="size" value="{{ variant.size }}">
+                            <label>Size: {{ variant.size }}</label>
+                               <input type="checkbox" class="color-checkbox" data-item-id="{{ product.product_id }}" name="color" value="{{ variant.color }}">
+                            <label>Color: {{ variant.color }}</label>
+                          </li>
                         {% endfor %}
                     </ul>
-
                 {% endif %}
             </li>
 
@@ -182,8 +179,8 @@ body, ul, li {
      {
       const cartButton = document.querySelector(`button.addToCartButton[data-item-id="${productId}"]`);
       console.log("cartButton",cartButton)
-<!--      cartButton.textContent = 'Item Added';-->
-<!--      cartButton.classList.add('itemAddedButton');-->
+      cartButton.textContent = 'Item Added';
+      cartButton.classList.add('itemAddedButton');
       cartButton.style.width = '140px'; // Set the width to the original width of the button
     }
 
@@ -295,7 +292,7 @@ body, ul, li {
                disableCheckboxes(productId);
 
             // Reload the page after displaying the success message
-            window.location.reload();
+<!--            window.location.reload();-->
         })
         .catch((error) => {
             console.error("this is the error", error);
