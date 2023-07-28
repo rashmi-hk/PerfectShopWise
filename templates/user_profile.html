@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
 <html>
 <head>
-    <title>User Information</title>
+    <title>Edit User Profile</title>
 </head>
 <body>
     <h1>User Information</h1>
@@ -52,3 +56,4 @@ function editItem(user_id) {
 }
 </script>
 </html>
+{% endblock %}

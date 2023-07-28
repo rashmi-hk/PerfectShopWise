@@ -28,12 +28,15 @@ class CartAPIList(APIView):
             return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
         else:
             result_list = []
+            total_price = 0
             for item in prod_obj:
                 print("product id", item.id)
                 product_obj = Product.objects.get(id =item.product_id)
                 print("product_obj",product_obj)
                 images = [image.image.url for image in product_obj.images.all()]
+                total_price += item.product.price * item.quantity
                 result_dict = {"product": item.product,
+                               "price": item.product.price,
                                "product_variant": item.product_variant,
                                "quantity": item.quantity,
                                "product_id": item.product.id,
@@ -42,7 +45,10 @@ class CartAPIList(APIView):
                     result_dict.update({"images": images[0]})
 
                 result_list.append(result_dict)
-            context = {"result_list": result_list}
+
+            context = {"result_list": result_list,
+                       "total_price": total_price}
+
             print("context", context)
             return render(request, 'cart.html', context)
         # return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)

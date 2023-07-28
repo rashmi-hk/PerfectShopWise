@@ -753,7 +753,7 @@ button.book-room-background {
 }
 
 body{
-    background-color: #FBF6E8;
+    background-color: white;
 }
 
 .logo {
@@ -829,7 +829,7 @@ h1.image-type.text-center.text-light {
         justify-content: center;
         flex-wrap: wrap;
         padding: 1%;
-        background-color: #3d3931;
+        background-color: white;
     }
 
     img.highlighted-images1.h-100 {
@@ -865,7 +865,7 @@ h1.image-type.text-center.text-light {
         justify-content: center;
         flex-wrap: wrap;
         padding: 1%;
-        background-color: #3d3931;
+        background-color: white;
     }
     h1.image-type.text-center.text-light {
         text-decoration: underline;
@@ -1065,7 +1065,7 @@ button.book-room-background {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: white;
   }
 
   .modal-dialog {
@@ -1076,3 +1076,18 @@ button.book-room-background {
     background-color: white;
     border-radius: 8px;
   }
+
+
+   #kids.owl-nav .owl-next:before {
+    display: inline-block;
+    font-family: FontAwesome;
+    color: #2a2a2a;
+    font-size: 25px;
+    font-weight: 700;
+    content: '\f105';
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    line-height: 48px;
+    border: 1px solid #2a2a2a;
+}

@@ -2,23 +2,17 @@
 
 <!DOCTYPE html>
 {% extends 'base.html' %}
-
-{% block content %}
+{% load humanize %}
+{% load mathfilters %}
 {% load static %}
 <html>
 <head>
+
     <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+
     <!-- Add any CSS or external stylesheets here -->
     <style>
-          .cart-item {
-        /* Define your cart item styles */
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        width: 50%;
-        padding: 10px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
 
     .quantity-container {
         /* Make the quantity buttons appear inline */
@@ -39,26 +33,82 @@
         font-size: 16px;
         cursor: pointer;
     }
+
+    .td {
+    padding: 20px 80px 0cm 20px;
+     }
+
+ .image-container {
+        /* Define your styles for the outer box (image container) */
+        width: 40%;
+        max-width: 300px; /* You can adjust the maximum width as needed */
+        margin: 0 auto; /* To center the box horizontally */
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .inner-box {
+        /* Define your styles for the inner box */
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .image-band {
+        width: 100%;
+        background-image: url('/static/img/foter3.jpeg'); /* Replace with the path to your image */
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 200px; /* Adjust the height of the image band as needed */
+    }
     </style>
 </head>
 <body>
+{% block content %}
+<!--<link rel="stylesheet" type="text/css" href="/static/css/style.css">-->
+<div class="image-band"></div>
 
-    <div>
+    <table>
+        <tr>
+            <th>Product Image</th>
+            <th>Product</th>
+            <th>size</th>
+            <th>color</th>
+            <th>Quantity</th>
+            <th>price</th>
+            <th>Item Total Price</th>
+
+        </tr>
         {% for item in result_list %}
-        <div class="cart-item">
-            <img src="{{ item.images }}" alt="Product Image">
-            <p>Product: {{ item.product }}</p>
-            <p>Variant: {{ item.product_variant }}</p>
-<!--            <p>Quantity: {{ item.quantity }}</p>-->
-            <div class="quantity-container">
+        <tr class="cart-item">
+             <div class="image-container">
+                 <div class="inner-box">
+                    <td><img src="{{ item.images }}" alt="Product Image"></td>
+                 </div>
+             </div>
+            <td>{{ item.product }}</td>
+            <td>{{ item.product_variant.size }}</td>
+            <td>{{ item.product_variant.color }}</td>
 
-             <button class="btn btn-primary" onclick="addItem('{{ item.product_id }}')">+</button>
-                        <p>{{ item.quantity }}</p>
-            <button class="btn btn-primary" onclick="removeItem('{{ item.product_id }}')">-</button>
-            </div>
-        </div>
+            <td>
+                <div class="quantity-container">
+                    <button class="btn btn-primary" onclick="addItem('{{ item.product_id }}')">+</button>
+                    <p>{{ item.quantity }}</p>
+                    <button class="btn btn-primary" onclick="removeItem('{{ item.product_id }}')">-</button>
+                </div>
+            </td>
+            <td>{{ item.price }}</td>
+            <td>
+                <p >{{ item.quantity|mul:item.price }}</p><!-- Add any additional actions related to the item here -->
+            </td>
+        </tr>
         {% endfor %}
-    </div>
+        <td colspan="1" class="right-align" >Total:</td>
+        <td>{{ total_price }}</td>
+    </table>
+
 
     <!-- Place Order Button -->
     <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
@@ -146,6 +196,7 @@
         }
 
     </script>
+{% endblock %}
 </body>
 </html>
-{% endblock %}
+
