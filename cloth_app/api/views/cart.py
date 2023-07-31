@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Cart,ProductVariant,Product,CustomUser
+from ...models import Cart,ProductVariant,Product,CustomUser,WishList
 from rest_framework import status
 from django.http import JsonResponse
 from django.http import HttpResponseBadRequest
@@ -139,9 +139,33 @@ class CartAPIList(APIView):
                 cart_item.quantity += 1
                 cart_item.save()
                 print("updated")
+            else:
+                product_size = request.data.get('size')
+                product_color = request.data.get('color')
+                wishlist_id = request.data.get('wishlist_id')
+                print("product_size", product_size)
+                print("product_color", product_color)
+
+                prod_obj = Product.objects.get(id=product_id)
+                print("prod_obj", prod_obj)
+                product_vartaint_obj = ProductVariant.objects.get(product=prod_obj, size=product_size,
+                                                                  color=product_color)
+                print("product_vartaint_obj", product_vartaint_obj)
+
+                cart_created_data = Cart.objects.create(user=cust_obj, product=prod_obj,
+                                                        product_variant=product_vartaint_obj, cart_created=True)
+
+                wish_obj = WishList.objects.filter(user=cust_obj,id=wishlist_id).first()
+                wish_obj.add_to_cart = True
+                wish_obj.save()
+
             return JsonResponse({'message': 'Cart quantity updated successfully'})
         except Cart.DoesNotExist:
                 return JsonResponse({'error': 'Cart not found'}, status=404)
+        except Product.DoesNotExist:
+                return JsonResponse({'error': 'Product not found'}, status=404)
+        except ProductVariant.DoesNotExist:
+                return JsonResponse({'error': 'ProductVariant not found'}, status=404)
 
 
 

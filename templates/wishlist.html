@@ -7,6 +7,53 @@
     <style>
         /* Add your CSS styles here */
         /* ... */
+        .color-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 2px solid #ccc;
+            cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+        }
+
+        .green {
+        background-color: green;
+    }
+
+    .yellow {
+        background-color: yellow;
+    }
+
+    .red {
+        background-color: red;
+    }
+
+     .blue {
+        background-color: blue;
+    }
+
+     .white {
+        background-color: white;
+    }
+
+    .black {
+        background-color: black;
+    }
+
+     .violet {
+        background-color: violet;
+    }
+
+    .orange {
+        background-color: orange;
+    }
+
+    .selected {
+    border: 2px solid black;
+}
+
+        /* Add more classes and corresponding background colors for more colors */
     </style>
 </head>
 <body>
@@ -18,27 +65,159 @@
                 <h2 class="product-name">{{ product.product }}</h2>
                 <p class="product-price">Price: ${{ product.price }}</p>
 
-                {% if product.images %}
-                    <div class="product-image">
-                        <img src="{{ product.images }}" alt="Product Image">
-                    </div>
-                {% endif %}
 
-                {% if product.product_variant %}
-                    <p class="product-variant">Variant: {{ product.product_variant }}</p>
-                {% endif %}
 
-                <p class="product-quantity">Quantity: {{ product.quantity }}</p>
+
+                <label for="size-select-{{ product.product_id }}">Select Size:</label>
+                <select id="size-select-{{ product.product_id }}">
+                    {% for size in product.unique_sizes %}
+                        <option value="{{ size }}">{{ size }}</option>
+                    {% endfor %}
+                </select>
+
+
+
+                <div class="color-circles-container" data-product-id="{{ product.product_id }}">
+                    {% for variant in product.product_variant %}
+                        {% if variant.size and variant.color %}
+                            <div class="color-circle {{ variant.color | lower }}" data-size="{{ variant.size }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+
+
 
                 <!-- Add any other product details you want to display -->
             </div>
-                        <button class="addToCartButton" data-item-id="{{ product.product_id }}"  onclick="addToCart({{ product.product_id }})" >Add to cart</button>
+            <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})">Move to cart</button>
+            <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="removeItem({{ product.wishlist_id }})">Delete</button>
+              <p class="error-message alert-error" style="display: none;color:red">Please select color and size before adding to cart.</p>
         {% endfor %}
     </div>
 
     <script>
-        // Add your JavaScript code here if needed
-        // ...
+ const sizeSelects = document.querySelectorAll('[id^="size-select-"]');
+    const colorCirclesContainers = document.querySelectorAll('.color-circles-container');
+
+    function handleColorCircleSelection(colorCircles, selectedSize) {
+        colorCircles.forEach(circle => {
+            const circleSize = circle.dataset.size;
+            if (circleSize === selectedSize) {
+                circle.style.display = 'inline-block';
+            } else {
+                circle.style.display = 'none';
+            }
+        });
+    }
+
+    // Show color circles associated with the initially selected size(s)
+    sizeSelects.forEach((sizeSelect, index) => {
+        const selectedSize = sizeSelect.value;
+        const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
+        handleColorCircleSelection(colorCircles, selectedSize);
+    });
+
+    // Set up event listeners for size select changes
+    sizeSelects.forEach((sizeSelect, index) => {
+        sizeSelect.addEventListener('change', function () {
+            const selectedSize = this.value;
+            const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
+            handleColorCircleSelection(colorCircles, selectedSize);
+        });
+    });
+
+    // Set up event listeners for color circle clicks
+    const colorCircles = document.querySelectorAll('.color-circle');
+    colorCircles.forEach(circle => {
+        circle.addEventListener('click', function () {
+            // Remove 'selected' class from all color circles
+            colorCircles.forEach(circle => {
+                circle.classList.remove('selected');
+            });
+
+            // Add 'selected' class to the clicked color circle
+            this.classList.add('selected');
+        });
+    });
+ function addToCart(productId,wishlist_id) {
+            // Find the selected color circle
+            console.log("****",document.querySelector(`.color-circles-container[data-product-id="${productId}"]`))
+            const colorCirclesContainer = document.querySelector(`.color-circles-container[data-product-id="${productId}"]`);
+            const selectedColorCircle = colorCirclesContainer.querySelector('.color-circle.selected');
+            const sizeSelect = document.querySelector(`#size-select-${productId}`);
+            const selectedSize = sizeSelect.value;
+
+
+            const errorMessage = document.querySelector('.error-message');
+            if (!selectedColorCircle) {
+                // Show the error message if the color is not selected
+                errorMessage.style.display = 'block';
+            } else {
+                const selectedColor = selectedColorCircle.classList[1]; // Get the color class from the selected circle
+
+        // Color and size are selected, send the data to the server
+        // You can use the Fetch API to make an HTTP request to your cart API
+        const data = {
+            product_id: productId,
+            color: selectedColor,
+            size: selectedSize,
+            wishlist_id: wishlist_id,
+        };
+
+        fetch('/cart', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add product to cart.');
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            // Handle the response from the server if necessary
+            console.log('Product added to cart successfully:', responseData);
+            // If successful, you may hide the error message (if it was previously shown)
+            errorMessage.style.display = 'none';
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error adding product to cart:', error);
+            errorMessage.style.display = 'block';
+        });
+
+            }
+        }
+
+          function removeItem(wishlist_id) {
+            // Send a DELETE request to the wishlist API
+
+            fetch('/wishlist', {
+                method: 'DELETE',
+                body: JSON.stringify({ wishlist_id: wishlist_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error removing item from wishlist:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error removing item from wishlist:', error);
+            });
+        }
     </script>
 </body>
 </html>

@@ -30,17 +30,25 @@ class WishListAPIList(APIView):
                 images = [image.image.url for image in product_obj.images.all()]
 
                 variants = []
+                unique_sizes = set()
+
                 get_variant = ProductVariant.objects.filter(product_id=product_obj.id)
                 for variant in get_variant:
                     var_dict = {"size": variant.size,
                                 "color": variant.color,
-                                "variant_id": variant.id}
+                                "variant_id": variant.id,
+                                "variant_qnt": variant.quantity,
+                                }
+                    unique_sizes.add(variant.size)
                     variants.append(var_dict)
+
 
                 result_dict = {"product": item.product,
                                "price": item.product.price,
-                               "product_variant": variant,
+                               "product_variant": variants,
                                "product_id": item.product.id,
+                               "unique_sizes": unique_sizes,
+                               "wishlist_id":item.id,
                                }
                 if len(images) != 0:
                     result_dict.update({"images": images[0]})
@@ -89,14 +97,14 @@ class WishListAPIList(APIView):
 
         print("inside delete wish list item", request.data)
 
-        product_id = request.data['product_id']
+        wishlist_id = request.data['wishlist_id']
 
-        print("product_id", product_id)
+        print("wishlist_id", wishlist_id)
         user = request.session.get('email')
         cust_obj = CustomUser.objects.get(email=user)
 
         try:
-            wishlist_item = WishList.objects.filter(user=cust_obj,product=product_id).first()
+            wishlist_item = WishList.objects.filter(user=cust_obj,id=wishlist_id).first()
             print("wishlist_item", wishlist_item)
 
             if wishlist_item:
@@ -107,5 +115,9 @@ class WishListAPIList(APIView):
 
         except Cart.DoesNotExist:
             return HttpResponseBadRequest("Cart item not found.")
+
+
+
+
 
 
