@@ -65,10 +65,13 @@ class CartAPIList(APIView):
             user = request.session.get('email')
             print("user", user)
             cust_obj = CustomUser.objects.get(email=user)
+            print("cust_obj", cust_obj)
             prod_obj = Product.objects.get(id=product_id)
-            product_vartaint_obj = ProductVariant.objects.get(product=prod_obj,size=product_size[0],color=product_color[0])
+            print("prod_obj", prod_obj)
+            product_vartaint_obj = ProductVariant.objects.get(product=prod_obj,size=product_size,color=product_color)
             print("product_vartaint_obj", product_vartaint_obj)
             cart_created_data = Cart.objects.create(user=cust_obj,product=prod_obj,product_variant=product_vartaint_obj, cart_created=True)
+            print("cart_created_data", cart_created_data)
             if cart_created_data:
 
                 response_data = {
@@ -131,14 +134,24 @@ class CartAPIList(APIView):
 
             cart_items = Cart.objects.filter(user=cust_obj,product=product_id, cart_created=True,orderid__isnull=True).first()
             print("cart_items", cart_items)
+            wishlist_id = request.data.get('wishlist_id')
+            if cart_items and wishlist_id:
+                print("Inside if ")
+                cart_item = cart_items  # Assuming there's only one item per table
+                cart_item.quantity += 1
+                cart_item.save()
+                print("updated and set status to wishlist ")
+                wish_obj = WishList.objects.filter(user=cust_obj, id=wishlist_id).first()
+                wish_obj.add_to_cart = True
+                wish_obj.save()
 
-
-            if cart_items:
+            elif cart_items:
                 print("Inside if ")
                 cart_item = cart_items  # Assuming there's only one item per table
                 cart_item.quantity += 1
                 cart_item.save()
                 print("updated")
+
             else:
                 product_size = request.data.get('size')
                 product_color = request.data.get('color')

@@ -3,7 +3,7 @@ import datetime
 
 from django.http import JsonResponse
 from rest_framework.views import APIView
-from ...models import CustomUser, Cart, OrderItem, Product,Order
+from ...models import CustomUser, Cart, OrderItem, Product,Order,ProductVariant
 
 from django.shortcuts import render, redirect
 
@@ -47,6 +47,8 @@ class OrderApiView(APIView):
 
                     product_variant=cart_item.product_variant
                     print("product_variant", product_variant)
+
+
                     # item_price = item.itemPrice
                     order_item_price = quantity * item_price
                     print("order_item_price", order_item_price)
@@ -65,10 +67,21 @@ class OrderApiView(APIView):
                     print("update", cart_item)
                     print("update", cart_item.orderid)
 
+                    product_variant_obj = ProductVariant.objects.get(id=product_variant.id,size=product_variant.size,color=product_variant.color)
+                    print("product_variant_obj", product_variant_obj)
+
+                    if product_variant_obj.quantity > 1:
+                        product_variant_obj.quantity -= 1
+                        product_variant_obj.save()
+                    else:
+                        product_variant_obj.quantity = 0
+                        product_variant_obj.save()
+
                 order.total_price = total_price
                 order.is_ordered = True
                 order.ordered_date =  datetime.datetime.now()
                 order.save()
+
 
 
             return render(request, 'base.html')

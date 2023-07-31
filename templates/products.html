@@ -122,6 +122,64 @@ body, ul, li {
     background-color: green !important;
     pointer-events: none !important;
 }
+
+ .color-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 2px solid #ccc;
+            cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+        }
+
+        .green {
+        background-color: green;
+    }
+
+    .yellow {
+        background-color: yellow;
+    }
+
+    .red {
+        background-color: red;
+    }
+
+     .blue {
+        background-color: blue;
+    }
+
+     .white {
+        background-color: white;
+    }
+
+    .black {
+        background-color: black;
+    }
+
+     .violet {
+        background-color: violet;
+    }
+
+    .orange {
+        background-color: orange;
+    }
+
+    .selected {
+    border: 2px solid black;
+}
+ .translucent {
+    opacity: 0.9; /* Set the opacity to make it translucent */
+    pointer-events: none; /* Disable pointer events on the translucent circle */
+}
+
+.translucent .cross-symbol {
+    /* Reset the opacity and pointer events for the cross symbol */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
     </style>
 </head>
 <body>
@@ -145,27 +203,53 @@ body, ul, li {
                 </div>
                 {% endif %}
 
-<!--                 <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})">Add to cart</button>-->
+
                 <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
 
-<!--                <button id="apiButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;" >WishList</button>-->
+
                 <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" {% if product.wish_status_disable %}disabled{% endif %}>WishList</button>
 
+                <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
 
-                {% if product.variants %}
-                    <h3 class="product-subtitle">Variants:</h3>
-                    <ul class="variant-list">
-                        {% for variant in product.variants %}
-                        <li class="variant-item">
-                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="size-checkbox" name="size" value="{{ variant.size }}" {% if product.disable %}disabled{% endif %}>
-                            <label {% if product.disable %}style="color: blue;"{% endif %}>Size: {{ variant.size }}</label>
-                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="color-checkbox" name="color" value="{{ variant.color }}" {% if product.disable %}disabled{% endif %}>
-                            <label {% if product.disable %}style="color: blue;"{% endif %}>Color: {{ variant.color }}</label>
-                        </li>
-                        {% endfor %}
-                    </ul>
+                  <label for="size-select-{{ product.product_id }}">Select Size:</label>
+                <select id="size-select-{{ product.product_id }}">
+                    {% for size in product.unique_sizes %}
+                        <option value="{{ size }}">{{ size }}</option>
+                    {% endfor %}
+                </select>
 
-                {% endif %}
+
+
+                <div class="color-circles-container" data-product-id="{{ product.product_id }}">
+                    {% for variant in product.variants %}
+                        {% if variant.size and variant.color %}
+                         <div class="color-circle {% if variant.quantity_status %}disabled{% endif %} {% if variant.color_status %}translucent{% endif %} {{ variant.color | lower }}" data-size="{{ variant.size }}">
+                                {% if variant.quantity_status %}
+                                    <div class="cross-symbol">X</div>
+                                {% endif %}
+                         </div>
+                              {% endif %}
+                    {% endfor %}
+                </div>
+
+
+
+
+
+<!--                {% if product.variants %}-->
+<!--                    <h3 class="product-subtitle">Variants:</h3>-->
+<!--                    <ul class="variant-list">-->
+<!--                        {% for variant in product.variants %}-->
+<!--                        <li class="variant-item">-->
+<!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="size-checkbox" name="size" value="{{ variant.size }}" {% if product.disable %}disabled{% endif %}>-->
+<!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Size: {{ variant.size }}</label>-->
+<!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="color-checkbox" name="color" value="{{ variant.color }}" {% if product.disable %}disabled{% endif %}>-->
+<!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Color: {{ variant.color }}</label>-->
+<!--                        </li>-->
+<!--                        {% endfor %}-->
+<!--                    </ul>-->
+
+<!--                {% endif %}-->
             </li>
 
             {% endfor %}
@@ -174,6 +258,66 @@ body, ul, li {
     </div>
 
 <script>
+
+    function showErrorMessage(productId) {
+            const errorMessage = document.querySelector(`#error-message-${productId}`);
+            errorMessage.style.display = 'block';
+        }
+
+    // Function to hide error message for a specific product
+    function hideErrorMessage(productId) {
+        const errorMessage = document.querySelector(`#error-message-${productId}`);
+        errorMessage.style.display = 'none';
+    }
+
+     const sizeSelects = document.querySelectorAll('[id^="size-select-"]');
+    const colorCirclesContainers = document.querySelectorAll('.color-circles-container');
+
+    function handleColorCircleSelection(colorCircles, selectedSize) {
+        colorCircles.forEach(circle => {
+            const circleSize = circle.dataset.size;
+            if (circleSize === selectedSize) {
+                circle.style.display = 'inline-block';
+            } else {
+                circle.style.display = 'none';
+            }
+        });
+    }
+
+    // Show color circles associated with the initially selected size(s)
+    sizeSelects.forEach((sizeSelect, index) => {
+        const selectedSize = sizeSelect.value;
+        const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
+        handleColorCircleSelection(colorCircles, selectedSize);
+    });
+
+    // Set up event listeners for size select changes
+    sizeSelects.forEach((sizeSelect, index) => {
+        sizeSelect.addEventListener('change', function () {
+            const selectedSize = this.value;
+            const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
+            handleColorCircleSelection(colorCircles, selectedSize);
+        });
+    });
+
+
+    // Set up event listeners for color circle clicks
+    const colorCircles = document.querySelectorAll('.color-circle');
+    colorCircles.forEach(circle => {
+        circle.addEventListener('click', function () {
+            if (!circle.classList.contains('disabled')) {
+                // If the color circle is not disabled, remove 'selected' class from all color circles
+                colorCircles.forEach(circle => {
+                    circle.classList.remove('selected');
+                });
+
+                // Add 'selected' class to the clicked color circle
+                this.classList.add('selected');
+            }
+        });
+    });
+
+
      apiCallCount = 0
      function isCartButtonDisabled(productId)
       {
@@ -184,38 +328,38 @@ body, ul, li {
 
 
 
-     function setItemAddedText(productId)
-     {
-      const cartButton = document.querySelector(`button.addToCartButton[data-item-id="${productId}"]`);
-      console.log("cartButton",cartButton)
-<!--      cartButton.textContent = 'Item Added';-->
-<!--      cartButton.classList.add('itemAddedButton');-->
-      cartButton.style.width = '140px'; // Set the width to the original width of the button
-    }
+<!--     function setItemAddedText(productId)-->
+<!--     {-->
+<!--      const cartButton = document.querySelector(`button.addToCartButton[data-item-id="${productId}"]`);-->
+<!--      console.log("cartButton",cartButton)-->
+<!--&lt;!&ndash;      cartButton.textContent = 'Item Added';&ndash;&gt;-->
+<!--&lt;!&ndash;      cartButton.classList.add('itemAddedButton');&ndash;&gt;-->
+<!--      cartButton.style.width = '140px'; // Set the width to the original width of the button-->
+<!--    }-->
 
-     function isCheckboxesDisabled(productId)
-      {
-            // Check if the button is already disabled for the specific product
-            return localStorage.getItem(`checkboxDisabled_${productId}`) === 'true';
-      }
+<!--     function isCheckboxesDisabled(productId)-->
+<!--      {-->
+<!--            // Check if the button is already disabled for the specific product-->
+<!--            return localStorage.getItem(`checkboxDisabled_${productId}`) === 'true';-->
+<!--      }-->
 
-    function disableCheckboxes(productId) {
-      // Disable the size and color checkboxes for the specific product
-      const sizeCheckboxes = document.querySelectorAll(`input[type="checkbox"].size-checkbox[data-item-id="${productId}"]`);
-      const colorCheckboxes = document.querySelectorAll(`input[type="checkbox"].color-checkbox[data-item-id="${productId}"]`);
+<!--    function disableCheckboxes(productId) {-->
+<!--      // Disable the size and color checkboxes for the specific product-->
+<!--      const sizeCheckboxes = document.querySelectorAll(`input[type="checkbox"].size-checkbox[data-item-id="${productId}"]`);-->
+<!--      const colorCheckboxes = document.querySelectorAll(`input[type="checkbox"].color-checkbox[data-item-id="${productId}"]`);-->
 
-      sizeCheckboxes.forEach((checkbox) => {
-        checkbox.disabled = true;
-        // Store the disabled state in session storage with a unique key for each checkbox
-        localStorage.setItem(`checkboxDisabled_${productId}_${checkbox.id}`, 'true');
-      });
+<!--      sizeCheckboxes.forEach((checkbox) => {-->
+<!--        checkbox.disabled = true;-->
+<!--        // Store the disabled state in session storage with a unique key for each checkbox-->
+<!--        localStorage.setItem(`checkboxDisabled_${productId}_${checkbox.id}`, 'true');-->
+<!--      });-->
 
-      colorCheckboxes.forEach((checkbox) => {
-        checkbox.disabled = true;
-        // Store the disabled state in session storage with a unique key for each checkbox
-        localStorage.setItem(`checkboxDisabled_${productId}_${checkbox.id}`, 'true');
-      });
-    }
+<!--      colorCheckboxes.forEach((checkbox) => {-->
+<!--        checkbox.disabled = true;-->
+<!--        // Store the disabled state in session storage with a unique key for each checkbox-->
+<!--        localStorage.setItem(`checkboxDisabled_${productId}_${checkbox.id}`, 'true');-->
+<!--      });-->
+<!--    }-->
 
 
     function disableCartButton(productId)
@@ -229,85 +373,148 @@ body, ul, li {
 
 
 
-       function addToCart(productId) {
-       console.log("*****",isCartButtonDisabled(productId))
-        if (isCartButtonDisabled(productId)) {
-            // If the cart button is already disabled, do not proceed
-            return;
-        }
-        if (isCheckboxesDisabled(productId)) {
-           return;
-        }
+<!--       function addToCart(productId) {-->
+<!--       console.log("*****",isCartButtonDisabled(productId))-->
+<!--        if (isCartButtonDisabled(productId)) {-->
+<!--            // If the cart button is already disabled, do not proceed-->
+<!--            return;-->
+<!--        }-->
+<!--        if (isCheckboxesDisabled(productId)) {-->
+<!--           return;-->
+<!--        }-->
 
-        const selectedSizes = document.querySelectorAll(`input[type="checkbox"].size-checkbox[data-item-id="${productId}"]:checked`);
-        const selectedColors = document.querySelectorAll(`input[type="checkbox"].color-checkbox[data-item-id="${productId}"]:checked`);
+<!--        const selectedSizes = document.querySelectorAll(`input[type="checkbox"].size-checkbox[data-item-id="${productId}"]:checked`);-->
+<!--        const selectedColors = document.querySelectorAll(`input[type="checkbox"].color-checkbox[data-item-id="${productId}"]:checked`);-->
 
 
-        if (selectedSizes.length === 0 || selectedColors.length === 0) {
-            alert('Please select a size and a color before adding to the cart.');
-            return;
-        }
+<!--        if (selectedSizes.length === 0 || selectedColors.length === 0) {-->
+<!--            alert('Please select a size and a color before adding to the cart.');-->
+<!--            return;-->
+<!--        }-->
 
-        // Create arrays to store the selected size and color variants
-        const selectedSizeVariants = [];
-        const selectedColorVariants = [];
+<!--        // Create arrays to store the selected size and color variants-->
+<!--        const selectedSizeVariants = [];-->
+<!--        const selectedColorVariants = [];-->
 
-        selectedSizes.forEach((checkbox) => {
-            selectedSizeVariants.push(checkbox.value);
-        });
+<!--        selectedSizes.forEach((checkbox) => {-->
+<!--            selectedSizeVariants.push(checkbox.value);-->
+<!--        });-->
 
-        selectedColors.forEach((checkbox) => {
-            selectedColorVariants.push(checkbox.value);
-        });
+<!--        selectedColors.forEach((checkbox) => {-->
+<!--            selectedColorVariants.push(checkbox.value);-->
+<!--        });-->
 
-        // Prepare the data to be sent in the POST request
+<!--        // Prepare the data to be sent in the POST request-->
+<!--        const data = {-->
+<!--            product_id: productId,-->
+<!--            size_variants: selectedSizeVariants,-->
+<!--            color_variants: selectedColorVariants,-->
+<!--        };-->
+
+<!--        // Send the POST request to the cart API endpoint-->
+<!--        fetch('/cart', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json',-->
+<!--                'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token if you are using it for CSRF protection-->
+<!--            },-->
+<!--            body: JSON.stringify(data),-->
+<!--        })-->
+<!--       .then((response) => {-->
+<!--            if (response.ok) {-->
+<!--                return response.json()-->
+<!--                    .catch((error) => {-->
+<!--                        throw new Error('Failed to parse JSON response from the server.');-->
+<!--                    })-->
+<!--                    .then((responseData) => {-->
+<!--                        console.log("Response Data:", responseData);-->
+<!--                        return responseData; // Return the parsed JSON data-->
+<!--                    });-->
+<!--            } else {-->
+<!--                throw new Error('Failed to add the product to the cart.');-->
+<!--            }-->
+<!--        })-->
+<!--        .then((responseData) => {-->
+<!--            console.log("Inside hear")-->
+<!--            // Process the responseData and update the cart view accordingly-->
+<!--            // Optionally, you can display a success message to the user indicating that the product has been added to the cart.-->
+<!--&lt;!&ndash;            alert('Product added to cart successfully.');&ndash;&gt;-->
+<!--            setItemAddedText(productId);-->
+<!--            disableCartButton(productId);-->
+<!--               disableCheckboxes(productId);-->
+
+<!--            // Reload the page after displaying the success message-->
+<!--            window.location.reload();-->
+<!--        })-->
+<!--        .catch((error) => {-->
+<!--            console.error("this is the error", error);-->
+<!--            alert('Failed to add the product to the cart. Please try again.');-->
+<!--        });-->
+<!--    }-->
+
+      function addToCart(productId) {
+
+             if (isCartButtonDisabled(productId)) {
+                // Display a message indicating that the item is already added to the cart
+                alert('Item is already added to the cart.');
+                return;
+            }
+            // Find the selected color circle
+            console.log("****",document.querySelector(`.color-circles-container[data-product-id="${productId}"]`))
+            const colorCirclesContainer = document.querySelector(`.color-circles-container[data-product-id="${productId}"]`);
+            const selectedColorCircle = colorCirclesContainer.querySelector('.color-circle.selected');
+            const sizeSelect = document.querySelector(`#size-select-${productId}`);
+            const selectedSize = sizeSelect.value;
+
+
+            const errorMessage = document.querySelector('.error-message');
+            if (!selectedColorCircle) {
+                // Show the error message if the color is not selected
+<!--                errorMessage.style.display = 'block';-->
+                showErrorMessage(productId);
+            } else {
+                const selectedColor = selectedColorCircle.classList[1]; // Get the color class from the selected circle
+
+
+
+        // Color and size are selected, send the data to the server
+        // You can use the Fetch API to make an HTTP request to your cart API
+
+
         const data = {
             product_id: productId,
-            size_variants: selectedSizeVariants,
-            color_variants: selectedColorVariants,
+            color_variants: selectedColor,
+            size_variants: selectedSize,
         };
 
-        // Send the POST request to the cart API endpoint
         fetch('/cart', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token if you are using it for CSRF protection
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data)
         })
-       .then((response) => {
-            if (response.ok) {
-                return response.json()
-                    .catch((error) => {
-                        throw new Error('Failed to parse JSON response from the server.');
-                    })
-                    .then((responseData) => {
-                        console.log("Response Data:", responseData);
-                        return responseData; // Return the parsed JSON data
-                    });
-            } else {
-                throw new Error('Failed to add the product to the cart.');
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add product to cart.');
             }
+            return response.json();
         })
-        .then((responseData) => {
-            console.log("Inside hear")
-            // Process the responseData and update the cart view accordingly
-            // Optionally, you can display a success message to the user indicating that the product has been added to the cart.
-<!--            alert('Product added to cart successfully.');-->
-            setItemAddedText(productId);
+        .then(responseData => {
+            // Handle the response from the server if necessary
+            console.log('Product added to cart successfully:', responseData);
+            // If successful, you may hide the error message (if it was previously shown)
             disableCartButton(productId);
-               disableCheckboxes(productId);
-
-            // Reload the page after displaying the success message
-            window.location.reload();
+            errorMessage.style.display = 'none';
         })
-        .catch((error) => {
-            console.error("this is the error", error);
-            alert('Failed to add the product to the cart. Please try again.');
+        .catch(error => {
+            // Handle errors
+            console.error('Error adding product to cart:', error);
+            errorMessage.style.display = 'block';
         });
-    }
 
+            }
+        }
 
 
      function addToWishlist(productId) {

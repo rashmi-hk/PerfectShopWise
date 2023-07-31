@@ -90,13 +90,28 @@
 
                 <!-- Add any other product details you want to display -->
             </div>
+            <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
+
             <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})">Move to cart</button>
             <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="removeItem({{ product.wishlist_id }})">Delete</button>
-              <p class="error-message alert-error" style="display: none;color:red">Please select color and size before adding to cart.</p>
+
+
         {% endfor %}
     </div>
 
     <script>
+
+     function showErrorMessage(productId) {
+            const errorMessage = document.querySelector(`#error-message-${productId}`);
+            errorMessage.style.display = 'block';
+        }
+
+    // Function to hide error message for a specific product
+    function hideErrorMessage(productId) {
+        const errorMessage = document.querySelector(`#error-message-${productId}`);
+        errorMessage.style.display = 'none';
+    }
+
  const sizeSelects = document.querySelectorAll('[id^="size-select-"]');
     const colorCirclesContainers = document.querySelectorAll('.color-circles-container');
 
@@ -152,7 +167,8 @@
             const errorMessage = document.querySelector('.error-message');
             if (!selectedColorCircle) {
                 // Show the error message if the color is not selected
-                errorMessage.style.display = 'block';
+<!--                errorMessage.style.display = 'block';-->
+                showErrorMessage(productId)
             } else {
                 const selectedColor = selectedColorCircle.classList[1]; // Get the color class from the selected circle
 

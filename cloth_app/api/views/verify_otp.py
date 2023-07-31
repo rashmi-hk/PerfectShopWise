@@ -71,7 +71,7 @@ class VerifyOtpAPIList(APIView):
                     'success': True,
                 }
                 print("response_data", response_data)
-                return render(request, 'base.html')  # Return a JSON response indicating success
+                return render(request, 'login.html')  # Return a JSON response indicating success
             else:
                 error_message = 'Error in serializer'
                 return render(request, 'otp_verification.html',{'error_message': error_message,'email':email})

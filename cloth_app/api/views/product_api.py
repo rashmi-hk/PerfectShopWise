@@ -25,6 +25,7 @@ class ProductAPIList(APIView):
 
         user = request.session.get('email')
         cust_obj = CustomUser.objects.get(email=user)
+        print("cust_obj", cust_obj)
 
         sub_category_id = request.query_params['sub_category']
         print("sub_category_id", sub_category_id)
@@ -56,11 +57,20 @@ class ProductAPIList(APIView):
             images = [image.image.url for image in data.images.all()]
 
             variants = []
+            unique_sizes = set()
             get_variant = ProductVariant.objects.filter(product_id=data.id)
+
             for variant in get_variant:
+                if variant.quantity == 0 :
+                    quantity_status = True
+                else:
+                    quantity_status = False
+
                 var_dict = {"size": variant.size,
                  "color": variant.color,
-                  "variant_id": variant.id}
+                  "variant_id": variant.id,
+                  "quantity_status": quantity_status}
+                unique_sizes.add(variant.size)
                 variants.append(var_dict)
 
             result_dict = {
@@ -69,7 +79,8 @@ class ProductAPIList(APIView):
                 "description": data.description,
                 "price": data.price,
                 "images": images,
-                "variants": variants
+                "variants": variants,
+                "unique_sizes": unique_sizes,
             }
             if cart is not None:
                 result_dict.update({"disable": True})

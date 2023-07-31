@@ -202,6 +202,10 @@
     <a href="#">About Us</a>
     <a href="#">Contact Us</a>
     <a href="#">Blog</a>
+<!--    <a href="#" id="logoutButton">Logout</a>-->
+    <a href="{% url 'logout' %}">Logout</a>
+
+
 
     <div id="cartContainer">
     <a id="cartLink" href="{% url 'cart' %}">
@@ -257,6 +261,35 @@ $(document).ready(function () {
     $(document).ready(function () {
         updateCartCount();
     });
+
+    // script.js
+
+// Function to handle logout
+function logout() {
+    // Send a request to the backend logout API endpoint using Fetch API or XMLHttpRequest
+    fetch('/logout', {
+        method: 'POST',  // You can use POST or GET depending on your backend implementation
+    })
+    .then((response) => {
+        // Check if the logout was successful (you may have a specific response from the server)
+        if (response.ok) {
+            // Redirect the user to the login page or any other page after logout
+            window.location.href = '/login/';  // Replace '/login/' with the appropriate URL for your login page
+        } else {
+            // Handle logout error (optional)
+            console.error('Logout failed.');
+        }
+    })
+    .catch((error) => {
+        // Handle fetch error (optional)
+        console.error('Error during logout:', error);
+    });
+}
+
+// Add click event listener to the "Logout" button
+document.getElementById('logoutButton').addEventListener('click', logout);
+
+
 </script>
 </body>
 </html>
