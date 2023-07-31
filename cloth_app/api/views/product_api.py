@@ -101,5 +101,5 @@ class ProductAPIList(APIView):
             return JsonResponse(result_list, safe=False)
         else:
             return render(request, 'products.html', context)
-        # return JsonResponse(result_list, safe=False)
+
 

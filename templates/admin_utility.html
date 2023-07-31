@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Utility</title>
+</head>
+<body>
+    <h1>Admin Utility Dashboard</h1>
+
+    <h2>Total Number of Orders</h2>
+    <p>Total orders placed today: {{ total_orders_placed }}</p>
+    <p>Total orders placed this month: {{ total_orders_this_month }}</p>
+
+    <h2>Products Per Size and Color</h2>
+    <h3>Today's Orders</h3>
+    <ul>
+        {% for product in products_per_size_color %}
+        <li>
+            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Total: {{ product.total_products }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h3>This Month's Orders</h3>
+    <ul>
+        {% for product in products_per_size_color_month %}
+        <li>
+            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Total: {{ product.total_products }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Quantity Left in Stock</h2>
+    <h3>Today</h3>
+    <ul>
+        {% for product in stock_left_per_day %}
+        <li>
+            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Quantity Left: {{ product.quantity_left }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h3>This Month</h3>
+    <ul>
+        {% for product in stock_left_per_month %}
+        <li>
+            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Quantity Left: {{ product.quantity_left }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if error %}
+    <h2>Error</h2>
+    <p>An error occurred: {{ error }}</p>
+    {% endif %}
+</body>
+</html>
