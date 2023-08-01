@@ -1,7 +1,7 @@
 <!-- cart.html -->
 
 <!DOCTYPE html>
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 {% load humanize %}
 {% load mathfilters %}
 {% load static %}
@@ -14,14 +14,14 @@
     <!-- Add any CSS or external stylesheets here -->
     <style>
 
-    .quantity-container {
-        /* Make the quantity buttons appear inline */
-        display: flex;
+<!--    .quantity-container {-->
+<!--        /* Make the quantity buttons appear inline */-->
+<!--        display: flex;-->
 
-        gap:5px;
-        justify-content: center;
-         align-items:center;
-    }
+<!--        gap:5px;-->
+<!--        justify-content: center;-->
+<!--         align-items:center;-->
+<!--    }-->
 
     .place-order-btn {
         /* Define your "Place Order" button styles */
@@ -42,7 +42,7 @@
         /* Define your styles for the outer box (image container) */
         width: 40%;
         max-width: 300px; /* You can adjust the maximum width as needed */
-        margin: 0 auto; /* To center the box horizontally */
+<!--        margin: 0 auto; /* To center the box horizontally */-->
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -68,9 +68,12 @@
 <body>
 {% block content %}
 <!--<link rel="stylesheet" type="text/css" href="/static/css/style.css">-->
-<div class="image-band"></div>
+<!--<div class="image-band"></div>-->
 
-    <table>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+      <table class="table table-striped">
         <tr>
             <th>Product Image</th>
             <th>Product</th>
@@ -79,21 +82,19 @@
             <th>Quantity</th>
             <th>price</th>
             <th>Item Total Price</th>
+            <th>Discount Price</th>
 
         </tr>
         {% for item in result_list %}
         <tr class="cart-item">
-             <div class="image-container">
-                 <div class="inner-box">
+
                     <td><img src="{{ item.images }}" alt="Product Image"></td>
-                 </div>
-             </div>
             <td>{{ item.product }}</td>
             <td>{{ item.product_variant.size }}</td>
             <td>{{ item.product_variant.color }}</td>
 
             <td>
-                <div class="quantity-container">
+                <div class="d-flex quantity-container">
                     <button class="btn btn-primary" onclick="addItem('{{ item.product_id }}')">+</button>
                     <p>{{ item.quantity }}</p>
                     <button class="btn btn-primary" onclick="removeItem('{{ item.product_id }}')">-</button>
@@ -108,6 +109,14 @@
         <td colspan="1" class="right-align" >Total:</td>
         <td>{{ total_price }}</td>
     </table>
+        </div>
+
+    </div>
+
+
+
+</div>
+
 
 
     <!-- Place Order Button -->

@@ -1,0 +1,27 @@
+@media (max-width: 576px) {
+    .menus {
+        justify-content: flex-start;
+    }
+    .user-details{
+        display: none;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .menus {
+        justify-content: flex-start;
+    }
+    .user-details{
+        display: none;
+    }
+}
+
+/* 
+@media (min-width: 992px) { }
+
+
+@media (min-width: 1200px) { }
+
+
+@media (min-width: 1400px) { } */
