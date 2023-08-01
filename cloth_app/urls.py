@@ -6,6 +6,7 @@ from cloth_app.api.views.register import RegisterAPIList
 from cloth_app.api.views.cart import CartAPIList
 from cloth_app.api.views.admin_utility import AdminUtilityAPIList
 from cloth_app.api.views.wishlist import WishListAPIList
+from cloth_app.api.views.first_page import FirstPageAPIList
 from cloth_app.api.views.order import OrderApiView
 from cloth_app.api.views.verify_otp import VerifyOtpAPIList
 # from allauth.account.views import PasswordResetView
@@ -21,6 +22,7 @@ urlpatterns = [
     path('home', HomeAPIList.as_view() , name='home'),
     path('admin_utility', AdminUtilityAPIList.as_view() , name='admin_utility'),
     path('login/', HomeAPIList.as_view() , name='login'),
+    path('first_page/', FirstPageAPIList.as_view() , name='first_page'),
     path('categories/<str:gender>/', CategoryAPIList.as_view() , name='categories'),
     path('product_api/', ProductAPIList.as_view() , name='product_api'),
     path('register', RegisterAPIList.as_view() , name='register'),

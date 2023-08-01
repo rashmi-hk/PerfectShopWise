@@ -188,74 +188,84 @@ body, ul, li {
         <ul class="product-list">
             {% for product in result_list %}
             <li class="product-item">
-                <h2 class="product-name">{{ product.name }}</h2>
-                <p class="product-description">{{ product.description }}</p>
-                <p class="product-price">Price: ${{ product.price }}</p>
+                  <div class="card" style="width: 300px;" >
+                  <div class="card-header">
 
-                {% if product.images %}
-                    <h3 class="product-subtitle">Images:</h3>
-                <div class="image-scroll-container">
-                    <ul class="image-list">
-                        {% for image in product.images %}
-                            <li class="image-item"><img src="{{ image }}" alt="Product Image"></li>
+                    <h2 class="product-name">{{ product.name }}</h2>
+                  </div>
+                      <div class="card-body">
+
+
+                    {% if product.images %}
+
+                    <div class="image-scroll-container">
+                        <ul class="image-list">
+                            {% for image in product.images %}
+                                <li class="image-item"><img src="{{ image }}" alt="Product Image"></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                           <p class="product-description">{{ product.description }}</p>
+                    <p class="product-price">Price: ${{ product.price }}</p>
+                      <label for="size-select-{{ product.product_id }}">Select Size:</label>
+                                    <select id="size-select-{{ product.product_id }}">
+                                        {% for size in product.unique_sizes %}
+                                            <option value="{{ size }}">{{ size }}</option>
+                                        {% endfor %}
+                                    </select>
+
+
+
+                    <div class="color-circles-container" data-product-id="{{ product.product_id }}">
+                        {% for variant in product.variants %}
+                            {% if variant.size and variant.color %}
+                             <div class="color-circle {% if variant.quantity_status %}disabled{% endif %} {% if variant.color_status %}translucent{% endif %} {{ variant.color | lower }}" data-size="{{ variant.size }}">
+                                    {% if variant.quantity_status %}
+                                        <div class="cross-symbol">X</div>
+                                    {% endif %}
+                             </div>
+                                  {% endif %}
                         {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
+                    </div>
+
+                 </div>
+                 </div>
+                    <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
 
 
-                <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
+                    <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" {% if product.wish_status_disable %}disabled{% endif %}>WishList</button>
 
-
-                <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" {% if product.wish_status_disable %}disabled{% endif %}>WishList</button>
-
-                <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
-
-                  <label for="size-select-{{ product.product_id }}">Select Size:</label>
-                <select id="size-select-{{ product.product_id }}">
-                    {% for size in product.unique_sizes %}
-                        <option value="{{ size }}">{{ size }}</option>
-                    {% endfor %}
-                </select>
-
-
-
-                <div class="color-circles-container" data-product-id="{{ product.product_id }}">
-                    {% for variant in product.variants %}
-                        {% if variant.size and variant.color %}
-                         <div class="color-circle {% if variant.quantity_status %}disabled{% endif %} {% if variant.color_status %}translucent{% endif %} {{ variant.color | lower }}" data-size="{{ variant.size }}">
-                                {% if variant.quantity_status %}
-                                    <div class="cross-symbol">X</div>
-                                {% endif %}
-                         </div>
-                              {% endif %}
-                    {% endfor %}
-                </div>
+                    <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
 
 
 
 
 
-<!--                {% if product.variants %}-->
-<!--                    <h3 class="product-subtitle">Variants:</h3>-->
-<!--                    <ul class="variant-list">-->
-<!--                        {% for variant in product.variants %}-->
-<!--                        <li class="variant-item">-->
-<!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="size-checkbox" name="size" value="{{ variant.size }}" {% if product.disable %}disabled{% endif %}>-->
-<!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Size: {{ variant.size }}</label>-->
-<!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="color-checkbox" name="color" value="{{ variant.color }}" {% if product.disable %}disabled{% endif %}>-->
-<!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Color: {{ variant.color }}</label>-->
-<!--                        </li>-->
-<!--                        {% endfor %}-->
-<!--                    </ul>-->
 
-<!--                {% endif %}-->
-            </li>
 
-            {% endfor %}
+    <!--                {% if product.variants %}-->
+    <!--                    <h3 class="product-subtitle">Variants:</h3>-->
+    <!--                    <ul class="variant-list">-->
+    <!--                        {% for variant in product.variants %}-->
+    <!--                        <li class="variant-item">-->
+    <!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="size-checkbox" name="size" value="{{ variant.size }}" {% if product.disable %}disabled{% endif %}>-->
+    <!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Size: {{ variant.size }}</label>-->
+    <!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="color-checkbox" name="color" value="{{ variant.color }}" {% if product.disable %}disabled{% endif %}>-->
+    <!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Color: {{ variant.color }}</label>-->
+    <!--                        </li>-->
+    <!--                        {% endfor %}-->
+    <!--                    </ul>-->
 
-        </ul>
+    <!--                {% endif %}-->
+                </li>
+
+                {% endfor %}
+
+            </ul>
     </div>
+
 
 <script>
 

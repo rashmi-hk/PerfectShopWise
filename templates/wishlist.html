@@ -61,39 +61,58 @@
     </style>
 </head>
 <body>
+
+<!--<div class="card">-->
+<!--  <div class="card-header">-->
+<!--    Featured-->
+<!--  </div>-->
+<!--  <div class="card-body">-->
+<!--    <h5 class="card-title">Special title treatment</h5>-->
+<!--    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
+<!--    <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--  </div>-->
+<!--</div>-->
+
+
     <div class="container">
         <h1>Wish list</h1>
         <!-- Loop through the result_list to display each product -->
         {% for product in result_list %}
             <div class="product-item">
-                <h2 class="product-name">{{ product.product }}</h2>
-                <p class="product-price">Price: ${{ product.price }}</p>
+                <div class="card" style="width: 300px;" >
+                 <div class="card-header">
+                    <h2 class="product-name">{{ product.product }}</h2>
+                 </div>
+                    <div class="card-body">
+                         <img src="{{ product.images }}" alt="{{ product.images }} Image">
+                        <p class="product-price">Price: ${{ product.price }}</p>
 
 
 
 
-                <label for="size-select-{{ product.product_id }}">Select Size:</label>
-                <select id="size-select-{{ product.product_id }}">
-                    {% for size in product.unique_sizes %}
-                        <option value="{{ size }}">{{ size }}</option>
-                    {% endfor %}
-                </select>
+                        <label for="size-select-{{ product.product_id }}">Select Size:</label>
+                        <select id="size-select-{{ product.product_id }}">
+                            {% for size in product.unique_sizes %}
+                                <option value="{{ size }}">{{ size }}</option>
+                            {% endfor %}
+                        </select>
 
 
 
-                <div class="color-circles-container" data-product-id="{{ product.product_id }}">
-                    {% for variant in product.product_variant %}
-                        {% if variant.size and variant.color %}
-                            <div class="color-circle {{ variant.color | lower }}" data-size="{{ variant.size }}"></div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+                        <div class="color-circles-container" data-product-id="{{ product.product_id }}">
+                            {% for variant in product.product_variant %}
+                                {% if variant.size and variant.color %}
+                                    <div class="color-circle {{ variant.color | lower }}" data-size="{{ variant.size }}"></div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
 
 
 
 
                 <!-- Add any other product details you want to display -->
             </div>
+                </div>
             <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
 
             <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})">Move to cart</button>

@@ -8,13 +8,20 @@
     <title>Edit User Profile</title>
 </head>
 <body>
-    <h1>User Information</h1>
+
+
+
+<div class="card" style="width:50%">
+  <h5 class="card-header">User Information</h5>
+  <div class="card-body">
     <form id="userForm">
-        <p><strong>Name:</strong> <input type="text" id="name" value="{{ result_dict.name }}"></p>
-        <p><strong>Phone Number:</strong> <input type="text" id="phone" value="{{ result_dict.phone_number }}"></p>
-        <p><strong>Address:</strong> <input type="text" id="address" value="{{ result_dict.address }}"></p>
+        <p class="card-text">Name: <input type="text" id="name" value="{{ result_dict.name }}"></p>
+        <p class="card-text">Phone Number: <input type="text" id="phone" value="{{ result_dict.phone_number }}"></p>
+        <p class="card-text">Address: <input type="text" id="address" value="{{ result_dict.address }}"></p>
         <button type="button" class="btn btn-primary" onclick="editItem('{{ result_dict.user_id }}')">Submit</button>
     </form>
+      </div>
+</div>
 </body>
 <script>
 function editItem(user_id) {

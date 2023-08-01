@@ -6,7 +6,7 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
   <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <!--  <link rel="stylesheet" type="text/css" href="/static/css/style.css">-->
@@ -127,7 +127,10 @@
     .nav-bar-sub1 .menu-padding,#cartContainer,.menu-padding{
     padding: 0px 20px 0px 20px;
     }
-
+.dropdown-content {
+  /* ... */
+  z-index: 999; /* Increase the z-index value */
+}
   </style>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/responsive.css">
@@ -140,10 +143,10 @@
       <div class="nav-bar-sub1">
 
       <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span>
-           <a class='menu-padding' href="#">Home</a>
-           <a class='menu-padding' href="http://127.0.0.1:8000/categories/W/">Woman</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Men</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
+           <a class='menu-padding' href="{% url 'first_page' %}">Home</a>
+           <a class='menu-padding' href="{% url 'categories' 'W'%}">Woman</a>
+    <a class='menu-padding' href="{% url 'categories' 'M'%}">Men</a>
+    <a class='menu-padding' href="{% url 'categories' 'K'%}">Kids</a>
       </div>
 
 <!--    <a href="#" id="logoutButton">Logout</a>-->
@@ -152,9 +155,18 @@
 
 
     <div id="cartContainer" class="d-flex justify-content-evenly align-items-center">
-         <a id="editAddress" href="{% url  'register_variant' variant=1 %}" class="menu-padding">
+         <a id="profileLink" href="#" class="menu-padding dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           <i class='fas fa-user-alt' style='font-size:24px;color:red'></i>
        </a>
+<!--        <img src="path/to/image.jpg" alt="Profile Image" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
+
+
+         <ul class="dropdown-menu" style="background-color:gray;">
+          <li><a class="dropdown-item" href="{% url  'register_variant' variant=1 %}">Profile</a></li>
+          <li><a class="dropdown-item" href="#">Order History</a></li>
+          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+
 <!--        <a href="{% url 'logout' %}">Logout</a>-->
     <a id="cartLink" href="{% url 'cart' %}" class="menu-padding">
             <i id="cartIcon" class="fas fa-shopping-cart"></i>
@@ -189,9 +201,9 @@
          <div class="col-md-2">
     <div class="d-flex flex-column">
        <h4> <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a></h4>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Men</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/W/">Woman</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
+    <a class='menu-padding' href="{% url 'categories' 'M'%}">Men</a>
+    <a class='menu-padding' href="{% url 'categories' 'W'%}">Woman</a>
+    <a class='menu-padding' href="{% url 'categories' 'K'%}">Kids</a>
     </div>
 
 
@@ -235,6 +247,9 @@
 <!--    <div class="black-footer">Black Footer</div>-->
 <!--  </div>-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
    // Set the default headers for AJAX requests
 $.ajaxSetup({
@@ -300,6 +315,17 @@ function logout() {
 // Add click event listener to the "Logout" button
 document.getElementById('logoutButton').addEventListener('click', logout);
 
+
+$(document).ready(function() {
+  // Add click event listener to the profile image link
+  $("#profileLink").on("click", function(e) {
+    // Toggle the dropdown
+    $(".dropdown-content").toggle();
+
+    // Prevent default navigation behavior
+    return false;
+  });
+});
 
 </script>
 </body>
