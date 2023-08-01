@@ -140,6 +140,7 @@
       <div class="nav-bar-sub1">
 
       <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span>
+           <a class='menu-padding' href="#">Home</a>
            <a class='menu-padding' href="http://127.0.0.1:8000/categories/W/">Woman</a>
     <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Men</a>
     <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
@@ -163,7 +164,7 @@
 
 
       <a id="wishlist" href="{% url  'wishlist' %}" class="d-flex flex-column align-items-center ">
-          <span class="text-white"><i class="fa fa-heart-o" aria-hidden="true"></i></span>
+          <span class="heart" style="color:red;"><i class="fa fa-heart" aria-hidden="true"></i></span>
          <span class="text-white">Wishlist</span>
 
        </a>
@@ -184,17 +185,12 @@
           <span class="shop-text text-white">need to be sure there isn't hidden of text</span>
 
          </div>
-         <div class="col-md-2">
-             <div class="d-flex flex-column">
 
-  <a class='menu-padding text-white' href="http://127.0.0.1:8000/categories/W/">
-               Contact Info</a>
-           <p>123 Street, Old Trafford, New South London , UK</p>  <p>info@shopwise.com</p>  <p>+ 457 789 789 65</p>
-             </div>
-         </div>
          <div class="col-md-2">
     <div class="d-flex flex-column">
-        <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>
+       <h4> <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a></h4>
+    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Men</a>
+    <a class='menu-padding' href="http://127.0.0.1:8000/categories/W/">Woman</a>
     <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
     </div>
 
@@ -202,16 +198,28 @@
          </div>
          <div class="col-md-2">
 <div class="d-flex flex-column">
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
+    <h4><a class='menu-padding' href="{% url  'register_variant' variant=1 %}">My Account</a></h4>
+    <a class='menu-padding' href="#">Discount</a>
+    <a class='menu-padding' href="#">Order History</a>
+    <a class='menu-padding' href="#">Order Tracking</a>
 </div>
 
          </div>
+<!--         <div class="col-md-2">-->
+<!--             <div class="d-flex flex-column">-->
+<!--                 <h4><a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a></h4>-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a></div>-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a></div>-->
+<!--             </div>-->
+
          <div class="col-md-2">
              <div class="d-flex flex-column">
-                 <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a></div>
+
+  <h4><a class='menu-padding text-white' href="#">
+               Contact Info</a></h4>
+           <p class="para text-white">123 Street, Old Trafford New South London , UK</p>  <p class="para text-white" >info@shopwise.com</p>  <p class="para text-white" >+ 457 789 789 65</p>
              </div>
+         </div>
 
      </div>
      </div>

@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
 <html>
 <head>
    {% load static %}
@@ -136,41 +139,41 @@
 <body>
 
 
-  <div class="d-flex justify-content-between align-items-center nav-bar">
-      <div class="nav-bar-sub1">
+<!--  <div class="d-flex justify-content-between align-items-center nav-bar">-->
+<!--      <div class="nav-bar-sub1">-->
 
-      <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span>
-           <a class='menu-padding' href="http://127.0.0.1:8000/categories/W/">Woman</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Men</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
-      </div>
+<!--      <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span>-->
+<!--           <a class='menu-padding' href="http://127.0.0.1:8000/categories/W/">Woman</a>-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Men</a>-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>-->
+<!--      </div>-->
 
-<!--    <a href="#" id="logoutButton">Logout</a>-->
-
-
+<!--&lt;!&ndash;    <a href="#" id="logoutButton">Logout</a>&ndash;&gt;-->
 
 
-    <div id="cartContainer" class="d-flex justify-content-evenly align-items-center">
-         <a id="editAddress" href="{% url  'register_variant' variant=1 %}" class="menu-padding">
-          <i class='fas fa-user-alt' style='font-size:24px;color:red'></i>
-       </a>
-<!--        <a href="{% url 'logout' %}">Logout</a>-->
-    <a id="cartLink" href="{% url 'cart' %}" class="menu-padding">
-            <i id="cartIcon" class="fas fa-shopping-cart"></i>
-            <span id="cartCountOverlay">{{prod_obj}}</span>
-    </a>
-         <div class="language-and-wishlist menu-padding">
 
 
-      <a id="wishlist" href="{% url  'wishlist' %}" class="d-flex flex-column align-items-center ">
-          <span class="text-white"><i class="fa fa-heart-o" aria-hidden="true"></i></span>
-         <span class="text-white">Wishlist</span>
+<!--    <div id="cartContainer" class="d-flex justify-content-evenly align-items-center">-->
+<!--         <a id="editAddress" href="{% url  'register_variant' variant=1 %}" class="menu-padding">-->
+<!--          <i class='fas fa-user-alt' style='font-size:24px;color:red'></i>-->
+<!--       </a>-->
+<!--&lt;!&ndash;        <a href="{% url 'logout' %}">Logout</a>&ndash;&gt;-->
+<!--    <a id="cartLink" href="{% url 'cart' %}" class="menu-padding">-->
+<!--            <i id="cartIcon" class="fas fa-shopping-cart"></i>-->
+<!--            <span id="cartCountOverlay">{{prod_obj}}</span>-->
+<!--    </a>-->
+<!--         <div class="language-and-wishlist menu-padding">-->
 
-       </a>
 
-    </div>
-      </div>
-  </div>
+<!--      <a id="wishlist" href="{% url  'wishlist' %}" class="d-flex flex-column align-items-center ">-->
+<!--          <span class="text-white"><i class="fa fa-heart-o" aria-hidden="true"></i></span>-->
+<!--         <span class="text-white">Wishlist</span>-->
+
+<!--       </a>-->
+
+<!--    </div>-->
+<!--      </div>-->
+<!--  </div>-->
 
 
 
@@ -212,60 +215,54 @@
 
     </section>
 
-{% block content %}
-  {% endblock %}
-
- <div class="nav-bar">
-     <div class="container m-0">
-     <div class="row d-flex align-items-center">
-         <div class="col-md-4">
-      <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span><br>
-          <span class="shop-text text-white">If you are going to use of Lorem Ipsum </span> <br>
-          <span class="shop-text text-white">need to be sure there isn't hidden of text</span>
-
-         </div>
-         <div class="col-md-2">
-             <div class="d-flex flex-column">
-
-  <a class='menu-padding text-white' href="http://127.0.0.1:8000/categories/W/">
-               Contact Info</a>
-           <p>123 Street, Old Trafford, New South London , UK</p>  <p>info@shopwise.com</p>  <p>+ 457 789 789 65</p>
-             </div>
-         </div>
-         <div class="col-md-2">
-    <div class="d-flex flex-column">
-        <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
-    </div>
 
 
-         </div>
-         <div class="col-md-2">
-<div class="d-flex flex-column">
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>
-</div>
+<!-- <div class="nav-bar">-->
+<!--     <div class="container m-0">-->
+<!--     <div class="row d-flex align-items-center">-->
+<!--         <div class="col-md-4">-->
+<!--      <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span><br>-->
+<!--          <span class="shop-text text-white">If you are going to use of Lorem Ipsum </span> <br>-->
+<!--          <span class="shop-text text-white">need to be sure there isn't hidden of text</span>-->
 
-         </div>
-         <div class="col-md-2">
-             <div class="d-flex flex-column">
-                 <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>
-    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a></div>
-             </div>
+<!--         </div>-->
+<!--         <div class="col-md-2">-->
+<!--             <div class="d-flex flex-column">-->
 
-     </div>
-     </div>
+<!--  <a class='menu-padding text-white' href="http://127.0.0.1:8000/categories/W/">-->
+<!--               Contact Info</a>-->
+<!--           <p>123 Street, Old Trafford, New South London , UK</p>  <p>info@shopwise.com</p>  <p>+ 457 789 789 65</p>-->
+<!--             </div>-->
+<!--         </div>-->
+<!--         <div class="col-md-2">-->
+<!--    <div class="d-flex flex-column">-->
+<!--        <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>-->
+<!--    </div>-->
 
 
-<!--    <a href="#" id="logoutButton">Logout</a>-->
+<!--         </div>-->
+<!--         <div class="col-md-2">-->
+<!--<div class="d-flex flex-column">-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a>-->
+<!--</div>-->
 
-  </div>
-  <!-- Your Main Content Goes Here -->
+<!--         </div>-->
+<!--         <div class="col-md-2">-->
+<!--             <div class="d-flex flex-column">-->
+<!--                 <a class='menu-padding' href="http://127.0.0.1:8000/categories/M/">Category</a>-->
+<!--    <a class='menu-padding' href="http://127.0.0.1:8000/categories/K/">Kids</a></div>-->
+<!--             </div>-->
 
-<!--  <div class="footer red-footer">-->
-<!--    <div>Red Footer</div>-->
-<!--    <div class="black-footer">Black Footer</div>-->
+<!--     </div>-->
+<!--     </div>-->
+
+
+<!--&lt;!&ndash;    <a href="#" id="logoutButton">Logout</a>&ndash;&gt;-->
+
 <!--  </div>-->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
@@ -276,3 +273,4 @@
 
 </body>
 </html>
+{% endblock %}
