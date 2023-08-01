@@ -94,10 +94,11 @@
             <td>{{ item.product_variant.color }}</td>
 
             <td>
-                <div class="d-flex quantity-container">
-                    <button class="btn btn-primary" onclick="addItem('{{ item.product_id }}')">+</button>
-                    <p>{{ item.quantity }}</p>
-                    <button class="btn btn-primary" onclick="removeItem('{{ item.product_id }}')">-</button>
+                <div class="d-flex align-items-center quantity-container">
+                    <button class="btn btn-secondary" onclick="addItem('{{ item.product_id }}')"> + </button>
+                   <div class="px-1">{{ item.quantity }}</div>
+
+                    <button class="btn btn-secondary" onclick="removeItem('{{ item.product_id }}')"> - </button>
                 </div>
             </td>
             <td>{{ item.price }}</td>
@@ -106,8 +107,22 @@
             </td>
         </tr>
         {% endfor %}
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         <td colspan="1" class="right-align" >Total:</td>
         <td>{{ total_price }}</td>
+          <tr>
+               <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        <td colspan="1" class="right-align" >Total Discount Amount:</td>
+        <td>{{ total_price }}</td>
+          </tr>
     </table>
         </div>
 
@@ -118,9 +133,11 @@
 </div>
 
 
-
+<div class="d-flex justify-content-evenly my-2">
     <!-- Place Order Button -->
-    <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+    <button class="btn bg-secondary text-white place-order-btn" onclick="placeOrder()">Place Order</button>
+
+</div>
 
     <!-- Optional: Add any additional content or elements you want -->
 
