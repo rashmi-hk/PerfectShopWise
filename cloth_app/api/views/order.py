@@ -1,6 +1,6 @@
 import datetime
 
-
+from django.db.models import F
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from ...models import CustomUser, Cart, OrderItem, Product,Order,ProductVariant
@@ -14,6 +14,43 @@ from django.db import transaction
 
 
 class OrderApiView(APIView):
+
+    def get(self, request):
+        print("Inside order get")
+        try:
+            user = request.session.get('email')
+            cust_obj = CustomUser.objects.get(email=user)
+
+            product_variants = ProductVariant.objects.filter(
+                orderitem__order__user=cust_obj
+            ).distinct()
+
+            # Get the product images for each product variant
+            product_images = []
+            for variant in product_variants:
+                # Retrieve the product images for the variant
+                images = variant.product.images.all()
+
+                # If there are multiple images, you may want to select one as the main image.
+                # For example, if you want to select the first image, you can do this:
+                main_image = images.first() if images else None
+
+                # Append the product name, size, color, and main image URL (if available) to the result list
+                product_images.append({
+                    'product_name': variant.product.name,
+                    'size': variant.get_size_display(),
+                    'color': variant.color,
+                    'main_image_url': main_image.image.url if main_image else None,
+                })
+                print("product_images", product_images)
+                context = {"product_images": product_images}
+            return render(request, 'order_history.html', context)
+        except ObjectDoesNotExist:
+            response_data = {
+                'success': False,
+                'message': 'User with this email does not exist.',
+            }
+            return JsonResponse(status=status.HTTP_404_NOT_FOUND)
 
 
     def post(self, request):

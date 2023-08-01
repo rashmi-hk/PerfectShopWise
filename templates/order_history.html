@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %}
+<html>
+<head>
+    <title>Product Images</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="row">
+            {% for product in product_images %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    {% if product.main_image_url %}
+                    <img src="{{ product.main_image_url }}" class="card-img-top" alt="{{ product.product_name }}">
+                    {% else %}
+                    <div class="card-img-top bg-secondary text-white text-center p-3">
+                        No Image Available
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.product_name }}</h5>
+                        <p class="card-text">Size: {{ product.size }}</p>
+                        <p class="card-text">Color: {{ product.color }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}
