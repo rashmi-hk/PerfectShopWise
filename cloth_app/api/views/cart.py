@@ -29,17 +29,25 @@ class CartAPIList(APIView):
         else:
             result_list = []
             total_price = 0
+            discounted_total_price = 0
             for item in prod_obj:
                 print("product id", item.id)
                 product_obj = Product.objects.get(id =item.product_id)
                 print("product_obj",product_obj)
                 images = [image.image.url for image in product_obj.images.all()]
                 total_price += item.product.price * item.quantity
+                discount_percent =  item.product.offer
+                print("discount_percent", discount_percent)
+
+                discounted_price = item.product.price * (1 - (discount_percent / 100))
+                print("discounted_price", discounted_price)
+                discounted_total_price += discounted_price
                 result_dict = {"product": item.product,
                                "price": item.product.price,
                                "product_variant": item.product_variant,
                                "quantity": item.quantity,
                                "product_id": item.product.id,
+                               "discounted_price": discounted_price,
                                }
                 if len(images) != 0:
                     result_dict.update({"images": images[0]})
@@ -47,7 +55,8 @@ class CartAPIList(APIView):
                 result_list.append(result_dict)
 
             context = {"result_list": result_list,
-                       "total_price": total_price}
+                       "total_price": total_price,
+                       "discounted_total_price":discounted_total_price}
 
             print("context", context)
             return render(request, 'cart.html', context)

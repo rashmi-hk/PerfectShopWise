@@ -105,6 +105,7 @@
             <td>
                 <p >{{ item.quantity|mul:item.price }}</p><!-- Add any additional actions related to the item here -->
             </td>
+            <td>{{item.discounted_price}}</td>
         </tr>
         {% endfor %}
           <td></td>
@@ -121,7 +122,7 @@
           <td></td>
           <td></td>
         <td colspan="1" class="right-align" >Total Discount Amount:</td>
-        <td>{{ total_price }}</td>
+        <td>{{ discounted_total_price }}</td>
           </tr>
     </table>
         </div>
