@@ -5,6 +5,8 @@
 {% load static %}
 <html lang="en">
 <head>
+     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
@@ -184,11 +186,11 @@ body, ul, li {
 </head>
 <body>
   <div class="container">
-
+       <h3>Product Detail</h3>
         <ul class="product-list">
             {% for product in result_list %}
             <li class="product-item">
-                  <div class="card" style="width: 300px;" >
+                  <div class="card" style="width: 100%;" >
                   <div class="card-header">
 
                     <h2 class="product-name">{{ product.name }}</h2>
@@ -196,16 +198,55 @@ body, ul, li {
                       <div class="card-body">
 
 
-                    {% if product.images %}
+<!--                    {% if product.images %}-->
 
-                    <div class="image-scroll-container">
-                        <ul class="image-list">
-                            {% for image in product.images %}
-                                <li class="image-item"><img src="{{ image }}" alt="Product Image"></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+<!--                    <div class="image-scroll-container">-->
+<!--                        <ul class="image-list">-->
+<!--                            {% for image in product.images %}-->
+<!--                                <li class="image-item"><img src="{{ image }}" alt="Product Image"></li>-->
+<!--                            {% endfor %}-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                    {% endif %}-->
+
+                           <section class="banner">
+        <div class="banner-container">
+            <div id="carouselExampleIndicators" class="carousel slide banner-carousel" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <!-- Add the carousel indicators here -->
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <!-- Add the carousel slide images here -->
+                    {% if product.images %}
+                        {% for image in product.images %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <img src="{{ image }}" alt="Product Image">
+                            </div>
+                        {% endfor %}
                     {% endif %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
 
                            <p class="product-description">{{ product.description }}</p>
                     <p class="product-price">Price: ${{ product.price }}</p>

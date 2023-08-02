@@ -57,7 +57,7 @@ class ProductAPIList(APIView):
             # images = [image.image.url for image in data.images.all()]
             image_url = data.images.first().image.url if data.images.exists() else None
 
-          
+
 
             variants = []
             unique_sizes = set()
