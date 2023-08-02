@@ -12,12 +12,12 @@
 <body>
     <div class="container">
 
-        <div class="row">
+        <div class="row" style="margin-bottom:250px;margin-top:30px">
             {% for product in product_images %}
             <div class="col-md-4">
                 <div class="card mb-4">
                     {% if product.main_image_url %}
-                    <img src="{{ product.main_image_url }}" class="card-img-top" alt="{{ product.product_name }}">
+                    <img src="{{ product.main_image_url }}" class="card-img-top" width="500" height="500" alt="{{ product.product_name }}  ">
                     {% else %}
                     <div class="card-img-top bg-secondary text-white text-center p-3">
                         No Image Available
