@@ -6,23 +6,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
-    <div class="container">
+    <div class="container my-5">
         <form id="productForm" method="get" action="{% url 'product_detail_api' %}">
             {% csrf_token %}
             <input type="hidden" id="productIdInput" name="product_id">
-            <ul class="product-list">
+            <ul class=" d-flex gap-5 flex-wrap list-unstyled justify-content-center product-list">
                 {% for product in result_list %}
                 <li class="product-item">
-                    <div class="card" style="width: 300px;">
+                    <div class="card" style="width: 300px;height:100%;">
                         <div class="card-header">
                             <h2 class="product-name">{{ product.name }}</h2>
                         </div>
                         <div class="card-body">
                             {% if product.images %}
                             <div class="image-scroll-container">
-                                <ul class="image-list" id="productImageList">
+                                <ul class="list-unstyled image-list" id="productImageList">
                                     {% for image in product.images %}
                                     <!-- Add a link around the image -->
 

@@ -178,6 +178,9 @@ a {
     align-items: center;
 }
 
+.nav-item.active a {
+    color: blue;
+}
 
 
 

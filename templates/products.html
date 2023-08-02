@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 {% extends 'index.html' %}
 
 {% block content %}
@@ -20,12 +19,11 @@ body, ul, li {
 }
 
 /* Center the content vertically and horizontally */
-.container {
+.product-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0; /* Optional: Set the background color */
 }
@@ -181,21 +179,28 @@ body, ul, li {
     pointer-events: auto;
 }
 
+.card-body-custom{
+height:100%;
+weidth:100%;
+}
 
     </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container my-5">
+      <div class="row">
        <h3>Product Detail</h3>
+
+          <div class="col-md-6">
         <ul class="product-list">
             {% for product in result_list %}
             <li class="product-item">
-                  <div class="card" style="width: 100%;" >
-                  <div class="card-header">
+
+
 
                     <h2 class="product-name">{{ product.name }}</h2>
-                  </div>
-                      <div class="card-body">
+
+                      <div class="card-body-custom">
 
 
 <!--                    {% if product.images %}-->
@@ -210,35 +215,35 @@ body, ul, li {
 <!--                    {% endif %}-->
 
                            <section class="banner">
-        <div class="banner-container">
-            <div id="carouselExampleIndicators" class="carousel slide banner-carousel" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <!-- Add the carousel indicators here -->
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
-                <div class="carousel-inner">
-                    <!-- Add the carousel slide images here -->
-                    {% if product.images %}
-                        {% for image in product.images %}
-                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                <img src="{{ image }}" alt="Product Image">
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-    </section>
+                                <div class="banner-container">
+                                    <div id="carouselExampleIndicators" class="carousel slide banner-carousel" data-bs-ride="carousel">
+                                        <div class="carousel-indicators">
+                                            <!-- Add the carousel indicators here -->
+                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                        </div>
+                                        <div class="carousel-inner">
+                                            <!-- Add the carousel slide images here -->
+                                            {% if product.images %}
+                                                {% for image in product.images %}
+                                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                        <img src="{{ image }}" alt="Product Image" width="500" height="500">
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
+                                </div>
+                        </section>
 
 
 
@@ -247,6 +252,34 @@ body, ul, li {
 
 
 
+
+
+
+
+    <!--                {% if product.variants %}-->
+    <!--                    <h3 class="product-subtitle">Variants:</h3>-->
+    <!--                    <ul class="variant-list">-->
+    <!--                        {% for variant in product.variants %}-->
+    <!--                        <li class="variant-item">-->
+    <!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="size-checkbox" name="size" value="{{ variant.size }}" {% if product.disable %}disabled{% endif %}>-->
+    <!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Size: {{ variant.size }}</label>-->
+    <!--                            <input type="checkbox" data-item-id="{{ product.product_id }}" class="color-checkbox" name="color" value="{{ variant.color }}" {% if product.disable %}disabled{% endif %}>-->
+    <!--                            <label {% if product.disable %}style="color: blue;"{% endif %}>Color: {{ variant.color }}</label>-->
+    <!--                        </li>-->
+    <!--                        {% endfor %}-->
+    <!--                    </ul>-->
+
+    <!--                {% endif %}-->
+                      </div>
+                </li>
+
+                {% endfor %}
+
+            </ul>
+          </div>
+                <div class="col-md-6">
+                    <div class="container my-5">
+               {% for product in result_list %}
 
                            <p class="product-description">{{ product.description }}</p>
                     <p class="product-price">Price: ${{ product.price }}</p>
@@ -270,15 +303,19 @@ body, ul, li {
                                   {% endif %}
                         {% endfor %}
                     </div>
-
-                 </div>
-                 </div>
-                    <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
+  <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
 
 
                     <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" {% if product.wish_status_disable %}disabled{% endif %}>WishList</button>
 
                     <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
+
+                    </div>
+
+                 </div>
+
+      </div>
+
 
 
 
@@ -300,13 +337,16 @@ body, ul, li {
     <!--                    </ul>-->
 
     <!--                {% endif %}-->
-                </li>
 
-                {% endfor %}
 
-            </ul>
+          </div>
+      </div>
+
+
+
+
     </div>
-
+  {% endfor %}
 
 <script>
 
@@ -492,16 +532,7 @@ body, ul, li {
 <!--&lt;!&ndash;            alert('Product added to cart successfully.');&ndash;&gt;-->
 <!--            setItemAddedText(productId);-->
 <!--            disableCartButton(productId);-->
-<!--               disableCheckboxes(productId);-->
 
-<!--            // Reload the page after displaying the success message-->
-<!--            window.location.reload();-->
-<!--        })-->
-<!--        .catch((error) => {-->
-<!--            console.error("this is the error", error);-->
-<!--            alert('Failed to add the product to the cart. Please try again.');-->
-<!--        });-->
-<!--    }-->
 
       function addToCart(productId) {
 
