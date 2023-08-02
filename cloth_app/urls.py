@@ -1,7 +1,7 @@
 from django.urls import path
 from cloth_app.api.views.home import HomeAPIList
 from cloth_app.api.views.categories import CategoryAPIList
-from cloth_app.api.views.product_api import ProductAPIList
+from cloth_app.api.views.product_api import ProductAPIList,AllProductAPIList
 from cloth_app.api.views.register import RegisterAPIList
 from cloth_app.api.views.cart import CartAPIList
 from cloth_app.api.views.admin_utility import AdminUtilityAPIList
@@ -25,6 +25,7 @@ urlpatterns = [
     path('first_page/', FirstPageAPIList.as_view() , name='first_page'),
     path('categories/<str:gender>/', CategoryAPIList.as_view() , name='categories'),
     path('product_api/', ProductAPIList.as_view() , name='product_api'),
+    path('product_detail_api/',AllProductAPIList.as_view(), name='product_detail_api'),
     path('register', RegisterAPIList.as_view() , name='register'),
     path('wishlist', WishListAPIList.as_view() , name='wishlist'),
     path('register/<int:variant>', RegisterAPIList.as_view() , name='register_variant'),
