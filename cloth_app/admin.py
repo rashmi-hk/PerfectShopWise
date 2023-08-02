@@ -44,55 +44,55 @@ admin.site.register(Categories, CategoriesAdmin)
 #     # list_display = ('product','size_choices','size','color')
 
 
-class ProductImageInline(admin.TabularInline):
-    model = ProductImage
-    extra = 0
+# class ProductImageInline(admin.TabularInline):
+#     model = ProductImage
+#     extra = 0
+#
+# class ProductVariantInline(admin.TabularInline):
+#     model = ProductVariant
+#     extra = 0
+#
+# class ProductAdmin(admin.ModelAdmin):
+#     inlines = [ProductImageInline, ProductVariantInline]
+#
+#     def formfield_for_manytomany(self, db_field, request, **kwargs):
+#         if db_field.name == 'images':
+#             # If editing an existing product, filter images based on the current product.
+#             if request.resolver_match.view_name == 'admin:%s_%s_change' % (
+#                     self.model._meta.app_label,
+#                     self.model._meta.model_name,
+#             ):
+#                 product_id = request.resolver_match.kwargs['object_id']
+#                 kwargs['queryset'] = ProductImage.objects.filter(product__id=product_id)
+#
+#             # If adding a new product, don't show any images until the product is saved.
+#             else:
+#                 kwargs['queryset'] = ProductImage.objects.none()
+#
+#         elif db_field.name == 'variants':
+#             # If editing an existing product, filter variants based on the current product.
+#             if request.resolver_match.view_name == 'admin:%s_%s_change' % (
+#                     self.model._meta.app_label,
+#                     self.model._meta.model_name,
+#             ):
+#                 product_id = request.resolver_match.kwargs['object_id']
+#                 kwargs['queryset'] = ProductVariant.objects.filter(product__id=product_id)
+#
+#             # If adding a new product, don't show any variants until the product is saved.
+#             else:
+#                 kwargs['queryset'] = ProductVariant.objects.none()
+#
+#         return super().formfield_for_manytomany(db_field, request, **kwargs)
+#
+#     def get_image_preview(self, obj):
+#         if obj.images.exists():
+#             return obj.images.first().image.url
+#         return "(No Image)"
+#
+#     get_image_preview.short_description = 'Image Preview'
+#
+#     list_display = ['name', 'get_image_preview']
 
-class ProductVariantInline(admin.TabularInline):
-    model = ProductVariant
-    extra = 0
-
-class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductImageInline, ProductVariantInline]
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == 'images':
-            # If editing an existing product, filter images based on the current product.
-            if request.resolver_match.view_name == 'admin:%s_%s_change' % (
-                    self.model._meta.app_label,
-                    self.model._meta.model_name,
-            ):
-                product_id = request.resolver_match.kwargs['object_id']
-                kwargs['queryset'] = ProductImage.objects.filter(product__id=product_id)
-
-            # If adding a new product, don't show any images until the product is saved.
-            else:
-                kwargs['queryset'] = ProductImage.objects.none()
-
-        elif db_field.name == 'variants':
-            # If editing an existing product, filter variants based on the current product.
-            if request.resolver_match.view_name == 'admin:%s_%s_change' % (
-                    self.model._meta.app_label,
-                    self.model._meta.model_name,
-            ):
-                product_id = request.resolver_match.kwargs['object_id']
-                kwargs['queryset'] = ProductVariant.objects.filter(product__id=product_id)
-
-            # If adding a new product, don't show any variants until the product is saved.
-            else:
-                kwargs['queryset'] = ProductVariant.objects.none()
-
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
-
-    def get_image_preview(self, obj):
-        if obj.images.exists():
-            return obj.images.first().image.url
-        return "(No Image)"
-
-    get_image_preview.short_description = 'Image Preview'
-
-    list_display = ['name', 'get_image_preview']
-
-admin.site.register(Product, ProductAdmin)
+admin.site.register(Product)
 
 

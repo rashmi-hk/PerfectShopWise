@@ -19,12 +19,15 @@ class OrderApiView(APIView):
         print("Inside order get")
         try:
             user = request.session.get('email')
+            print("user", user)
             cust_obj = CustomUser.objects.get(email=user)
+            print("cust_obj", cust_obj)
 
             product_variants = ProductVariant.objects.filter(
                 orderitem__order__user=cust_obj
-            ).distinct()
-
+            )
+            print("product_variants",product_variants)
+            print("product_variants",len(product_variants))
             # Get the product images for each product variant
             product_images = []
             for variant in product_variants:
@@ -43,7 +46,13 @@ class OrderApiView(APIView):
                     'main_image_url': main_image.image.url if main_image else None,
                 })
                 print("product_images", product_images)
-                context = {"product_images": product_images}
+            context = {"product_images": product_images}
+            print("product_images", product_images)
+            if len(product_variants) == 0:
+                context["error_message"] = "No product images available."
+
+            print("context********************************",context)
+
             return render(request, 'order_history.html', context)
         except ObjectDoesNotExist:
             response_data = {

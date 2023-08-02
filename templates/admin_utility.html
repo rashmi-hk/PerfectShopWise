@@ -2,51 +2,136 @@
 <html>
 <head>
     <title>Admin Utility</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<header>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <i class="fa fa-shopping-cart cart-icon" style="font-size: 48px; color: red;"></i>
+            <span style="color: black; font-weight: bold; font-size: 36px; font-family: cursive;">Shopwise</span>
+        </div>
+        <div>
+            <a href="{% url 'admin_utility_logout' %}" style="margin-right: 10px;font-size: 20px;">Logout</a>
+        </div>
+    </div>
+</header>
     <h1>Admin Utility Dashboard</h1>
 
     <h2>Total Number of Orders</h2>
-    <p>Total orders placed today: {{ total_orders_placed }}</p>
-    <p>Total orders placed this month: {{ total_orders_this_month }}</p>
+    <table>
+        <tr>
+            <th>Total orders placed today</th>
+            <td>{{ total_orders_placed }}</td>
+        </tr>
+        <tr>
+            <th>Total orders placed this month</th>
+            <td>{{ total_orders_this_month }}</td>
+        </tr>
+    </table>
 
     <h2>Products Per Size and Color</h2>
     <h3>Today's Orders</h3>
-    <ul>
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th>Total</th>
+        </tr>
         {% for product in products_per_size_color %}
-        <li>
-            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Total: {{ product.total_products }}
-        </li>
+        <tr>
+            <td>{{ product.product_name }}</td>
+            <td>{{ product.size }}</td>
+            <td>{{ product.color }}</td>
+            <td>{{ product.total_products }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 
     <h3>This Month's Orders</h3>
-    <ul>
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th>Total</th>
+        </tr>
         {% for product in products_per_size_color_month %}
-        <li>
-            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Total: {{ product.total_products }}
-        </li>
+        <tr>
+            <td>{{ product.product_name }}</td>
+            <td>{{ product.size }}</td>
+            <td>{{ product.color }}</td>
+            <td>{{ product.total_products }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 
-    <h2>Quantity Left in Stock</h2>
-    <h3>Today</h3>
-    <ul>
-        {% for product in stock_left_per_day %}
-        <li>
-            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Quantity Left: {{ product.quantity_left }}
-        </li>
-        {% endfor %}
-    </ul>
+<!--    <h2>Quantity Left in Stock</h2>-->
+<!--    <h3>Today</h3>-->
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <th>Product</th>-->
+<!--            <th>Size</th>-->
+<!--            <th>Color</th>-->
+<!--            <th>Quantity Left</th>-->
+<!--        </tr>-->
+<!--        {% for product in stock_left_per_day %}-->
+<!--        <tr>-->
+<!--            <td>{{ product.product_name }}</td>-->
+<!--            <td>{{ product.size }}</td>-->
+<!--            <td>{{ product.color }}</td>-->
+<!--            <td>{{ product.quantity_left }}</td>-->
+<!--        </tr>-->
+<!--        {% endfor %}-->
+<!--    </table>-->
 
-    <h3>This Month</h3>
-    <ul>
-        {% for product in stock_left_per_month %}
-        <li>
-            Product: {{ product.product_name }} | Size: {{ product.size }} | Color: {{ product.color }} | Quantity Left: {{ product.quantity_left }}
-        </li>
-        {% endfor %}
-    </ul>
+<!--    <h3>This Month</h3>-->
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <th>Product</th>-->
+<!--            <th>Size</th>-->
+<!--            <th>Color</th>-->
+<!--            <th>Quantity Left</th>-->
+<!--        </tr>-->
+<!--        {% for product in stock_left_per_month %}-->
+<!--        <tr>-->
+<!--            <td>{{ product.product_name }}</td>-->
+<!--            <td>{{ product.size }}</td>-->
+<!--            <td>{{ product.color }}</td>-->
+<!--            <td>{{ product.quantity_left }}</td>-->
+<!--        </tr>-->
+<!--        {% endfor %}-->
+    </table>
 
     {% if error %}
     <h2>Error</h2>

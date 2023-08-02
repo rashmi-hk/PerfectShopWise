@@ -585,9 +585,11 @@ weidth:100%;
         .then(responseData => {
             // Handle the response from the server if necessary
             console.log('Product added to cart successfully:', responseData);
+            window.location.reload();
             // If successful, you may hide the error message (if it was previously shown)
             disableCartButton(productId);
             errorMessage.style.display = 'none';
+
         })
         .catch(error => {
             // Handle errors
