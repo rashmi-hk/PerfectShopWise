@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from ...models import CustomUser
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
+from ...models import Categories,Subcategory
 # import os
 # from ...serializers import CartSerializer
 # from django.core import serializers
@@ -49,9 +50,34 @@ class HomeAPIList(APIView):
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
                 return_list = []
+
+                categories = Categories.objects.all()
+
+                data_list = []
+                for category in categories:
+                    subcategories_data = []
+                    sub_cat_data = Subcategory.objects.filter(category=category.id)
+                    for item in sub_cat_data:
+                        subcategory_data = {
+                            'subCategoryId': item.id,
+                            'subcategoryName': item.subcategoryName,
+                            'sub_category_img': item.sub_category_img.url if item.sub_category_img else None,
+                        }
+                        subcategories_data.append(subcategory_data)
+
+                    category_data = {
+                        'categoryId': category.id,
+                        'categoryName': category.categoryName,
+                        'category_img': category.category_img.url if category.category_img else None,
+                        'subcategories': subcategories_data,
+                    }
+                    data_list.append(category_data)
+
                 context = {
                     'user_is_authenticated': customer.is_verified,
+                    'category_data': data_list,
                 }
+                print("context", context)
             return render(request, 'base.html', context)
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly

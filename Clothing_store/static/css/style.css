@@ -198,3 +198,21 @@ a {
 .categories-to-bag .categories-list-item .categories-list-item-image {
     border-radius: 70px;
 }
+
+.carousel-control-next-icon:hover {
+    background-color: rgba(255, 0, 0, 0.5); /* Use the rgba() function to set the opacity */
+  }
+
+  /* Optional: Adjust the color of the carousel "Next" icon on hover */
+  .carousel-control-next-icon:hover .carousel-control-next-icon {
+    color: white;
+  }
+
+  .carousel-control-prev-icon:hover {
+    background-color: rgba(255, 0, 0, 0.5); /* Use the rgba() function to set the opacity */
+  }
+
+  /* Optional: Adjust the color of the carousel "Next" icon on hover */
+  .carousel-control-prev-icon:hover .carousel-control-next-icon {
+    color: white;
+  }
