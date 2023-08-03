@@ -79,8 +79,12 @@
         <h1>Wish list</h1>
         <!-- Loop through the result_list to display each product -->
         {% for product in result_list %}
+        {% if forloop.counter0|divisibleby:3 %}
+                <div class="row">
+            {% endif %}
+                    <div class="col-md-4">
             <div class="product-item">
-                <div class="card" style="width: 300px;" >
+                <div class="card" style="width: 300px;height:560px" >
                  <div class="card-header">
                     <h2 class="product-name">{{ product.product }}</h2>
                  </div>
@@ -119,7 +123,11 @@
             <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})">Move to cart</button>
             <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="removeItem({{ product.wishlist_id }})">Delete</button>
 
-
+             </div>
+             </div>
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
 
@@ -221,6 +229,7 @@
         .then(responseData => {
             // Handle the response from the server if necessary
             console.log('Product added to cart successfully:', responseData);
+            window.location.reload();
             // If successful, you may hide the error message (if it was previously shown)
             errorMessage.style.display = 'none';
         })
@@ -260,6 +269,7 @@
         }
     </script>
     </div>
+
 </body>
 </html>
 {% endblock %}
