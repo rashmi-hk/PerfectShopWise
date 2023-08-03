@@ -173,7 +173,7 @@
 <!--        <a href="{% url 'logout' %}">Logout</a>-->
     <a id="cartLink" href="{% url 'cart' %}" class="menu-padding">
             <i id="cartIcon" class="fas fa-shopping-cart"></i>
-            <span id="cartCountOverlay">{{prod_obj}}</span>
+            <span id="cartCountOverlay">{{prod_obj|default:"0"}}</span>
     </a>
          <div class="language-and-wishlist menu-padding">
 

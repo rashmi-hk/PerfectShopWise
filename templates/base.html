@@ -381,8 +381,9 @@ swiper-container {
         <div class="sub-category-row">
             {% for subcategory in category.subcategories %}
             <div class="sub-category-card">
-
+                <a href="{% url 'product_api' %}?main_category={{ category.categoryId }}&sub_category={{ subcategory.subCategoryId }}">
                 <img class="sub-category-img" src="{{ subcategory.sub_category_img }}" alt="{{ subcategory.subcategoryName }}">
+                    </a>
                 <p>{{ subcategory.subcategoryName }}</p>
             </div>
             {% endfor %}
@@ -419,6 +420,24 @@ swiper-container {
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-element-bundle.min.js"></script>
 <script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+        const isLoggedIn = {{ user_is_authenticated|yesno:"true,false" }};
+        console.log("***** login detail", isLoggedIn);
+        const links = document.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', function (event) {
+                if (!isLoggedIn) {
+                    // Redirect to the login page
+                    event.preventDefault(); // Prevent default link behavior
+                    window.location.href = '{% url "login" %}';
+                }
+            });
+        });
+    });
+    console.log("**************************",user.is_authenticated)
+
+
      const swiper = new Swiper('.swiper', {
   // Optional parameters
   direction: 'vertical',
@@ -442,21 +461,7 @@ swiper-container {
 });
 
 
-     document.addEventListener('DOMContentLoaded', function () {
-        const isLoggedIn = {{ user_is_authenticated|yesno:"true,false" }};
-        console.log("***** login detail", isLoggedIn);
-        const links = document.querySelectorAll('a');
-        links.forEach(link => {
-            link.addEventListener('click', function (event) {
-                if (!isLoggedIn) {
-                    // Redirect to the login page
-                    event.preventDefault(); // Prevent default link behavior
-                    window.location.href = '{% url "login" %}';
-                }
-            });
-        });
-    });
-    console.log("**************************",user.is_authenticated)
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 </body>

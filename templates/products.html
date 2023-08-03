@@ -228,7 +228,7 @@ weidth:100%;
                                             {% if product.images %}
                                                 {% for image in product.images %}
                                                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                                        <img src="{{ image }}" alt="Product Image" width="400" height="480">
+                                                        <img src="{{ image }}" alt="Product Image" width="400" height="480" style="object-fit:contain;">
                                                     </div>
                                                 {% endfor %}
                                             {% endif %}
