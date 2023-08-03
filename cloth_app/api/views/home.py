@@ -49,7 +49,10 @@ class HomeAPIList(APIView):
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
                 return_list = []
-            return render(request, 'base.html')
+                context = {
+                    'user_is_authenticated': customer.is_verified,
+                }
+            return render(request, 'base.html', context)
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response

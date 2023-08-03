@@ -13,54 +13,59 @@ from django.core.exceptions import ObjectDoesNotExist
 class CartAPIList(APIView):
 
     def get(self,request):
+        try:
+            print("Inside get cart")
+            print("Inside  get   register")
+            user = request.session.get('email')
+            cust_obj = CustomUser.objects.get(email=user)
+            prod_obj = Cart.objects.filter(user=cust_obj,orderid_id__isnull=True)
 
-        print("Inside get cart")
-        print("Inside  get   register")
-        user = request.session.get('email')
-        cust_obj = CustomUser.objects.get(email=user)
-        prod_obj = Cart.objects.filter(user=cust_obj,orderid_id__isnull=True)
-
-        cart_item_count = prod_obj.count()
+            cart_item_count = prod_obj.count()
 
 
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            print("HI")
-            return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
-        else:
-            result_list = []
-            total_price = 0
-            discounted_total_price = 0
-            for item in prod_obj:
-                print("product id", item.id)
-                product_obj = Product.objects.get(id =item.product_id)
-                print("product_obj",product_obj)
-                images = [image.image.url for image in product_obj.images.all()]
-                total_price += item.product.price * item.quantity
-                discount_percent =  item.product.offer
-                print("discount_percent", discount_percent)
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                print("HI")
+                return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
+            else:
+                result_list = []
+                total_price = 0
+                discounted_total_price = 0
+                for item in prod_obj:
+                    print("product id", item.id)
+                    product_obj = Product.objects.get(id =item.product_id)
+                    print("product_obj",product_obj)
+                    images = [image.image.url for image in product_obj.images.all()]
+                    total_price += item.product.price * item.quantity
+                    discount_percent =  item.product.offer
+                    print("discount_percent", discount_percent)
 
-                discounted_price = item.product.price * (1 - (discount_percent / 100))
-                print("discounted_price", discounted_price)
-                discounted_total_price += discounted_price
-                result_dict = {"product": item.product,
-                               "price": item.product.price,
-                               "product_variant": item.product_variant,
-                               "quantity": item.quantity,
-                               "product_id": item.product.id,
-                               "discounted_price": discounted_price,
-                               }
-                if len(images) != 0:
-                    result_dict.update({"images": images[0]})
+                    discounted_price = item.product.price * (1 - (discount_percent / 100))
+                    print("discounted_price", discounted_price)
+                    discounted_total_price += discounted_price
+                    result_dict = {"product": item.product,
+                                   "price": item.product.price,
+                                   "product_variant": item.product_variant,
+                                   "quantity": item.quantity,
+                                   "product_id": item.product.id,
+                                   "discounted_price": discounted_price,
+                                   }
+                    if len(images) != 0:
+                        result_dict.update({"images": images[0]})
 
-                result_list.append(result_dict)
+                    result_list.append(result_dict)
 
-            context = {"result_list": result_list,
-                       "total_price": total_price,
-                       "discounted_total_price":discounted_total_price}
+                context = {"result_list": result_list,
+                           "total_price": total_price,
+                           "discounted_total_price":discounted_total_price}
 
-            print("context", context)
-            return render(request, 'cart.html', context)
+                print("context", context)
+                return render(request, 'cart.html', context)
         # return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            # If the user does not exist, you can handle it accordingly
+            # For example, you might want to return an error response
+            return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
+                                status=404)
 
     def post(self, request):
         print("inside  cart api post  ",request)
