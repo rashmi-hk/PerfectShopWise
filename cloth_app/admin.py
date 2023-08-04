@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Categories,Product,ProductVariant,ProductImage,Subcategory
+from .models import Categories,Product,ProductVariant,ProductImage,Subcategory,Order
 # Register your models here.
 
 # admin.site.register(Product)
 admin.site.register(ProductVariant)
 admin.site.register(ProductImage)
 admin.site.register(Subcategory)
+admin.site.register(Order)
 
 
 # @admin.register(Categories)

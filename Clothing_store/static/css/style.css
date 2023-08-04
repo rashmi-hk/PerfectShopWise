@@ -216,3 +216,6 @@ a {
   .carousel-control-prev-icon:hover .carousel-control-next-icon {
     color: white;
   }
+  .error-message {
+            color: red;
+        }

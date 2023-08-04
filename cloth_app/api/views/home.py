@@ -44,7 +44,7 @@ class HomeAPIList(APIView):
             if not password_matched:
                 print("invalid")
 
-                return render(request, 'login_custom.html', {'error_message': 'Invalid credentials'})
+                return render(request, 'login.html', {'error_message': 'Invalid credentials'})
             else:
                 print("valid")
                 request.session['customer_id'] = customer.id

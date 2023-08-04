@@ -140,6 +140,17 @@ class Order(models.Model):
     ordered_date = models.DateTimeField(auto_now_add=True)
     is_ordered = models.BooleanField(default=False)
     total_price = models.IntegerField(null=False, blank=False)
+    ORDER_STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('PROCESSING', 'Processing'),
+        ('COMPLETED', 'Completed'),
+        ('CANCELLED', 'Cancelled'),
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=ORDER_STATUS_CHOICES,
+        default='PENDING'
+    )
 
     def __str__(self):
         return f"Order #{self.id} - CustomUser: {self.user.username}"

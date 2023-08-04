@@ -421,20 +421,20 @@ swiper-container {
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-element-bundle.min.js"></script>
 <script>
 
-  document.addEventListener('DOMContentLoaded', function () {
-        const isLoggedIn = {{ user_is_authenticated|yesno:"true,false" }};
-        console.log("***** login detail", isLoggedIn);
-        const links = document.querySelectorAll('a');
-        links.forEach(link => {
-            link.addEventListener('click', function (event) {
-                if (!isLoggedIn) {
-                    // Redirect to the login page
-                    event.preventDefault(); // Prevent default link behavior
-                    window.location.href = '{% url "login" %}';
-                }
-            });
-        });
-    });
+<!--  document.addEventListener('DOMContentLoaded', function () {-->
+<!--        const isLoggedIn = {{ user_is_authenticated|yesno:"true,false" }};-->
+<!--        console.log("***** login detail", isLoggedIn);-->
+<!--        const links = document.querySelectorAll('a');-->
+<!--        links.forEach(link => {-->
+<!--            link.addEventListener('click', function (event) {-->
+<!--                if (!isLoggedIn) {-->
+<!--                    // Redirect to the login page-->
+<!--                    event.preventDefault(); // Prevent default link behavior-->
+<!--                    window.location.href = '{% url "login" %}';-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
     console.log("**************************",user.is_authenticated)
 
 

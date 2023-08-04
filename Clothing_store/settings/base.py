@@ -41,17 +41,7 @@ logging.config.dictConfig(LOGGING)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'restaurants',
-#         'USER': 'root',
-#         'PASSWORD': 'Dollarbird@22',
-#         'HOST':'localhost',
-#         'PORT':'3306',
-#     }
-# }
+
 
 DATABASES = {
     'default': {

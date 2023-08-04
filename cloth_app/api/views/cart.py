@@ -59,7 +59,10 @@ class CartAPIList(APIView):
                            "discounted_total_price":discounted_total_price}
 
                 print("context", context)
-                return render(request, 'cart.html', context)
+                if len(context['result_list']) != 0:
+                    return render(request, 'cart.html', context)
+                else:
+                    return render(request, 'empty_cart.html', context)
         # return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly

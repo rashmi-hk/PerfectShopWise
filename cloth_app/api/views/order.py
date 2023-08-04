@@ -37,12 +37,14 @@ class OrderApiView(APIView):
                 # If there are multiple images, you may want to select one as the main image.
                 # For example, if you want to select the first image, you can do this:
                 main_image = images.first() if images else None
-
+                order_statuses = Order.objects.filter(orderitem__product_variant=variant,user=cust_obj.id).values_list('status',
+                                                                                                              flat=True).first()
                 # Append the product name, size, color, and main image URL (if available) to the result list
                 product_images.append({
                     'product_name': variant.product.name,
                     'size': variant.get_size_display(),
                     'color': variant.color,
+                    'status': order_statuses,
                     'main_image_url': main_image.image.url if main_image else None,
                 })
                 print("product_images", product_images)
@@ -125,6 +127,7 @@ class OrderApiView(APIView):
 
                 order.total_price = total_price
                 order.is_ordered = True
+                order.status = 'PROCESSING'
                 order.ordered_date =  datetime.datetime.now()
                 order.save()
 

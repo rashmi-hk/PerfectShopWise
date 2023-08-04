@@ -63,7 +63,16 @@
             background-color: red;
 
         }
+        .error-message {
+            color: red;
+        }
     </style>
+       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.alert-error').fadeOut(4000);
+        });
+    </script>
     <title>Login Form</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -87,6 +96,9 @@
 
         <button type="submit">Login</button>
     </form>
+    {% if error_message %}
+        <p class="error-message alert-error">{{ error_message }}</p>
+    {% endif %}
     <p>
         <a href="#" onclick="showForgotPassword()">Forgot Password?</a> |
         <a href="#" onclick="showRegister()">Register</a>
