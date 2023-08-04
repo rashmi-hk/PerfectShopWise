@@ -56,12 +56,16 @@ class WishListAPIList(APIView):
                 result_list.append(result_dict)
 
             context = {"result_list": result_list}
+            if len(context['result_list']) == 0:
+                return render(request, 'empty_wishlist.html')
+            else:
 
-            print("context", context)
-            return render(request, 'wishlist.html', context)
+                print("context", context)
+                return render(request, 'wishlist.html', context)
 
         except ObjectDoesNotExist:
-            return JsonResponse(status=status.HTTP_404_NOT_FOUND)
+
+            return render(request, 'empty_wishlist_without_login.html')
             # return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
 
     def post(self, request):

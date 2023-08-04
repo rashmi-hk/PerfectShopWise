@@ -3,7 +3,7 @@ from cloth_app.api.views.home import HomeAPIList
 from cloth_app.api.views.categories import CategoryAPIList
 from cloth_app.api.views.product_api import ProductAPIList,AllProductAPIList
 from cloth_app.api.views.register import RegisterAPIList
-from cloth_app.api.views.cart import CartAPIList
+from cloth_app.api.views.cart import CartAPIList,UserCheckAPIList
 from cloth_app.api.views.admin_utility import AdminUtilityAPIList,AdminUtilityLoginAPIList
 from cloth_app.api.views.wishlist import WishListAPIList
 from cloth_app.api.views.first_page import FirstPageAPIList
@@ -31,6 +31,7 @@ urlpatterns = [
     path('wishlist', WishListAPIList.as_view() , name='wishlist'),
     path('register/<int:variant>', RegisterAPIList.as_view() , name='register_variant'),
     path('order', OrderApiView.as_view() , name='order'),
+    path('check_user', UserCheckAPIList.as_view() , name='check_user'),
     path('cart', CartAPIList.as_view() , name='cart'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('admin_utility_logout/', LogoutView.as_view(next_page='admin_utility_login'), name='admin_utility_logout'),

@@ -63,6 +63,7 @@
         background-size: cover;
         height: 200px; /* Adjust the height of the image band as needed */
     }
+
     </style>
 </head>
 <body>
@@ -74,60 +75,62 @@
     <div class="row">
         <div class="col-md-12">
             <h3>Billing Section</h3>
-      <table class="table table-striped">
-        <tr>
-            <th>Product Image</th>
-            <th>Product</th>
-            <th>size</th>
-            <th>color</th>
-            <th>Quantity</th>
-            <th>price</th>
-            <th>Item Total Price</th>
-            <th>Discount Price</th>
+             <div class="table-container" style="overflow-y: auto;max-height: 50vh;">
+          <table class="table table-striped">
+            <tr>
+                <th>Product Image</th>
+                <th>Product</th>
+                <th>size</th>
+                <th>color</th>
+                <th>Quantity</th>
+                <th>price</th>
+                <th>Item Total Price</th>
+                <th>Discount Price</th>
 
-        </tr>
-        {% for item in result_list %}
-        <tr class="cart-item">
+            </tr>
+            {% for item in result_list %}
+            <tr class="cart-item">
 
-                    <td><img src="{{ item.images }}" alt="Product Image"></td>
-            <td>{{ item.product }}</td>
-            <td>{{ item.product_variant.size }}</td>
-            <td>{{ item.product_variant.color }}</td>
+                        <td><img src="{{ item.images }}" alt="Product Image"></td>
+                <td>{{ item.product }}</td>
+                <td>{{ item.product_variant.size }}</td>
+                <td>{{ item.product_variant.color }}</td>
 
-            <td>
-                <div class="d-flex align-items-center quantity-container">
-                    <button class="btn btn-secondary" onclick="addItem('{{ item.product_id }}')"> + </button>
-                   <div class="px-1">{{ item.quantity }}</div>
+                <td>
+                    <div class="d-flex align-items-center quantity-container">
+                        <button class="btn btn-secondary" onclick="addItem('{{ item.product_id }}')"> + </button>
+                       <div class="px-1">{{ item.quantity }}</div>
 
-                    <button class="btn btn-secondary" onclick="removeItem('{{ item.product_id }}')"> - </button>
-                </div>
-            </td>
-            <td>{{ item.price }}</td>
-            <td>
-                <p >{{ item.quantity|mul:item.price }}</p><!-- Add any additional actions related to the item here -->
-            </td>
-            <td>{{item.discounted_price}}</td>
-        </tr>
-        {% endfor %}
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        <td colspan="1" class="right-align" >Total:</td>
-        <td>{{ total_price }}</td>
-          <tr>
-               <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        <td colspan="1" class="right-align" >Total Discount Amount:</td>
-        <td>{{ discounted_total_price }}</td>
-          </tr>
-    </table>
+                        <button class="btn btn-secondary" onclick="removeItem('{{ item.product_id }}')"> - </button>
+                    </div>
+                </td>
+                <td>{{ item.price }}</td>
+                <td>
+                    <p >{{ item.quantity|mul:item.price }}</p><!-- Add any additional actions related to the item here -->
+                </td>
+                <td>{{item.discounted_price}}</td>
+            </tr>
+            {% endfor %}
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            <td colspan="1" class="right-align" >Total:</td>
+            <td>{{ total_price }}</td>
+              <tr>
+                   <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            <td colspan="1" class="right-align" >Total Discount Amount:</td>
+            <td>{{ discounted_total_price }}</td>
+              </tr>
+        </table>
+            </div>
+
         </div>
-
     </div>
 
 
@@ -148,6 +151,7 @@
         // Define the JavaScript function to handle placing the order
         function placeOrder(product_id) {
              localStorage.clear();
+
                // Send a POST request to the cart API
             fetch('/order', {
                 method: 'POST',
@@ -161,6 +165,7 @@
                 if (response.ok) {
                     // Refresh the page to update the cart items
                     window.location.reload();
+                     alert('Order Placed');
                 } else {
                     // Handle unsuccessful response if needed
                     console.error('Error adding item to cart:', response.statusText);

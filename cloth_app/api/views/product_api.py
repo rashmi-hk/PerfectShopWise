@@ -18,14 +18,19 @@ from django.http import HttpResponse
 class ProductAPIList(APIView):
 
     def get(self, request):
+
         print("inside  product get", request)
         print("inside  product get", request.query_params)
         main_category_id = request.query_params['main_category']
         print("main_category_id", main_category_id)
-
-        user = request.session.get('email')
-        cust_obj = CustomUser.objects.get(email=user)
-        print("cust_obj", cust_obj)
+        try:
+            user = request.session.get('email')
+            cust_obj = CustomUser.objects.get(email=user)
+            print("cust_obj", cust_obj)
+            context ={'user_is_authenticated': cust_obj.is_verified}
+        except CustomUser.DoesNotExist:
+            cust_obj= None
+            context = {'user_is_authenticated': False}
 
         sub_category_id = request.query_params['sub_category']
         print("sub_category_id", sub_category_id)
@@ -40,16 +45,24 @@ class ProductAPIList(APIView):
 
             try:
                 print("cart item check")
-                cart = Cart.objects.get(user=cust_obj.id,product=data.id, orderid__isnull=True)
-                print("cart item is present in cart", cart)
+                if cust_obj is not None:
+                    cart = Cart.objects.get(user=cust_obj.id,product=data.id, orderid__isnull=True)
+                    print("cart item is present in cart", cart)
+                else:
+                    print("user not login ")
+                    cart = None
             except Cart.DoesNotExist:
                 print("cart not exist")
                 cart = None
 
             try:
                 print("wishlist item check")
-                wish_status = WishList.objects.filter(user=cust_obj.id,product=data.id,add_to_cart=False).first()
-                print("cart item is present in cart", cart)
+                if cust_obj is not None:
+                    wish_status = WishList.objects.filter(user=cust_obj.id,product=data.id,add_to_cart=False).first()
+                    print("cart item is present in cart", cart)
+                else:
+                    print("user not login ")
+                    wish_status = None
             except WishList.DoesNotExist:
                 print("WishList not exist")
                 wish_status = None
@@ -96,8 +109,11 @@ class ProductAPIList(APIView):
                 result_dict.update({"wish_status_disable": False})
 
             result_list.append(result_dict)
-        # return Response(context=result_list, status=status.HTTP_200_OK)
-        context = {"result_list": result_list}
+
+        context.update({"result_list": result_list})
+
+
+
         print("context", context)
         if request.headers.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             # If the request is made through JavaScript (AJAX), return a JSON response
@@ -115,10 +131,14 @@ class AllProductAPIList(APIView):
 
             product_detail_id = request.query_params['product_id']
             print("product_detail_id", product_detail_id)
-            user = request.session.get('email')
-            cust_obj = CustomUser.objects.get(email=user)
-            print("cust_obj", cust_obj)
-
+            try:
+                user = request.session.get('email')
+                cust_obj = CustomUser.objects.get(email=user)
+                print("cust_obj", cust_obj)
+                context = {'user_is_authenticated': cust_obj.is_verified}
+            except CustomUser.DoesNotExist:
+                cust_obj = None
+                context = {'user_is_authenticated': False}
 
             print("product_detail_id", product_detail_id)
             categories = Product.objects.filter(id=product_detail_id)
@@ -130,16 +150,24 @@ class AllProductAPIList(APIView):
 
                 try:
                     print("cart item check")
-                    cart = Cart.objects.get(user=cust_obj.id, product=data.id, orderid__isnull=True)
-                    print("cart item is present in cart", cart)
+                    if cust_obj is not None:
+                        cart = Cart.objects.get(user=cust_obj.id, product=data.id, orderid__isnull=True)
+                        print("cart item is present in cart", cart)
+                    else:
+                        print("user not login ")
+                        cart = None
                 except Cart.DoesNotExist:
                     print("cart not exist")
                     cart = None
 
                 try:
                     print("wishlist item check")
-                    wish_status = WishList.objects.filter(user=cust_obj.id, product=data.id, add_to_cart=False).first()
-                    print("cart item is present in cart", cart)
+                    if cust_obj is not None:
+                        wish_status = WishList.objects.filter(user=cust_obj.id, product=data.id, add_to_cart=False).first()
+                        print("cart item is present in cart", cart)
+                    else:
+                        print("user not login ")
+                        wish_status = None
                 except WishList.DoesNotExist:
                     print("WishList not exist")
                     wish_status = None
@@ -184,7 +212,7 @@ class AllProductAPIList(APIView):
 
                 result_list.append(result_dict)
             # return Response(context=result_list, status=status.HTTP_200_OK)
-            context = {"result_list": result_list}
+            context.update({"result_list": result_list})
             print("context", context)
             # if product_detail_id:
             #     if request.headers.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':

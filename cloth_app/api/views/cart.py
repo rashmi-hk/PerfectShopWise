@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.shortcuts import get_object_or_404
 
 
 # Item api
@@ -24,8 +24,10 @@ class CartAPIList(APIView):
 
 
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                print("HI")
-                return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
+                print("HI  in X0request ",cust_obj.username)
+                return JsonResponse({'prod_obj': cart_item_count,
+                                     'user_name': cust_obj.username,
+                                     'user_is_authenticated': cust_obj.is_verified}, status=status.HTTP_200_OK)
             else:
                 result_list = []
                 total_price = 0
@@ -56,19 +58,23 @@ class CartAPIList(APIView):
 
                 context = {"result_list": result_list,
                            "total_price": total_price,
-                           "discounted_total_price":discounted_total_price}
+                           "discounted_total_price":discounted_total_price,
+                           'user_name': cust_obj.username}
 
                 print("context", context)
                 if len(context['result_list']) != 0:
+                    print("normal")
                     return render(request, 'cart.html', context)
                 else:
+                    print("with login")
                     return render(request, 'empty_cart.html', context)
         # return JsonResponse({'prod_obj': cart_item_count}, status=status.HTTP_200_OK)
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response
-            return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
-                                status=404)
+            print("without login")
+            context = {'user_is_authenticated': False}
+            return render(request, 'empty_cart_without_login.html', context)
 
     def post(self, request):
         print("inside  cart api post  ",request)
@@ -196,6 +202,23 @@ class CartAPIList(APIView):
                 return JsonResponse({'error': 'Product not found'}, status=404)
         except ProductVariant.DoesNotExist:
                 return JsonResponse({'error': 'ProductVariant not found'}, status=404)
+
+class UserCheckAPIList(APIView):
+    def get(self,request):
+        print("UserCheckAPIList  inside ***************************** ")
+        try:
+            user_email = request.session.get('email')
+            if user_email:
+                cust_obj = get_object_or_404(CustomUser, email=user_email)
+                return JsonResponse({'user_is_authenticated': cust_obj.is_verified}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'user_is_authenticated': False}, status=status.HTTP_200_OK)
+
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'user_is_authenticated': False}, status=status.HTTP_200_OK)
+        except Exception as e:
+            # Handle other exceptions here, log them, or return an appropriate error response
+            return JsonResponse({'error': 'An error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 

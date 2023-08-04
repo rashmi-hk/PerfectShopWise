@@ -349,7 +349,7 @@ weidth:100%;
   {% endfor %}
 
 <script>
-    
+
     function showErrorMessage(productId) {
             const errorMessage = document.querySelector(`#error-message-${productId}`);
             errorMessage.style.display = 'block';
@@ -410,137 +410,47 @@ weidth:100%;
 
 
      apiCallCount = 0
-     function isCartButtonDisabled(productId)
-      {
-            // Check if the button is already disabled for the specific product
-            return localStorage.getItem(`cartButtonDisabled_${productId}`) === 'true';
-      }
-
-
-
-
-<!--     function setItemAddedText(productId)-->
-<!--     {-->
-<!--      const cartButton = document.querySelector(`button.addToCartButton[data-item-id="${productId}"]`);-->
-<!--      console.log("cartButton",cartButton)-->
-<!--&lt;!&ndash;      cartButton.textContent = 'Item Added';&ndash;&gt;-->
-<!--&lt;!&ndash;      cartButton.classList.add('itemAddedButton');&ndash;&gt;-->
-<!--      cartButton.style.width = '140px'; // Set the width to the original width of the button-->
-<!--    }-->
-
-<!--     function isCheckboxesDisabled(productId)-->
+<!--     function isCartButtonDisabled(productId)-->
 <!--      {-->
 <!--            // Check if the button is already disabled for the specific product-->
-<!--            return localStorage.getItem(`checkboxDisabled_${productId}`) === 'true';-->
+<!--            return localStorage.getItem(`cartButtonDisabled_${productId}`) === 'true';-->
 <!--      }-->
 
-<!--    function disableCheckboxes(productId) {-->
-<!--      // Disable the size and color checkboxes for the specific product-->
-<!--      const sizeCheckboxes = document.querySelectorAll(`input[type="checkbox"].size-checkbox[data-item-id="${productId}"]`);-->
-<!--      const colorCheckboxes = document.querySelectorAll(`input[type="checkbox"].color-checkbox[data-item-id="${productId}"]`);-->
 
-<!--      sizeCheckboxes.forEach((checkbox) => {-->
-<!--        checkbox.disabled = true;-->
-<!--        // Store the disabled state in session storage with a unique key for each checkbox-->
-<!--        localStorage.setItem(`checkboxDisabled_${productId}_${checkbox.id}`, 'true');-->
-<!--      });-->
 
-<!--      colorCheckboxes.forEach((checkbox) => {-->
-<!--        checkbox.disabled = true;-->
-<!--        // Store the disabled state in session storage with a unique key for each checkbox-->
-<!--        localStorage.setItem(`checkboxDisabled_${productId}_${checkbox.id}`, 'true');-->
-<!--      });-->
+
+
+
+<!--    function disableCartButton(productId)-->
+<!--    {-->
+<!--        // Disable the cart button and store its state in the session storage-->
+<!--        localStorage.setItem(`cartButtonDisabled_${productId}`, 'true');-->
+<!--        const cartButton = document.querySelector(`button.addToCartButton[data-item-id="${productId}"]`);-->
+<!--        cartButton.disabled = true;-->
 <!--    }-->
 
 
-    function disableCartButton(productId)
-    {
-        // Disable the cart button and store its state in the session storage
-        localStorage.setItem(`cartButtonDisabled_${productId}`, 'true');
-        const cartButton = document.querySelector(`button.addToCartButton[data-item-id="${productId}"]`);
-        cartButton.disabled = true;
-    }
 
 
 
 
-<!--       function addToCart(productId) {-->
-<!--       console.log("*****",isCartButtonDisabled(productId))-->
-<!--        if (isCartButtonDisabled(productId)) {-->
-<!--            // If the cart button is already disabled, do not proceed-->
-<!--            return;-->
-<!--        }-->
-<!--        if (isCheckboxesDisabled(productId)) {-->
-<!--           return;-->
-<!--        }-->
 
-<!--        const selectedSizes = document.querySelectorAll(`input[type="checkbox"].size-checkbox[data-item-id="${productId}"]:checked`);-->
-<!--        const selectedColors = document.querySelectorAll(`input[type="checkbox"].color-checkbox[data-item-id="${productId}"]:checked`);-->
-
-
-<!--        if (selectedSizes.length === 0 || selectedColors.length === 0) {-->
-<!--            alert('Please select a size and a color before adding to the cart.');-->
-<!--            return;-->
-<!--        }-->
-
-<!--        // Create arrays to store the selected size and color variants-->
-<!--        const selectedSizeVariants = [];-->
-<!--        const selectedColorVariants = [];-->
-
-<!--        selectedSizes.forEach((checkbox) => {-->
-<!--            selectedSizeVariants.push(checkbox.value);-->
-<!--        });-->
-
-<!--        selectedColors.forEach((checkbox) => {-->
-<!--            selectedColorVariants.push(checkbox.value);-->
-<!--        });-->
-
-<!--        // Prepare the data to be sent in the POST request-->
-<!--        const data = {-->
-<!--            product_id: productId,-->
-<!--            size_variants: selectedSizeVariants,-->
-<!--            color_variants: selectedColorVariants,-->
-<!--        };-->
-
-<!--        // Send the POST request to the cart API endpoint-->
-<!--        fetch('/cart', {-->
-<!--            method: 'POST',-->
-<!--            headers: {-->
-<!--                'Content-Type': 'application/json',-->
-<!--                'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token if you are using it for CSRF protection-->
-<!--            },-->
-<!--            body: JSON.stringify(data),-->
-<!--        })-->
-<!--       .then((response) => {-->
-<!--            if (response.ok) {-->
-<!--                return response.json()-->
-<!--                    .catch((error) => {-->
-<!--                        throw new Error('Failed to parse JSON response from the server.');-->
-<!--                    })-->
-<!--                    .then((responseData) => {-->
-<!--                        console.log("Response Data:", responseData);-->
-<!--                        return responseData; // Return the parsed JSON data-->
-<!--                    });-->
-<!--            } else {-->
-<!--                throw new Error('Failed to add the product to the cart.');-->
-<!--            }-->
-<!--        })-->
-<!--        .then((responseData) => {-->
-<!--            console.log("Inside hear")-->
-<!--            // Process the responseData and update the cart view accordingly-->
-<!--            // Optionally, you can display a success message to the user indicating that the product has been added to the cart.-->
-<!--&lt;!&ndash;            alert('Product added to cart successfully.');&ndash;&gt;-->
-<!--            setItemAddedText(productId);-->
-<!--            disableCartButton(productId);-->
 
 
       function addToCart(productId) {
+           const isLoggedIn = {{ user_is_authenticated|yesno:"true,false" }};
+           console.log("isLoggedIn",isLoggedIn)
+           if (!isLoggedIn) {
+            // Redirect the user to the login page
+            window.location.href = '{% url "login" %}'; // Replace 'login.html' with the actual URL of your login page
+          }
+          else {
 
-             if (isCartButtonDisabled(productId)) {
-                // Display a message indicating that the item is already added to the cart
-                alert('Item is already added to the cart.');
-                return;
-            }
+<!--             if (isCartButtonDisabled(productId)) {-->
+<!--                // Display a message indicating that the item is already added to the cart-->
+<!--                alert('Item is already added to the cart.');-->
+<!--                return;-->
+<!--            }-->
             // Find the selected color circle
             console.log("****",document.querySelector(`.color-circles-container[data-product-id="${productId}"]`))
             const colorCirclesContainer = document.querySelector(`.color-circles-container[data-product-id="${productId}"]`);
@@ -587,7 +497,7 @@ weidth:100%;
             console.log('Product added to cart successfully:', responseData);
             window.location.reload();
             // If successful, you may hide the error message (if it was previously shown)
-            disableCartButton(productId);
+<!--            disableCartButton(productId);-->
             errorMessage.style.display = 'none';
 
         })
@@ -599,12 +509,17 @@ weidth:100%;
 
             }
         }
-
+     }
 
      function addToWishlist(productId) {
-       console.log("*****",isCartButtonDisabled(productId))
 
-
+       const isLoggedIn = {{ user_is_authenticated|yesno:"true,false" }};
+       console.log("isLoggedIn",isLoggedIn)
+        if (!isLoggedIn) {
+            // Redirect the user to the login page
+            window.location.href = '{% url "login" %}'; // Replace 'login.html' with the actual URL of your login page
+          }
+        else{
 
         // Prepare the data to be sent in the POST request
         const data = {
@@ -646,21 +561,21 @@ weidth:100%;
             alert('Failed to add the product to the wishlist. Please try again.');
         });
     }
+  }
 
 
 
 
-
-     document.addEventListener('DOMContentLoaded', () => {
-        const cartButtons = document.querySelectorAll('button.addToCartButton');
-        cartButtons.forEach((cartButton) => {
-            const productId = cartButton.dataset.itemId;
-            if (isCartButtonDisabled(productId)) {
-                cartButton.disabled = true;
-                cartButton.classList.add('disabledButton');
-            }
-        });
-    });
+<!--     document.addEventListener('DOMContentLoaded', () => {-->
+<!--        const cartButtons = document.querySelectorAll('button.addToCartButton');-->
+<!--        cartButtons.forEach((cartButton) => {-->
+<!--            const productId = cartButton.dataset.itemId;-->
+<!--            if (isCartButtonDisabled(productId)) {-->
+<!--                cartButton.disabled = true;-->
+<!--                cartButton.classList.add('disabledButton');-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
 
 
     </script>

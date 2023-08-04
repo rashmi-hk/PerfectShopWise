@@ -148,6 +148,17 @@
             // Replace this with the URL for your registration page
             window.location.href = '/register';
         }
+
+
+        // Disable back button for logged-out pages
+        const loggedOutPages = ['/login', '/logout']; // Add more URLs as needed
+
+        window.addEventListener('popstate', (event) => {
+            if (loggedOutPages.includes(window.location.pathname)) {
+                window.location.href = '/login'; // Redirect to the login page
+            }
+        });
+
     </script>
 </body>
 </html>

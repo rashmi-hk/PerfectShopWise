@@ -25,27 +25,9 @@ a {
     /* padding: 10px; */
 }
 
-/* Styling the dropdown list */
-.has-dropdown:hover .dropdown {
-    display: block;
-}
 
-.dropdown {
-    display: none;
-    position: absolute;
-    background-color: #444;
-    min-width: 150px;
-    padding: 10px;
-}
 
-.dropdown li {
-    padding: 5px;
-}
 
-.dropdown li a {
-    color: #fff;
-    text-decoration: none;
-}
 
 /* Additional styling for better visibility */
 /* .has-dropdown:hover>a {
