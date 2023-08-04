@@ -59,7 +59,8 @@ class CartAPIList(APIView):
                 context = {"result_list": result_list,
                            "total_price": total_price,
                            "discounted_total_price":discounted_total_price,
-                           'user_name': cust_obj.username}
+                           'user_name': cust_obj.username,
+                           'user_is_authenticated': cust_obj.is_verified}
 
                 print("context", context)
                 if len(context['result_list']) != 0:
@@ -209,12 +210,15 @@ class UserCheckAPIList(APIView):
         try:
             user_email = request.session.get('email')
             if user_email:
+                print("I am hear")
                 cust_obj = get_object_or_404(CustomUser, email=user_email)
                 return JsonResponse({'user_is_authenticated': cust_obj.is_verified}, status=status.HTTP_200_OK)
             else:
+                print("in else")
                 return JsonResponse({'user_is_authenticated': False}, status=status.HTTP_200_OK)
 
         except CustomUser.DoesNotExist:
+            print("in except")
             return JsonResponse({'user_is_authenticated': False}, status=status.HTTP_200_OK)
         except Exception as e:
             # Handle other exceptions here, log them, or return an appropriate error response

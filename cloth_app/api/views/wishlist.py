@@ -55,9 +55,10 @@ class WishListAPIList(APIView):
 
                 result_list.append(result_dict)
 
-            context = {"result_list": result_list}
+            context = {"result_list": result_list,
+                       'user_is_authenticated': cust_obj.is_verified}
             if len(context['result_list']) == 0:
-                return render(request, 'empty_wishlist.html')
+                return render(request, 'empty_wishlist.html',context={'user_is_authenticated': cust_obj.is_verified})
             else:
 
                 print("context", context)

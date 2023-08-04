@@ -168,7 +168,7 @@
 
       <div class="d-flex justify-content-center align-items-center">
 
-    <div id="" class="d-flex justify-content-evenly align-items-center">
+    <div id="cartContainer" class="d-flex justify-content-evenly align-items-center">
 
         <li class="nav-item dropdown"  {% if not user_is_authenticated %}hidden{% endif %}>>
           <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -290,7 +290,7 @@ function getAuthenticationStatus() {
         const userIsAuthenticated = data.user_is_authenticated;
         console.log("--user status",userIsAuthenticated)
         // Do something with the userIsAuthenticated value
-
+         sessionStorage.setItem('userIsAuthenticated', userIsAuthenticated);
          const profileDropDown = document.querySelector(".nav-link.disabled");
           if (!isAuthenticated) {
 

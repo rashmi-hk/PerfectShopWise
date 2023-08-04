@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Categories,Subcategory
+from ...models import Categories,Subcategory,CustomUser
 from django.http import JsonResponse
 import os
 # from ...serializers import ItemsSerializer
@@ -18,9 +18,19 @@ class CategoryAPIList(APIView):
 
     def get(self, request,gender):
         print("inside  category_api", request.query_params)
+        context = {'categories': []}
+        try:
+            user = request.session.get('email')
+            print("user", user)
+            cust_obj = CustomUser.objects.get(email=user)
+            print("cust_obj", cust_obj)
+            context.update({'user_is_authenticated': cust_obj.is_verified})
+        except CustomUser.DoesNotExist:
+            cust_obj = None
+            context.update({'user_is_authenticated': False})
 
         categories = Categories.objects.filter(gender=gender)
-        context = {'categories': []}
+
 
         for category in categories:
             subcategories_data = []
@@ -38,6 +48,7 @@ class CategoryAPIList(APIView):
                 'categoryName': category.categoryName,
                 'category_img': category.category_img.url if category.category_img else None,
                 'subcategories': subcategories_data,
+
             }
             context['categories'].append(category_data)
 
