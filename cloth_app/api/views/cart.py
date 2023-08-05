@@ -84,15 +84,15 @@ class CartAPIList(APIView):
             product_id = request.data['product_id']
 
             product_size = request.data['size_variants']
-            product_color = request.data['color_variants']
-            print("product_id,product_size,product_color",product_id,product_size,product_color)
+
+            print("product_id,product_size,product_color",product_id,product_size)
             user = request.session.get('email')
             print("user", user)
             cust_obj = CustomUser.objects.get(email=user)
             print("cust_obj", cust_obj)
             prod_obj = Product.objects.get(id=product_id)
             print("prod_obj", prod_obj)
-            product_vartaint_obj = ProductVariant.objects.get(product=prod_obj,size=product_size,color=product_color)
+            product_vartaint_obj = ProductVariant.objects.get(product=prod_obj,size=product_size)
             print("product_vartaint_obj", product_vartaint_obj)
             cart_created_data = Cart.objects.create(user=cust_obj,product=prod_obj,product_variant=product_vartaint_obj, cart_created=True)
             print("cart_created_data", cart_created_data)
@@ -178,15 +178,15 @@ class CartAPIList(APIView):
 
             else:
                 product_size = request.data.get('size')
-                product_color = request.data.get('color')
+
                 wishlist_id = request.data.get('wishlist_id')
                 print("product_size", product_size)
-                print("product_color", product_color)
+
 
                 prod_obj = Product.objects.get(id=product_id)
                 print("prod_obj", prod_obj)
                 product_vartaint_obj = ProductVariant.objects.get(product=prod_obj, size=product_size,
-                                                                  color=product_color)
+                                                                  )
                 print("product_vartaint_obj", product_vartaint_obj)
 
                 cart_created_data = Cart.objects.create(user=cust_obj, product=prod_obj,

@@ -43,7 +43,7 @@ class OrderApiView(APIView):
                 product_images.append({
                     'product_name': variant.product.name,
                     'size': variant.get_size_display(),
-                    'color': variant.color,
+
                     'status': order_statuses,
                     'main_image_url': main_image.image.url if main_image else None,
                 })
@@ -117,7 +117,7 @@ class OrderApiView(APIView):
                     print("update", cart_item)
                     print("update", cart_item.orderid)
 
-                    product_variant_obj = ProductVariant.objects.get(id=product_variant.id,size=product_variant.size,color=product_variant.color)
+                    product_variant_obj = ProductVariant.objects.get(id=product_variant.id,size=product_variant.size)
                     print("product_variant_obj", product_variant_obj)
 
                     if product_variant_obj.quantity > 1:

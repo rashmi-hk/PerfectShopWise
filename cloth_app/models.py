@@ -99,11 +99,11 @@ class ProductVariant(models.Model):
         ('XL', 'Extra Large'),
     )
     size = models.CharField(max_length=2, choices=size_choices)
-    color = models.CharField(max_length=50)
+    # color = models.CharField(max_length=50)
     quantity = models.IntegerField(null=True, blank=False, default=1)
 
     def __str__(self):
-        return f"{self.product.name} - Size: {self.get_size_display()}, Color: {self.color}"
+        return f"{self.product.name} - Size: {self.get_size_display()}"
 
     class Meta:
         managed = True
@@ -192,7 +192,7 @@ class OrderItem(models.Model):
     order_item_price = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.quantity} x {self.product_variant.product.name} - Size: {self.product_variant.get_size_display()}, Color: {self.product_variant.color} in Order #{self.order.id}"
+        return f"{self.quantity} x {self.product_variant.product.name} - Size: {self.product_variant.get_size_display()}"
 
     class Meta:
         managed = True

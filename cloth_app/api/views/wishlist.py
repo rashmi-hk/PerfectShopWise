@@ -34,12 +34,18 @@ class WishListAPIList(APIView):
 
                 get_variant = ProductVariant.objects.filter(product_id=product_obj.id)
                 for variant in get_variant:
+                    if variant.quantity == 0:
+                         print("no product")
+                    else:
+                        print("Product present")
+                        unique_sizes.add(variant.size)
+
                     var_dict = {"size": variant.size,
-                                "color": variant.color,
+
                                 "variant_id": variant.id,
                                 "variant_qnt": variant.quantity,
                                 }
-                    unique_sizes.add(variant.size)
+
                     variants.append(var_dict)
 
 
