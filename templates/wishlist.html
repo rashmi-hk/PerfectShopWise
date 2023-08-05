@@ -22,37 +22,10 @@
             cursor: pointer; /* Add cursor pointer to indicate it's clickable */
         }
 
-        .green {
-        background-color: green;
-    }
+   
 
-    .yellow {
-        background-color: yellow;
-    }
 
-    .red {
-        background-color: red;
-    }
 
-     .blue {
-        background-color: blue;
-    }
-
-     .white {
-        background-color: white;
-    }
-
-    .black {
-        background-color: black;
-    }
-
-     .violet {
-        background-color: violet;
-    }
-
-    .orange {
-        background-color: orange;
-    }
 
     .selected {
     border: 2px solid black;
@@ -73,16 +46,6 @@
 </head>
 <body>
 
-<!--<div class="card">-->
-<!--  <div class="card-header">-->
-<!--    Featured-->
-<!--  </div>-->
-<!--  <div class="card-body">-->
-<!--    <h5 class="card-title">Special title treatment</h5>-->
-<!--    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
-<!--    <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--  </div>-->
-<!--</div>-->
 
 
     <div class="container my-3">
@@ -147,32 +110,8 @@
  const sizeSelects = document.querySelectorAll('[id^="size-select-"]');
     const colorCirclesContainers = document.querySelectorAll('.color-circles-container');
 
-    function handleColorCircleSelection(colorCircles, selectedSize) {
-        colorCircles.forEach(circle => {
-            const circleSize = circle.dataset.size;
-            if (circleSize === selectedSize) {
-                circle.style.display = 'inline-block';
-            } else {
-                circle.style.display = 'none';
-            }
-        });
-    }
 
-    // Show color circles associated with the initially selected size(s)
-    sizeSelects.forEach((sizeSelect, index) => {
-        const selectedSize = sizeSelect.value;
-        const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
-        handleColorCircleSelection(colorCircles, selectedSize);
-    });
 
-    // Set up event listeners for size select changes
-    sizeSelects.forEach((sizeSelect, index) => {
-        sizeSelect.addEventListener('change', function () {
-            const selectedSize = this.value;
-            const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
-            handleColorCircleSelection(colorCircles, selectedSize);
-        });
-    });
 
 
 function addToCart(productId, wishlist_id) {
@@ -180,45 +119,40 @@ function addToCart(productId, wishlist_id) {
     const selectedSize = sizeSelect.value;
 
     const errorMessage = document.querySelector('.error-message');
-    if (!selectedSize) {
-        // Show the error message if the size is not selected
-        showErrorMessage(productId);
-    } else {
-        // Size is selected, send the data to the server
-        // You can use the Fetch API to make an HTTP request to your cart API
-        const data = {
-            product_id: productId,
-            size: selectedSize,
-            wishlist_id: wishlist_id,
-        };
 
-        fetch('/cart', {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to add product to cart.');
-            }
-            return response.json();
-        })
-        .then(responseData => {
-            // Handle the response from the server if necessary
-            console.log('Product added to cart successfully:', responseData);
-            window.location.reload();
-            // If successful, you may hide the error message (if it was previously shown)
-            errorMessage.style.display = 'none';
-        })
-        .catch(error => {
-            // Handle errors
-            console.error('Error adding product to cart:', error);
-            errorMessage.style.display = 'block';
-        });
+    const data = {
+        product_id: productId,
+        size: selectedSize,
+        wishlist_id: wishlist_id,
+    };
 
-    }
+    fetch('/cart', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add product to cart.');
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Handle the response from the server if necessary
+        console.log('Product added to cart successfully:', responseData);
+        window.location.reload();
+        // If successful, you may hide the error message (if it was previously shown)
+        errorMessage.style.display = 'none';
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error adding product to cart:', error);
+        errorMessage.style.display = 'block';
+    });
+
+
 }
 
 

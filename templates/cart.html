@@ -81,7 +81,7 @@
                 <th>Product Image</th>
                 <th>Product</th>
                 <th>size</th>
-                <th>color</th>
+
                 <th>Quantity</th>
                 <th>price</th>
                 <th>Item Total Price</th>
@@ -93,8 +93,22 @@
 
                         <td><img src="{{ item.images }}" alt="Product Image"></td>
                 <td>{{ item.product }}</td>
-                <td>{{ item.product_variant.size }}</td>
-                <td>{{ item.product_variant.color }}</td>
+<!--                <td>{{ item.product_variant.size }}</td>-->
+                   <td>
+
+                        <select id="size-select-{{ item.product_id }}">
+                            {% for size in item.unique_sizes %}
+                                {% if size == item.product_variant.size %}
+                                    <option value="{{ size }}" selected>{{ size }}</option>
+                                {% else %}
+                                    <option value="{{ size }}">{{ size }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                </td>
+
+
+
 
                 <td>
                     <div class="d-flex align-items-center quantity-container">
@@ -177,6 +191,8 @@
             });
         }
          function addItem(product_id) {
+            console.log("***inside addItem", product_id)
+
 
             // Send a POST request to the cart API
             fetch('/cart', {
@@ -201,6 +217,52 @@
                 console.error('Error adding item to cart:', error);
             });
         }
+
+function checkUserStatus(product_id, selectedSize) {
+    // Prepare the data to send in the request body
+    const data = {
+        size: selectedSize
+    };
+
+    // Send a PATCH request to the check_user API endpoint
+    fetch(`/check_user?product_id=${product_id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        // Check if the response was successful
+        if (response.ok) {
+            // Refresh the page to update the cart items
+            window.location.reload();
+        } else {
+            // Handle unsuccessful response if needed
+            console.error('Error updating size to cart:', response.statusText);
+        }
+    })
+    .catch(error => {
+        // Handle any errors
+        console.error('Error checking user status:', error);
+    });
+}
+
+// ... Your existing code ...
+
+        {% for item in result_list %}
+        const sizeSelect{{ item.product_id }} = document.getElementById(`size-select-{{ item.product_id }}`);
+        sizeSelect{{ item.product_id }}.addEventListener('change', function() {
+            const selectedSize = this.value;
+            // Call the checkUserStatus function with the selected size and the product_id
+            checkUserStatus('{{ item.product_id }}', selectedSize);
+
+
+        });
+        {% endfor %}
+
+
+
 
         function removeItem(product_id) {
             // Send a DELETE request to the cart API

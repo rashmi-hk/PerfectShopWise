@@ -41,6 +41,16 @@ class CartAPIList(APIView):
                     discount_percent =  item.product.offer
                     print("discount_percent", discount_percent)
 
+                    get_variant = ProductVariant.objects.filter(product_id=product_obj.id)
+                    unique_sizes = set()
+                    for variant in get_variant:
+                        if variant.quantity == 0:
+                            quantity_status = True
+                        else:
+                            quantity_status = False
+                            unique_sizes.add(variant.size)
+
+
                     discounted_price = item.product.price * (1 - (discount_percent / 100))
                     print("discounted_price", discounted_price)
                     discounted_total_price += discounted_price
@@ -50,6 +60,7 @@ class CartAPIList(APIView):
                                    "quantity": item.quantity,
                                    "product_id": item.product.id,
                                    "discounted_price": discounted_price,
+                                   "unique_sizes":unique_sizes,
                                    }
                     if len(images) != 0:
                         result_dict.update({"images": images[0]})
@@ -223,6 +234,43 @@ class UserCheckAPIList(APIView):
         except Exception as e:
             # Handle other exceptions here, log them, or return an appropriate error response
             return JsonResponse({'error': 'An error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def patch(self, request):
+
+        try:
+            print("inside UserCheckAPIList *******************^^^^^^^^^^^^^", request)
+            print("inside UserCheckAPIList *******************^^^^^^^^^^^^^", request.data)
+            print("cart patch request", request.data.get)
+            product_id = request.GET.get('product_id')
+            print("product_id", product_id)
+
+            size = request.data.get('size')
+            print("size", size)
+
+            user = request.session.get('email')
+            cust_obj = CustomUser.objects.get(email=user)
+            size = request.data.get('size')
+            print("size", size)
+            cart_items = Cart.objects.filter(user=cust_obj, product=product_id, cart_created=True,
+                                             orderid__isnull=True).first()
+
+            product_vartaint_obj = ProductVariant.objects.get(product=product_id, size=size)
+            print("product_vartaint_obj", product_vartaint_obj)
+
+            print("cart_items", cart_items)
+            if cart_items:
+                cart_item = cart_items  # Assuming there's only one item per table
+                cart_item.product_variant = product_vartaint_obj
+                cart_item.save()
+            return JsonResponse({'message': 'Size updated successfully'})
+        except Cart.DoesNotExist:
+            return JsonResponse({'error': 'Cart not found'}, status=404)
+        except Product.DoesNotExist:
+            return JsonResponse({'error': 'Product not found'}, status=404)
+        except ProductVariant.DoesNotExist:
+            return JsonResponse({'error': 'ProductVariant not found'}, status=404)
+
+
 
 
 
