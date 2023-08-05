@@ -114,6 +114,8 @@ class AdminUtilityAPIList(APIView):
                     })
 
                 response_data['products_per_size_color_month'] = products_per_size_color_month
+                request.session['customer_id'] = user.id
+                request.session['email'] = email
 
                 return render(request, 'admin_utility.html', response_data)
             else:

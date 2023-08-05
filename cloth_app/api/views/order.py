@@ -48,7 +48,9 @@ class OrderApiView(APIView):
                     'main_image_url': main_image.image.url if main_image else None,
                 })
                 print("product_images", product_images)
-            context = {"product_images": product_images}
+            context = {"product_images": product_images,
+                       'user_is_authenticated': cust_obj.is_verified}
+
             print("product_images", product_images)
             if len(product_variants) == 0:
                 context["error_message"] = "No product images available."
