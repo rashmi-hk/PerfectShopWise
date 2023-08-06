@@ -179,7 +179,7 @@ class AllProductAPIList(APIView):
                 variants = []
                 unique_sizes = set()
                 get_variant = ProductVariant.objects.filter(product_id=data.id)
-
+                var_dict = {}
                 for variant in get_variant:
                     if variant.quantity == 0:
                         quantity_status = True
@@ -187,9 +187,11 @@ class AllProductAPIList(APIView):
                         quantity_status = False
                         unique_sizes.add(variant.size)
 
+
                     var_dict = {"size": variant.size,
 
                                 "variant_id": variant.id,
+                                "product_quantity":variant.quantity,
                                 "quantity_status": quantity_status}
 
                     variants.append(var_dict)

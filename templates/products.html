@@ -179,12 +179,25 @@ body, ul, li {
     pointer-events: auto;
 }
 
+.items-left-message {
+    font-size: 14px;
+    color: #ff0000; /* Red color for the message */
+    margin-top: 5px;
+}
+
+
 .card-body-custom{
 height:100%;
 weidth:100%;
 }
 
     </style>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.alert-error').fadeOut(4000);
+        });
+    </script>
 </head>
 <body>
   <div class="container my-5">
@@ -251,21 +264,64 @@ weidth:100%;
 
                            <p class="product-description">{{ product.description }}</p>
                     <p class="product-price">Price: ${{ product.price }}</p>
-                      <label for="size-select-{{ product.product_id }}">Select Size:</label>
-                                    <select id="size-select-{{ product.product_id }}">
-                                        {% for size in product.unique_sizes %}
-                                            <option value="{{ size }}">{{ size }}</option>
-                                        {% endfor %}
-                                    </select>
+<!--                      <label for="size-select-{{ product.product_id }}">Select Size:</label>-->
+<!--                                    <select id="size-select-{{ product.product_id }}">-->
+<!--                        <div id="selectedSizeContainer">-->
+
+<!--                           <div class="a-button-inner" role="group" aria-label="Select Size">-->
+<!--                               {% for var_data in product.variants %}-->
+<!--                                    {% if var_data.product_quantity != 0 %}-->
+<!--                              -->
+<!--                                         <button type="button" class="btn btn-primary size-button" data-product-id="{{ product.product_id }}" data-size="{{ var_data.size }}" onclick="updateSelectedSize('{{ var_data.size }}')">{{ var_data.size }}</button>-->
+<!--                                    {% endif %}-->
+<!--                            </div>-->
+<!--                            <div>-->
+
+
+<!--                                {% if var_data.product_quantity <= 3 and var_data.product_quantity > 0 %}-->
+<!--                                    <p class="items-left-message">Only {{ var_data.product_quantity }} left in stock!</p>-->
+<!--                                {% endif %}-->
+<!--                              {% endfor %}-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div id="selectedSizeContainer">
+    <div class="row">
+        {% for var_data in product.variants %}
+            {% if var_data.product_quantity != 0 %}
+                <div class="col-md-3">
+                    <div class="a-button-inner" role="group" aria-label="Select Size">
+                        <button type="button" class="btn btn-primary size-button" data-product-id="{{ product.product_id }}" data-size="{{ var_data.size }}" onclick="updateSelectedSize('{{ var_data.size }}')">{{ var_data.size }}</button>
+                    </div>
+                    <div>
+                        {% if var_data.product_quantity <= 3 and var_data.product_quantity > 0 %}
+                            <p class="items-left-message">Only {{ var_data.product_quantity }} left in stock!</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+                        </div>
+
+
+<!--  <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart('{{ product.product_id }}','{{ size }}')" >Add to cart</button>-->
+<!--                        <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart('{{ product.product_id }}', document.querySelector('.size-button.active').getAttribute('data-size'))">Add to cart</button>-->
+<!--                      <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white; width: 140px; height: 35px; font-weight: bold;" onclick="addToCart('{{ product.product_id }}', document.getElementById('selectedSizeContainer').innerText); clearSelectedSize();">Add to cart</button>-->
+<!--                      <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white; width: 140px; height: 35px; font-weight: bold;" onclick="addToCart('{{ product.product_id }}', document.getElementById('selectedSizeContainer').innerText)">Add to cart</button>-->
+                    <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white; width: 140px; height: 35px; font-weight: bold;">Add to cart</button>
 
 
 
-  <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" >Add to cart</button>
+
 
 
                     <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" >WishList</button>
 
-                    <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
+
+                    <p class="error-message alert-error" style="display: none; color: red" id="error-message-{{ product.product_id }}">Please select size before adding to cart.</p>
+
 
                     </div>
 
@@ -287,9 +343,23 @@ weidth:100%;
   {% endfor %}
 
 <script>
+let selectedSize = '';
+ function updateSelectedSize(size) {
+        selectedSize = size; // Update the selectedSize variable with the selected size
+        const selectedSizeContainer = document.getElementById('selectedSizeContainer');
+        selectedSizeContainer.innerText = `Selected Size: ${size}`;
+    }
+
+      const addToCartButton = document.querySelector('.addToCartButton');
+    addToCartButton.addEventListener('click', function() {
+        const productId = this.getAttribute('data-item-id');
+        addToCart(productId, selectedSize);
+    });
 
     function showErrorMessage(productId) {
+            console.log("In hear")
             const errorMessage = document.querySelector(`#error-message-${productId}`);
+            console.log("errorMessage",errorMessage)
             errorMessage.style.display = 'block';
         }
 
@@ -299,46 +369,9 @@ weidth:100%;
         errorMessage.style.display = 'none';
     }
 
-     const sizeSelects = document.querySelectorAll('[id^="size-select-"]');
-    const colorCirclesContainers = document.querySelectorAll('.color-circles-container');
-
-    function handleColorCircleSelection(colorCircles, selectedSize) {
-        colorCircles.forEach(circle => {
-            const circleSize = circle.dataset.size;
-            if (circleSize === selectedSize) {
-                circle.style.display = 'inline-block';
-            } else {
-                circle.style.display = 'none';
-            }
-        });
-    }
-
-    // Show color circles associated with the initially selected size(s)
-    sizeSelects.forEach((sizeSelect, index) => {
-        const selectedSize = sizeSelect.value;
-        const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
-        handleColorCircleSelection(colorCircles, selectedSize);
-    });
-
-    // Set up event listeners for size select changes
-    sizeSelects.forEach((sizeSelect, index) => {
-        sizeSelect.addEventListener('change', function () {
-            const selectedSize = this.value;
-            const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
-            handleColorCircleSelection(colorCircles, selectedSize);
-        });
-    });
-
-
-
-
      apiCallCount = 0
 
-
-
-
-
-      function addToCart(productId) {
+      function addToCart(productId,selectedSize) {
     const isLoggedIn = {{ user_is_authenticated|yesno:"true,false" }};
     console.log("isLoggedIn", isLoggedIn);
 
@@ -346,8 +379,13 @@ weidth:100%;
         // Redirect the user to the login page
         window.location.href = '{% url "login" %}'; // Replace 'login.html' with the actual URL of your login page
     } else {
-        const sizeSelect = document.querySelector(`#size-select-${productId}`);
-        const selectedSize = sizeSelect.value;
+
+       if (!selectedSize) {
+
+            showErrorMessage(productId); // This will show the error message
+            return;
+        }
+        console.log("selectedSize",selectedSize)
 
         // Prepare the data to be sent in the POST request
         const data = {
@@ -434,6 +472,8 @@ weidth:100%;
         });
     }
   }
+
+
 
 
 

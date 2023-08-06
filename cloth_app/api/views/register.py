@@ -38,7 +38,9 @@ class RegisterAPIList(APIView):
                            "address": cust_obj.address,
                            "user_id": cust_obj.id,
                            }
-            context = {"result_dict": result_dict}
+            context = {"result_dict": result_dict,
+                       'user_is_authenticated': cust_obj.is_verified,
+                       }
             return render(request, 'user_profile.html', context=context)
         else:
             return render(request, 'sign_up.html')
