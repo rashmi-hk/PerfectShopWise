@@ -33,6 +33,7 @@ class CartAPIList(APIView):
                 total_price = 0
                 discounted_total_price = 0
                 for item in prod_obj:
+
                     print("product id", item.id)
                     product_obj = Product.objects.get(id =item.product_id)
                     print("product_obj",product_obj)
@@ -53,15 +54,16 @@ class CartAPIList(APIView):
 
                     discounted_price = item.product.price * (1 - (discount_percent / 100))
                     print("discounted_price", discounted_price)
-                    discounted_total_price += discounted_price
+                    discounted_total_price += discounted_price * item.quantity
                     result_dict = {"product": item.product,
                                    "price": item.product.price,
                                    "product_variant": item.product_variant,
                                    "quantity": item.quantity,
                                    "product_id": item.product.id,
-                                   "discounted_price": discounted_price,
+                                   "discounted_price": round(discounted_price),
                                    "unique_sizes":unique_sizes,
                                    "product_variant_id": item.product_variant.id,
+                                   "discount_percent": round(discount_percent),
                                    }
                     if len(images) != 0:
                         result_dict.update({"images": images[0]})
@@ -69,8 +71,8 @@ class CartAPIList(APIView):
                     result_list.append(result_dict)
 
                 context = {"result_list": result_list,
-                           "total_price": total_price,
-                           "discounted_total_price":discounted_total_price,
+                           "total_price": round(total_price),
+                           "discounted_total_price":round(discounted_total_price),
                            'user_name': cust_obj.username,
                            'user_is_authenticated': cust_obj.is_verified}
 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Order Details</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<header>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <i class="fa fa-shopping-cart cart-icon" style="font-size: 48px; color: red;"></i>
+            <span style="color: black; font-weight: bold; font-size: 32px; font-family: cursive;">Shopwise</span>
+        </div>
+
+        <div>
+            <a href="{% url 'admin_utility_logout' %}" style="margin-right: 10px;font-size: 20px;">Logout</a>
+        </div>
+    </div>
+</header>
+    <div class="container">
+        <h3>Admin Order Details</h3>
+
+        {% for order_id, order_data in order_items_grouped.items %}
+        <div class="card my-3">
+            <div class="card-header">
+                <h2>Order ID: {{ order_id }}</h2>
+                <p>Username: {{ order_data.order_details.user }}</p>
+                <p>Ordered Date: {{ order_data.order_details.ordered_date }}</p>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product Variant</th>
+                            <th>Quantity</th>
+                            <th>Order Item Price</th>
+                            <th>Discount Percentage</th>
+                            <th>Discount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_data.order_items %}
+                        <tr>
+                            <td>{{ item.product_variant }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.order_item_price }}</td>
+                            <td>{{ item.offer }}%</td>
+                            <td>{{ item.discount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-right"><strong>Total Amount:</strong></td>
+                            <td>${{ order_data.order_details.Total_amount }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-right"><strong>Discount Amount:</strong></td>
+                            <td>${{ order_data.order_details.discount_amount }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

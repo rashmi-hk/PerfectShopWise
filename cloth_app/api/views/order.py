@@ -82,6 +82,7 @@ class OrderApiView(APIView):
                 # cart :-   product, product_variant, quantity, orderid
                 # order_item:- order, product_variant, quantity
                 order_items = []
+                discount_percent = 0
                 for cart_item in cart_items:
                     print("cart_item.id", cart_item)
                     item_price = cart_item.product.price
@@ -112,6 +113,14 @@ class OrderApiView(APIView):
                     order_items.append(order_item)
                     total_price += order_item_price
 
+                    discount_percent = cart_item.product.offer
+                    print("discount_percent", discount_percent)
+
+                    discounted_price = cart_item.product.price * (1 - (discount_percent / 100))
+                    print("discounted_price", discounted_price)
+
+
+
                     Cart.objects.filter(user=cust_obj, orderid_id__isnull=True).update(orderid=order_item.order.id)
 
                     print("update", cart_item)
@@ -127,7 +136,7 @@ class OrderApiView(APIView):
                         product_variant_obj.quantity = 0
                         product_variant_obj.save()
 
-                order.total_price = total_price
+                order.total_price = discounted_price
                 order.is_ordered = True
                 order.status = 'PROCESSING'
                 order.ordered_date =  datetime.datetime.now()

@@ -40,6 +40,9 @@
             <i class="fa fa-shopping-cart cart-icon" style="font-size: 48px; color: red;"></i>
             <span style="color: black; font-weight: bold; font-size: 36px; font-family: cursive;">Shopwise</span>
         </div>
+         <div>
+            <a href="{% url 'admin_order_detail' %}" style="margin-right: 10px;font-size: 20px;">Order Detail</a>
+        </div>
         <div>
             <a href="{% url 'admin_utility_logout' %}" style="margin-right: 10px;font-size: 20px;">Logout</a>
         </div>
@@ -65,14 +68,14 @@
         <tr>
             <th>Product</th>
             <th>Size</th>
-            <th>Color</th>
+
             <th>Total</th>
         </tr>
         {% for product in products_per_size_color %}
         <tr>
             <td>{{ product.product_name }}</td>
             <td>{{ product.size }}</td>
-            <td>{{ product.color }}</td>
+
             <td>{{ product.total_products }}</td>
         </tr>
         {% endfor %}
@@ -83,14 +86,14 @@
         <tr>
             <th>Product</th>
             <th>Size</th>
-            <th>Color</th>
+            
             <th>Total</th>
         </tr>
         {% for product in products_per_size_color_month %}
         <tr>
             <td>{{ product.product_name }}</td>
             <td>{{ product.size }}</td>
-            <td>{{ product.color }}</td>
+
             <td>{{ product.total_products }}</td>
         </tr>
         {% endfor %}
