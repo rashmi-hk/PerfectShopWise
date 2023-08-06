@@ -61,6 +61,7 @@ class CartAPIList(APIView):
                                    "product_id": item.product.id,
                                    "discounted_price": discounted_price,
                                    "unique_sizes":unique_sizes,
+                                   "product_variant_id": item.product_variant.id,
                                    }
                     if len(images) != 0:
                         result_dict.update({"images": images[0]})
@@ -105,22 +106,43 @@ class CartAPIList(APIView):
             print("prod_obj", prod_obj)
             product_vartaint_obj = ProductVariant.objects.get(product=prod_obj,size=product_size)
             print("product_vartaint_obj", product_vartaint_obj)
-            cart_created_data = Cart.objects.create(user=cust_obj,product=prod_obj,product_variant=product_vartaint_obj, cart_created=True)
-            print("cart_created_data", cart_created_data)
-            if cart_created_data:
+
+            cart_item_exist = Cart.objects.filter(user=cust_obj, product=product_id,product_variant=product_vartaint_obj,
+                                                cart_created=True,
+                                                orderid__isnull=True).first()
+
+            if cart_item_exist:
+                print("Item already exist so update")
+                cart_item = cart_item_exist  # Assuming there's only one item per table
+                cart_item.quantity += 1
+                cart_item.save()
 
                 response_data = {
                     'success': True,
-                    'message': 'Product added to cart successfully.',
-                    'cart_id': cart_created_data.id,  # If you want to return the cart ID to the client
-                     # If you want to return the cart total to the client
+                    'message': 'Product updated to cart successfully.',
+                    'cart_id': cart_item_exist.id,  # If you want to return the cart ID to the client
+                    # If you want to return the cart total to the client
                     # Add any other cart-related data that you want to return to the client
                 }
-
-                return JsonResponse(response_data, status=status.HTTP_201_CREATED)
+                return JsonResponse(response_data, status=status.HTTP_200_OK)
             else:
-                # If the serializer validation fails, return the error details.
-                return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
+
+                cart_created_data = Cart.objects.create(user=cust_obj,product=prod_obj,product_variant=product_vartaint_obj, cart_created=True)
+                print("cart_created_data", cart_created_data)
+                if cart_created_data:
+
+                    response_data = {
+                        'success': True,
+                        'message': 'Product added to cart successfully.',
+                        'cart_id': cart_created_data.id,  # If you want to return the cart ID to the client
+                         # If you want to return the cart total to the client
+                        # Add any other cart-related data that you want to return to the client
+                    }
+
+                    return JsonResponse(response_data, status=status.HTTP_201_CREATED)
+                else:
+                    # If the serializer validation fails, return the error details.
+                    return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist :
             response_data = {
                 'success': False,
@@ -139,8 +161,14 @@ class CartAPIList(APIView):
         user = request.session.get('email')
         cust_obj = CustomUser.objects.get(email=user)
 
+        product_size = request.data.get('size')
+        print("product_size", product_size)
+
+        product_vartaint_obj = ProductVariant.objects.get(product=product_id, size=product_size)
+        print("product_vartaint_obj", product_vartaint_obj)
+
         try:
-            cart_item = Cart.objects.filter(user=cust_obj,product=product_id, cart_created=True,orderid__isnull=True).first()
+            cart_item = Cart.objects.filter(user=cust_obj,product=product_id, product_variant=product_vartaint_obj,cart_created=True,orderid__isnull=True).first()
             print("cart_item", cart_item)
 
             if cart_item:
@@ -167,7 +195,16 @@ class CartAPIList(APIView):
             user = request.session.get('email')
             cust_obj = CustomUser.objects.get(email=user)
 
-            cart_items = Cart.objects.filter(user=cust_obj,product=product_id, cart_created=True,orderid__isnull=True).first()
+            prod_obj = Product.objects.get(id=product_id)
+            print("prod_obj", prod_obj)
+            product_size = request.data.get('size')
+            print("product_size", product_size)
+
+            product_vartaint_obj = ProductVariant.objects.get(product=prod_obj, size=product_size)
+            print("product_vartaint_obj", product_vartaint_obj)
+
+
+            cart_items = Cart.objects.filter(user=cust_obj,product=product_id, product_variant=product_vartaint_obj,cart_created=True,orderid__isnull=True).first()
             print("cart_items", cart_items)
             wishlist_id = request.data.get('wishlist_id')
             if cart_items and wishlist_id:
@@ -188,17 +225,12 @@ class CartAPIList(APIView):
                 print("updated")
 
             else:
-                product_size = request.data.get('size')
+
 
                 wishlist_id = request.data.get('wishlist_id')
                 print("product_size", product_size)
 
 
-                prod_obj = Product.objects.get(id=product_id)
-                print("prod_obj", prod_obj)
-                product_vartaint_obj = ProductVariant.objects.get(product=prod_obj, size=product_size,
-                                                                  )
-                print("product_vartaint_obj", product_vartaint_obj)
 
                 cart_created_data = Cart.objects.create(user=cust_obj, product=prod_obj,
                                                         product_variant=product_vartaint_obj, cart_created=True)
@@ -214,6 +246,11 @@ class CartAPIList(APIView):
                 return JsonResponse({'error': 'Product not found'}, status=404)
         except ProductVariant.DoesNotExist:
                 return JsonResponse({'error': 'ProductVariant not found'}, status=404)
+        except Exception as e:
+            # Catch any other general exceptions here
+            # You can log the error for debugging purposes
+            print('Unexpected error occurred:', str(e))
+            return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
 
 class UserCheckAPIList(APIView):
     def get(self,request):

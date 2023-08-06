@@ -46,7 +46,7 @@ class ProductAPIList(APIView):
             try:
                 print("cart item check")
                 if cust_obj is not None:
-                    cart = Cart.objects.get(user=cust_obj.id,product=data.id, orderid__isnull=True)
+                    cart = Cart.objects.filter(user=cust_obj.id,product=data.id, orderid__isnull=True).first()
                     print("cart item is present in cart", cart)
                 else:
                     print("user not login ")
@@ -150,23 +150,23 @@ class AllProductAPIList(APIView):
             result_list = []
             for data in categories:
 
-                try:
-                    print("cart item check")
-                    if cust_obj is not None:
-                        cart = Cart.objects.get(user=cust_obj.id, product=data.id, orderid__isnull=True)
-                        print("cart item is present in cart", cart)
-                    else:
-                        print("user not login ")
-                        cart = None
-                except Cart.DoesNotExist:
-                    print("cart not exist")
-                    cart = None
+                # try:
+                #     print("cart item check")
+                #     if cust_obj is not None:
+                #         cart = Cart.objects.get(user=cust_obj.id, product=data.id, orderid__isnull=True)
+                #         print("cart item is present in cart", cart)
+                #     else:
+                #         print("user not login ")
+                #         cart = None
+                # except Cart.DoesNotExist:
+                #     print("cart not exist")
+                #     cart = None
 
                 try:
                     print("wishlist item check")
                     if cust_obj is not None:
                         wish_status = WishList.objects.filter(user=cust_obj.id, product=data.id, add_to_cart=False).first()
-                        print("cart item is present in cart", cart)
+                        # print("cart item is present in cart", cart)
                     else:
                         print("user not login ")
                         wish_status = None
@@ -203,10 +203,10 @@ class AllProductAPIList(APIView):
                     "variants": variants,
                     "unique_sizes": unique_sizes,
                 }
-                if cart is not None:
-                    result_dict.update({"disable": True})
-                else:
-                    result_dict.update({"disable": False})
+                # if cart is not None:
+                #     result_dict.update({"disable": True})
+                # else:
+                #     result_dict.update({"disable": False})
 
                 if wish_status is not None:
                     result_dict.update({"wish_status_disable": True})

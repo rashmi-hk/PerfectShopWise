@@ -260,10 +260,10 @@ weidth:100%;
 
 
 
-  <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" {% if product.disable %}disabled{% endif %}>Add to cart</button>
+  <button class="addToCartButton" data-item-id="{{ product.product_id }}" style="background-color: {% if product.disable %}gray{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" onclick="addToCart({{ product.product_id }})" >Add to cart</button>
 
 
-                    <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" {% if product.wish_status_disable %}disabled{% endif %}>WishList</button>
+                    <button id="wishlistButton" class="addToWishlistButton" data-item-id="{{ product.product_id }}" data-wish-status="{{ product.wish_status_disable }}" onclick="addToWishlist({{ product.product_id }})" style="background-color: {% if product.wish_status_disable %}red{% else %}black{% endif %}; color: white;width: 140px; height: 35px;font-weight: bold;" >WishList</button>
 
                     <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
 
@@ -373,6 +373,7 @@ weidth:100%;
             .then((responseData) => {
                 // Handle the response from the server if necessary
                 console.log('Product added to cart successfully:', responseData);
+                alert('Product added to cart successfully' )
                 window.location.reload();
             })
             .catch((error) => {
