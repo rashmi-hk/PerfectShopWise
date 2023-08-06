@@ -43,7 +43,7 @@ class WishListAPIList(APIView):
                     var_dict = {"size": variant.size,
 
                                 "variant_id": variant.id,
-                                "variant_qnt": variant.quantity,
+                                "product_quantity": variant.quantity,
                                 }
 
                     variants.append(var_dict)

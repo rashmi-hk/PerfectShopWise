@@ -22,10 +22,21 @@
             cursor: pointer; /* Add cursor pointer to indicate it's clickable */
         }
 
-   
+   .items-left-message {
+    font-size: 14px;
+    color: #ff0000; /* Red color for the message */
+    margin-top: 5px;
+}
 
 
-
+.footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: black;
+      width: 100%;
+      position:inherit;
+    }
 
     .selected {
     border: 2px solid black;
@@ -57,7 +68,7 @@
             {% endif %}
                     <div class="col-md-4 my-3">
             <div class="product-item">
-                <div class="card" style="width: 300px;height:560px" >
+                <div class="card"  >
                  <div class="card-header">
                     <h2 class="product-name">{{ product.product }}</h2>
                  </div>
@@ -68,12 +79,31 @@
 
 
 
-                        <label for="size-select-{{ product.product_id }}">Select Size:</label>
-                        <select id="size-select-{{ product.product_id }}">
-                            {% for size in product.unique_sizes %}
-                                <option value="{{ size }}">{{ size }}</option>
+<!--                        <label for="size-select-{{ product.product_id }}">Select Size:</label>-->
+<!--                        <select id="size-select-{{ product.product_id }}">-->
+<!--                            {% for size in product.unique_sizes %}-->
+<!--                                <option value="{{ size }}">{{ size }}</option>-->
+<!--                            {% endfor %}-->
+<!--                        </select>-->
+                           <div id="selectedSizeContainer">
+                          <div class="row">
+                            {% for var_data in product.product_variant %}
+
+                                {% if var_data.product_quantity != 0 %}
+                                    <div class="col-md-3">
+                                        <div class="a-button-inner" role="group" aria-label="Select Size">
+                                            <button type="button" class="btn btn-primary size-button" data-product-id="{{ product.product_id }}" data-size="{{ var_data.size }}" onclick="updateSelectedSize('{{ var_data.size }}')">{{ var_data.size }}</button>
+                                        </div>
+                                        <div>
+                                            {% if var_data.product_quantity <= 3 and var_data.product_quantity > 0 %}
+                                                <p class="items-left-message">Only {{ var_data.product_quantity }} left in stock!</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
-                        </select>
+                        </div>
+                        </div>
 
 
 
@@ -83,8 +113,10 @@
                 </div>
             <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
 
-            <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})">Move to cart</button>
-            <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="removeItem({{ product.wishlist_id }})">Delete</button>
+<!--            <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})">Move to cart</button>-->
+             <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})" >Add to cart</button>
+
+                <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="removeItem({{ product.wishlist_id }})">Delete</button>
 
              </div>
              </div>
@@ -95,6 +127,19 @@
     </div>
 
     <script>
+ let selectedSize = '';
+ function updateSelectedSize(size) {
+        selectedSize = size; // Update the selectedSize variable with the selected size
+        const selectedSizeContainer = document.getElementById('selectedSizeContainer');
+        selectedSizeContainer.innerText = `Selected Size: ${size}`;
+    }
+
+      const addToCartButton = document.querySelector('.addToCartButton');
+    addToCartButton.addEventListener('click', function() {
+        const productId = this.getAttribute('data-item-id');
+        addToCart(productId, selectedSize);
+    });
+
 
      function showErrorMessage(productId) {
             const errorMessage = document.querySelector(`#error-message-${productId}`);
@@ -107,18 +152,21 @@
         errorMessage.style.display = 'none';
     }
 
- const sizeSelects = document.querySelectorAll('[id^="size-select-"]');
-    const colorCirclesContainers = document.querySelectorAll('.color-circles-container');
-
-
 
 
 
 function addToCart(productId, wishlist_id) {
+    console.log("Inside addToCart")
     const sizeSelect = document.querySelector(`#size-select-${productId}`);
-    const selectedSize = sizeSelect.value;
+    console.log("sizeSelect",sizeSelect)
 
     const errorMessage = document.querySelector('.error-message');
+     if (!selectedSize) {
+
+                showErrorMessage(productId); // This will show the error message
+                return;
+            }
+     console.log("selectedSize",selectedSize)
 
     const data = {
         product_id: productId,
