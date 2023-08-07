@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Empty cart</title>
+
+
+ <style>
+       .wish_emt{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+    </style>
+</head>
+<body>
+<div class="_1AtVbE col-12-12">
+    <div class="wish_emt">
+        <img src="https://rukminim2.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png?q=90" class="_2giOt4">
+        <div class="_1LCJ1U">Missing Cart items?</div>
+        <div class="hKIFfL">Login to see the items you added previously</div>
+         <div class="d-flex justify-content-center">
+        <a class="dropdown-item" href="{% url 'login' %}"><button class="_2KpZ6l 1sbqEe 3AWRsL"><span>Login</span></button></a></div></div>
+</div>
+</body>
+</html>
+
+{% endblock %}

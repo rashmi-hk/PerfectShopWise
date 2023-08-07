@@ -20,7 +20,7 @@ import logging
 import secrets
 from django.utils import timezone
 from datetime import timedelta
-
+from rest_framework import status
 from django.http import HttpResponseRedirect
 
 LOGGER = logging.getLogger(__name__)
@@ -28,54 +28,84 @@ LOGGER = logging.getLogger(__name__)
 # Item api
 class RegisterAPIList(APIView):
 
-    def get(self,request):
+    def get(self,request,variant=None):
         print("Inside  get   register")
-        return render(request, 'sign_up.html')
+        if variant:
+            user = request.session.get('email')
+            cust_obj = CustomUser.objects.get(email=user)
+            result_dict = {"name": cust_obj.username,
+                           "phone_number": cust_obj.phone_number,
+                           "address": cust_obj.address,
+                           "user_id": cust_obj.id,
+                           }
+            context = {"result_dict": result_dict,
+                       'user_is_authenticated': cust_obj.is_verified,
+                       }
+            return render(request, 'user_profile.html', context=context)
+        else:
+            return render(request, 'sign_up.html')
         # return render(request, 'new_lohin.html')
 
     def post(self,request):
         print("Inside sign up post", request)
         print("Inside sign up", request.data)
-        if request.data:
-            print("****", request.data["username"])
-            otp = get_random_string(length=6, allowed_chars='1234567890')
-            password = request.data["password"]
-            username = request.data["username"]
-            email = request.data["email"]
-            phone_number = request.data["phone_number"]
-            address = request.data["address"]
-            otp = otp
+        try:
+            if request.data:
+                print("****", request.data["username"])
+                otp = get_random_string(length=6, allowed_chars='1234567890')
+                password = request.data["password"]
+                username = request.data["username"]
+                email = request.data["email"]
+                phone_number = request.data["phone_number"]
+                address = request.data["address"]
+                otp = otp
+
+                check_existence = CustomUser.objects.filter(email=email).first()
+                if not check_existence:
+                    # Assuming 'user_dict' contains the necessary user information including 'email'
+                    user = CustomUser.objects.create_user(username=username, email=email,
+                                                          password=password,otp=otp,phone_number=phone_number,address=address)
+
+                    print("db save password",user.password)
 
 
-            # Assuming 'user_dict' contains the necessary user information including 'email'
-            user = CustomUser.objects.create_user(username=username, email=email,
-                                                  password=password,otp=otp,phone_number=phone_number,address=address)
+                    # Send email with OTP
+                    subject = 'Verify your email'
+                    message = f'Your OTP is {otp}'
+                    from_email = config('email_from')
+                    recipient_list = [email]
+                    send_mail(subject, message, from_email, recipient_list)
+                    # Redirect to verify page
+                    context = {"email": email}
+                    return render(request, 'otp_verification.html', context)
+                else:
+                    error_message = 'CustomUser with this email id already exist,Please try with different one'
+                    return render(request, 'sign_up.html', {'error_message': error_message})
+        except  Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
-            print("db save password",user.password)
-            # print("Created customer")
-            # # to create a token
-            # try:
-            #     token = Token.objects.get(user=user)
-            #     print("token get",token)
-            # except Token.DoesNotExist:
-            #     token = Token(user=user)
-            #     print("token create", token)
-            #
-            # token.key = secrets.token_urlsafe(32)
-            # token.created = timezone.now()
-            # token.expires = token.created + timedelta(days=7)
-            # token.save()
+    def patch(self, request):
 
-            # Send email with OTP asynchronously
+        try:
+            print("register patch ", request.data)
+            user_id = request.data['user_id']
+            name = request.data['name']
+            phone_number = request.data['phone_number']
+            address = request.data['address']
 
-            # Send email with OTP
-            subject = 'Verify your email'
-            message = f'Your OTP is {otp}'
-            from_email = config('email_from')
-            recipient_list = [email]
-            send_mail(subject, message, from_email, recipient_list)
-            # Redirect to verify page
+            user = CustomUser.objects.get(id=user_id)
+            if name:
+                user.username = name
+            if phone_number:
+                user.phone_number = phone_number
+            if address:
+                user.address = address
 
-            return render(request, 'otp_verification.html')
+                # Save the updated user data
+            user.save()
 
-        # return HttpResponse('Notification sent successfully')
+            return Response(status=status.HTTP_200_OK)
+        except  Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+# return HttpResponse('Notification sent successfully')

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wish Listing</title>
+    <style>
+
+        /* Add your CSS styles here */
+        /* ... */
+        .color-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 2px solid #ccc;
+            cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+        }
+
+   .items-left-message {
+    font-size: 14px;
+    color: #ff0000; /* Red color for the message */
+    margin-top: 5px;
+}
+
+
+.footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: black;
+      width: 100%;
+      position:inherit;
+    }
+
+    .selected {
+    border: 2px solid black;
+}
+  .footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+
+      background-color: black;
+      width: 100%;
+<!--      position: fixed;-->
+<!--      bottom: 0;-->
+      z-index: 2;
+    }
+        /* Add more classes and corresponding background colors for more colors */
+    </style>
+</head>
+<body>
+
+
+
+    <div class="container my-3">
+        <h1>Wish list</h1>
+        <!-- Loop through the result_list to display each product -->
+        {% for product in result_list %}
+        {% if forloop.counter0|divisibleby:3 %}
+                <div class="row">
+            {% endif %}
+                    <div class="col-md-4 my-3">
+            <div class="product-item">
+                <div class="card"  >
+                 <div class="card-header">
+                    <h2 class="product-name">{{ product.product }}</h2>
+                 </div>
+                    <div class="card-body">
+                         <img src="{{ product.images }}" alt="{{ product.images }} Image">
+                        <p class="product-price">Price: ${{ product.price }}</p>
+
+
+
+
+<!--                        <label for="size-select-{{ product.product_id }}">Select Size:</label>-->
+<!--                        <select id="size-select-{{ product.product_id }}">-->
+<!--                            {% for size in product.unique_sizes %}-->
+<!--                                <option value="{{ size }}">{{ size }}</option>-->
+<!--                            {% endfor %}-->
+<!--                        </select>-->
+                           <div id="selectedSizeContainer">
+                          <div class="row">
+                            {% for var_data in product.product_variant %}
+
+                                {% if var_data.product_quantity != 0 %}
+                                    <div class="col-md-3">
+                                        <div class="a-button-inner" role="group" aria-label="Select Size">
+                                            <button type="button" class="btn btn-primary size-button" data-product-id="{{ product.product_id }}" data-size="{{ var_data.size }}" onclick="updateSelectedSize('{{ var_data.size }}')">{{ var_data.size }}</button>
+                                        </div>
+                                        <div>
+                                            {% if var_data.product_quantity <= 3 and var_data.product_quantity > 0 %}
+                                                <p class="items-left-message">Only {{ var_data.product_quantity }} left in stock!</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        </div>
+
+
+
+
+                <!-- Add any other product details you want to display -->
+            </div>
+                </div>
+            <p class="error-message alert-error" style="display: none;color:red" id="error-message-{{ product.product_id }}">Please select color and size before adding to cart.</p>
+
+<!--            <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})">Move to cart</button>-->
+             <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }},{{ product.wishlist_id }})" >Add to cart</button>
+
+                <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="removeItem({{ product.wishlist_id }})">Delete</button>
+
+             </div>
+             </div>
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <script>
+ let selectedSize = '';
+ function updateSelectedSize(size) {
+        selectedSize = size; // Update the selectedSize variable with the selected size
+        const selectedSizeContainer = document.getElementById('selectedSizeContainer');
+        selectedSizeContainer.innerText = `Selected Size: ${size}`;
+    }
+
+      const addToCartButton = document.querySelector('.addToCartButton');
+    addToCartButton.addEventListener('click', function() {
+        const productId = this.getAttribute('data-item-id');
+        addToCart(productId, selectedSize);
+    });
+
+
+     function showErrorMessage(productId) {
+            const errorMessage = document.querySelector(`#error-message-${productId}`);
+            errorMessage.style.display = 'block';
+        }
+
+    // Function to hide error message for a specific product
+    function hideErrorMessage(productId) {
+        const errorMessage = document.querySelector(`#error-message-${productId}`);
+        errorMessage.style.display = 'none';
+    }
+
+
+
+
+function addToCart(productId, wishlist_id) {
+    console.log("Inside addToCart")
+    const sizeSelect = document.querySelector(`#size-select-${productId}`);
+    console.log("sizeSelect",sizeSelect)
+
+    const errorMessage = document.querySelector('.error-message');
+     if (!selectedSize) {
+
+                showErrorMessage(productId); // This will show the error message
+                return;
+            }
+     console.log("selectedSize",selectedSize)
+
+    const data = {
+        product_id: productId,
+        size: selectedSize,
+        wishlist_id: wishlist_id,
+    };
+
+    fetch('/cart', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add product to cart.');
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Handle the response from the server if necessary
+        console.log('Product added to cart successfully:', responseData);
+        window.location.reload();
+        // If successful, you may hide the error message (if it was previously shown)
+        errorMessage.style.display = 'none';
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error adding product to cart:', error);
+        errorMessage.style.display = 'block';
+    });
+
+
+}
+
+
+          function removeItem(wishlist_id) {
+            // Send a DELETE request to the wishlist API
+
+            fetch('/wishlist', {
+                method: 'DELETE',
+                body: JSON.stringify({ wishlist_id: wishlist_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error removing item from wishlist:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error removing item from wishlist:', error);
+            });
+        }
+    </script>
+    </div>
+
+</body>
+</html>
+{% endblock %}

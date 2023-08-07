@@ -34,23 +34,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'django-insecure-+(crmon84y13y#%j71wum!t*z-v*^b9%p-lrjvg35ju8%6!0_('
 
+
 with open(os.path.join(BASE_DIR, '../config/logging_app.yml'), 'rt') as f:
     LOGGING = yaml.safe_load(f.read())
 logging.config.dictConfig(LOGGING)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'restaurants',
-#         'USER': 'root',
-#         'PASSWORD': 'Dollarbird@22',
-#         'HOST':'localhost',
-#         'PORT':'3306',
-#     }
-# }
+
 
 DATABASES = {
     'default': {
@@ -83,7 +74,9 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'mathfilters',
     'rest_framework.authtoken',
-
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
 ]
 
@@ -107,7 +100,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS =['*']
 
@@ -212,13 +205,16 @@ CELERY_TASK_ALWAYS_EAGER = True
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_USERNAME_REQUIRED = False
 
-
+DJANGO_SETTINGS_MODULE = 'Clothing_store.settings.development'
 
 AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
 SESAME_MAX_AGE = 15 * 60
 SESAME_ONE_TIME = True
 SESAME_TOKEN_NAME = "token"
@@ -236,9 +232,17 @@ cloudinary.config(
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'rashmi.hk@gmail.com'
-EMAIL_HOST_PASSWORD = 'rndmsnlspighpxjj'
+EMAIL_HOST_USER = 'rashmihk79@gmail.com'
+EMAIL_HOST_PASSWORD = 'ltkuakfmjxlevvqi'
 EMAIL_USE_TLS = True
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+
+
+
+
+
+DEFAULT_FROM_EMAIL = 'your-email@example.com'
+

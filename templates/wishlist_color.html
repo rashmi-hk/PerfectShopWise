@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wish Listing</title>
+    <style>
+        /* Add your CSS styles here */
+        /* ... */
+        .color-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 2px solid #ccc;
+            cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+        }
+
+        .green {
+        background-color: green;
+    }
+
+    .yellow {
+        background-color: yellow;
+    }
+
+    .red {
+        background-color: red;
+    }
+
+     .blue {
+        background-color: blue;
+    }
+
+     .white {
+        background-color: white;
+    }
+
+    .black {
+        background-color: black;
+    }
+
+     .violet {
+        background-color: violet;
+    }
+
+    .orange {
+        background-color: orange;
+    }
+
+        /* Add more classes and corresponding background colors for more colors */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wish list</h1>
+        <!-- Loop through the result_list to display each product -->
+        {% for product in result_list %}
+            <div class="product-item">
+                <h2 class="product-name">{{ product.product }}</h2>
+                <p class="product-price">Price: ${{ product.price }}</p>
+
+
+
+
+                <label for="size-select-{{ product.product_id }}">Select Size:</label>
+                <select id="size-select-{{ product.product_id }}">
+                    {% for size in product.unique_sizes %}
+                        <option value="{{ size }}">{{ size }}</option>
+                    {% endfor %}
+                </select>
+
+
+
+                <div class="color-circles-container">
+                    {% for variant in product.product_variant %}
+                        {% if variant.size and variant.color %}
+                            <div class="color-circle {{ variant.color | lower }}" data-size="{{ variant.size }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+
+                <p class="product-quantity">Quantity: {{ product.quantity }}</p>
+
+                <!-- Add any other product details you want to display -->
+            </div>
+            <button class="addToCartButton" data-item-id="{{ product.product_id }}" onclick="addToCart({{ product.product_id }})">Add to cart</button>
+        {% endfor %}
+    </div>
+
+    <script>
+ const sizeSelects = document.querySelectorAll('[id^="size-select-"]');
+    const colorCirclesContainers = document.querySelectorAll('.color-circles-container');
+
+    // Show color circles associated with the initially selected size(s)
+    sizeSelects.forEach((sizeSelect, index) => {
+        const selectedSize = sizeSelect.value;
+        const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
+        colorCircles.forEach(circle => {
+            const circleSize = circle.dataset.size;
+            if (circleSize === selectedSize) {
+                circle.style.display = 'inline-block';
+            } else {
+                circle.style.display = 'none';
+            }
+        });
+    });
+
+    // Set up event listeners for size select changes
+    sizeSelects.forEach((sizeSelect, index) => {
+        sizeSelect.addEventListener('change', function() {
+            const selectedSize = this.value;
+            const colorCircles = colorCirclesContainers[index].querySelectorAll('.color-circle');
+            colorCircles.forEach(circle => {
+                const circleSize = circle.dataset.size;
+                if (circleSize === selectedSize) {
+                    circle.style.display = 'inline-block';
+                } else {
+                    circle.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    </script>
+</body>
+</html>

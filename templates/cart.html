@@ -1,0 +1,254 @@
+<!-- cart.html -->
+
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<html>
+<head>
+
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Add any CSS or external stylesheets here -->
+    <style>
+
+<!--    .quantity-container {-->
+<!--        /* Make the quantity buttons appear inline */-->
+<!--        display: flex;-->
+
+<!--        gap:5px;-->
+<!--        justify-content: center;-->
+<!--         align-items:center;-->
+<!--    }-->
+
+    .place-order-btn {
+        /* Define your "Place Order" button styles */
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .td {
+    padding: 20px 80px 0cm 20px;
+     }
+
+ .image-container {
+        /* Define your styles for the outer box (image container) */
+        width: 40%;
+        max-width: 300px; /* You can adjust the maximum width as needed */
+<!--        margin: 0 auto; /* To center the box horizontally */-->
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .inner-box {
+        /* Define your styles for the inner box */
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .image-band {
+        width: 100%;
+        background-image: url('/static/img/foter3.jpeg'); /* Replace with the path to your image */
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 200px; /* Adjust the height of the image band as needed */
+    }
+
+    </style>
+</head>
+<body>
+{% block content %}
+<!--<link rel="stylesheet" type="text/css" href="/static/css/style.css">-->
+<!--<div class="image-band"></div>-->
+
+<div class="container my-5" style="">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Billing Section</h3>
+             <div class="table-container" style="overflow-y: auto;max-height: 50vh;">
+          <table class="table table-striped">
+            <tr>
+                <th>Product Image</th>
+                <th>Product</th>
+                <th>size</th>
+
+                <th>Quantity</th>
+                <th>price</th>
+                <th>Item Total Price</th>
+                <th>Discount_percent</th>
+                <th>Discount Price</th>
+
+            </tr>
+            {% for item in result_list %}
+            <tr class="cart-item">
+
+                        <td><img src="{{ item.images }}" alt="Product Image"></td>
+                <td>{{ item.product }}</td>
+                <td>{{ item.product_variant.size }}</td>
+
+
+
+
+
+                <td>
+                    <div class="d-flex align-items-center quantity-container">
+                        <button class="btn btn-secondary" onclick="addItem('{{ item.product_id }}','{{ item.product_variant.size }}')"> + </button>
+                       <div class="px-1">{{ item.quantity }}</div>
+
+                        <button class="btn btn-secondary" onclick="removeItem('{{ item.product_id }}','{{ item.product_variant.size }}')"> - </button>
+                    </div>
+                </td>
+                <td>{{ item.price }}</td>
+                <td>
+                    <p >${{ item.quantity|mul:item.price }}</p><!-- Add any additional actions related to the item here -->
+                </td>
+                <td>{{item.discount_percent}}%</td>
+                <td>${{item.quantity|mul:item.discounted_price}}</td>
+            </tr>
+            {% endfor %}
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            <td colspan="2" class="right-align" >Total:</td>
+            <td>${{ total_price }}</td>
+              <tr>
+                   <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            <td colspan="2" class="right-align" >Total Discount Amount:</td>
+            <td>${{ discounted_total_price }}</td>
+              </tr>
+        </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<div class="d-flex justify-content-evenly my-2">
+    <!-- Place Order Button -->
+    <button class="btn bg-secondary text-white place-order-btn" onclick="placeOrder()">Place Order</button>
+
+</div>
+
+    <!-- Optional: Add any additional content or elements you want -->
+
+    <!-- Add your JavaScript logic here (if required) -->
+    <script>
+        // Define the JavaScript function to handle placing the order
+        function placeOrder(product_id) {
+               console.log("Inside place")
+               const cartItems = [];
+                // Collect all the cart items and their selected sizes
+                const cartItemElements = document.querySelectorAll('.cart-item');
+                cartItemElements.forEach(item => {
+                    const productID = item.dataset.productId;
+                    const selectedSize = item.dataset.selectedSize;
+                    cartItems.push({ product_id: productID, size: selectedSize });
+                });
+
+               // Send a POST request to the cart API
+            fetch('/order', {
+                method: 'POST',
+                body: JSON.stringify(cartItems),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                     alert('Order Placed');
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error adding item to cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error adding item to cart:', error);
+            });
+        }
+         function addItem(product_id,selectedSize) {
+            console.log("***inside addItem", product_id)
+
+
+            // Send a PATCH request to the cart API
+            fetch('/cart', {
+                method: 'PATCH',
+                body: JSON.stringify({ product_id: product_id ,
+                                        size:selectedSize}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error adding item to cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error adding item to cart:', error);
+            });
+        }
+
+
+
+
+        function removeItem(product_id,selectedSize) {
+            // Send a DELETE request to the cart API
+            console.log("IN function",product_id)
+            fetch('/cart', {
+                method: 'DELETE',
+                body: JSON.stringify({ product_id: product_id,
+                                       size:selectedSize }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error removing item from cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error removing item from cart:', error);
+            });
+        }
+
+    </script>
+{% endblock %}
+</body>
+</html>

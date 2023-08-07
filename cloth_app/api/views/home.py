@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from ...models import CustomUser
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
+from ...models import Categories,Subcategory
 # import os
 # from ...serializers import CartSerializer
 # from django.core import serializers
@@ -22,9 +23,8 @@ class HomeAPIList(APIView):
 
     def get(self,request):
         print("Inside get homeapi")
-        # return render(request, 'index.html')
-        # return render(request, 'login.html')
-        return render(request, 'otp_verification.html')
+        return render(request, 'login.html')
+
 
     def post(self,request):
         print("Inside home post", request)
@@ -44,13 +44,41 @@ class HomeAPIList(APIView):
             if not password_matched:
                 print("invalid")
 
-                return render(request, 'login_custom.html', {'error_message': 'Invalid credentials'})
+                return render(request, 'login.html', {'error_message': 'Invalid credentials'})
             else:
                 print("valid")
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
                 return_list = []
-            return redirect('cart')
+
+                categories = Categories.objects.all()
+
+                data_list = []
+                for category in categories:
+                    subcategories_data = []
+                    sub_cat_data = Subcategory.objects.filter(category=category.id)
+                    for item in sub_cat_data:
+                        subcategory_data = {
+                            'subCategoryId': item.id,
+                            'subcategoryName': item.subcategoryName,
+                            'sub_category_img': item.sub_category_img.url if item.sub_category_img else None,
+                        }
+                        subcategories_data.append(subcategory_data)
+
+                    category_data = {
+                        'categoryId': category.id,
+                        'categoryName': category.categoryName,
+                        'category_img': category.category_img.url if category.category_img else None,
+                        'subcategories': subcategories_data,
+                    }
+                    data_list.append(category_data)
+
+                context = {
+                    'user_is_authenticated': customer.is_verified,
+                    'category_data': data_list,
+                }
+                print("context", context)
+            return render(request, 'base.html', context)
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response

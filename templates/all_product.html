@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+    <div class="container my-5">
+        <form id="productForm" method="get" action="{% url 'product_detail_api' %}">
+            {% csrf_token %}
+            <input type="hidden" id="productIdInput" name="product_id">
+            <ul class=" d-flex gap-5 flex-wrap list-unstyled justify-content-center product-list">
+                {% for product in result_list %}
+                <li class="product-item">
+                    <div class="card" style="width: 300px;height:100%;">
+                        <div class="card-header">
+                            <h2 class="product-name">{{ product.name }}</h2>
+                        </div>
+                        <div class="card-body">
+                            {% if product.images %}
+                            <div class="image-scroll-container">
+                                <ul class="list-unstyled image-list" id="productImageList">
+                                    {% for image in product.images %}
+                                    <!-- Add a link around the image -->
+
+                                    <div class="subcategory-box" onclick="submitProductForm('{{ product.product_id }}')">
+                                        <li class="image-item">
+                                            <img src="{{ image }}" alt="Product Image" data-product-id="{{ product.id }}">
+                                        </li>
+                                    </div>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            <p class="product-description">{{ product.description }}</p>
+                            <p class="product-price">Price: ${{ product.price }}</p>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </form>
+    </div>
+    <script>
+        function submitProductForm(productId) {
+            console.log("productId ***", productId)
+            const productIdInput = document.getElementById('productIdInput');
+            productIdInput.value = productId;
+            const productForm = document.getElementById('productForm');
+            productForm.submit();
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
