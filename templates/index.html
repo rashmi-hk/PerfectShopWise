@@ -152,63 +152,113 @@
 </head>
 
 <body>
-
-
-  <div class=" nav-bar">
-      <div class="nav-bar-sub1">
-
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
       <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span>
-           <a class='menu-padding' href="{% url 'first_page' %}">Home</a>
-           <a class='menu-padding' href="{% url 'categories' 'W'%}">Woman</a>
-    <a class='menu-padding' href="{% url 'categories' 'M'%}">Men</a>
-    <a class='menu-padding' href="{% url 'categories' 'K'%}">Kids</a>
-      </div>
-
-<!--    <a href="#" id="logoutButton">Logout</a>-->
-
-      <div class="d-flex justify-content-center align-items-center">
-
-    <div id="cartContainer" class="d-flex justify-content-evenly align-items-center">
-
-        <li class="nav-item dropdown"  {% if not user_is_authenticated %}hidden{% endif %}>>
-          <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-         <span id= "user-detail" class="text-white">{{user_name}}</span>
-              <i class='fas fa-user-alt' style='font-size:24px;color:red'></i>
-
-          </a>
-            <ul class="dropdown-menu " id="profileDropdownContainer" style="background-color:gray;">
-                  <li><a class="dropdown-item" href="{% url  'register_variant' variant=1 %}">Profile</a></li>
-                  <li><a class="dropdown-item" href="{% url 'order' %}">Order History</a></li>
-                  <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                </ul>
-
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class='nav-link menu-padding text-white px-3' href="{% url 'first_page' %}">Home</a>
         </li>
-
-
-</div>
-
-
-
-    <a id="cartLink" href="{% url 'cart' %}" class="menu-padding">
+        <li class="nav-item">
+          <a class='nav-link menu-padding text-white ' href="{% url 'categories' 'W'%}">Woman</a>
+        </li>
+        <li class="nav-item">
+          <a class='nav-link menu-padding text-white px-3' href="{% url 'categories' 'M'%}">Men</a>
+        </li>
+        <li class="nav-item">
+          <a class='nav-link menu-padding text-white' href="{% url 'categories' 'K'%}">Kids</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav mb-2 mb-lg-0 d-flex justify-content-center align-items-center">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="user-detail" class="text-white">{{user_name}}</span>
+            <i class='fas fa-user-alt' style='font-size:24px;color:red'></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url  'register_variant' variant=1 %}">Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'order' %}">Order History</a></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a id="cartLink" href="{% url 'cart' %}" style="padding-right:35px;" class="menu-padding">
             <i id="cartIcon" class="fas fa-shopping-cart"></i>
             <span id="cartCountOverlay">{{prod_obj|default:"0"}}</span>
-    </a>
-         <div class="language-and-wishlist menu-padding">
-
-
-      <a id="wishlist" href="{% url  'wishlist' %}" class="d-flex flex-column align-items-center ">
-          <span class="heart" style="color:red;"><i class="fa fa-heart" aria-hidden="true"></i></span>
-         <span class="text-white">Wishlist</span>
-
-       </a>
-
+          </a>
+        </li>
+        <li>
+          <a id="wishlist" href="{% url  'wishlist' %}" style="padding-right:35px;" class="d-flex flex-column align-items-center ">
+            <span class="heart" style="color:red;"><i class="fa fa-heart" aria-hidden="true"></i></span>
+            <span class="text-white">Wishlist</span>
+          </a>
+        </li>
+      </ul>
     </div>
-      </div>
-
-
-
-      </div>
   </div>
+</nav>
+
+<!--  <div class=" nav-bar">-->
+<!--      <div class="nav-bar-sub1">-->
+
+<!--      <span class="shop-logo text-white" > <i class="fa fa-shopping-cart cart-icon " style="font-size: 35px;color:red"></i> Shopwise</span>-->
+<!--           <a class='menu-padding' href="{% url 'first_page' %}">Home</a>-->
+<!--           <a class='menu-padding' href="{% url 'categories' 'W'%}">Woman</a>-->
+<!--    <a class='menu-padding' href="{% url 'categories' 'M'%}">Men</a>-->
+<!--    <a class='menu-padding' href="{% url 'categories' 'K'%}">Kids</a>-->
+<!--      </div>-->
+
+<!--&lt;!&ndash;    <a href="#" id="logoutButton">Logout</a>&ndash;&gt;-->
+
+<!--      <div class="d-flex justify-content-center align-items-center">-->
+
+<!--    <div id="cartContainer" class="d-flex justify-content-evenly align-items-center">-->
+
+<!--        <li class="nav-item dropdown"  {% if not user_is_authenticated %}hidden{% endif %}>>-->
+<!--          <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--         <span id= "user-detail" class="text-white">{{user_name}}</span>-->
+<!--              <i class='fas fa-user-alt' style='font-size:24px;color:red'></i>-->
+
+<!--          </a>-->
+<!--            <ul class="dropdown-menu " id="profileDropdownContainer" style="background-color:gray;">-->
+<!--                  <li><a class="dropdown-item" href="{% url  'register_variant' variant=1 %}">Profile</a></li>-->
+<!--                  <li><a class="dropdown-item" href="{% url 'order' %}">Order History</a></li>-->
+<!--                  <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>-->
+<!--                </ul>-->
+
+<!--        </li>-->
+
+
+<!--</div>-->
+
+
+
+<!--    <a id="cartLink" href="{% url 'cart' %}" class="menu-padding">-->
+<!--            <i id="cartIcon" class="fas fa-shopping-cart"></i>-->
+<!--            <span id="cartCountOverlay">{{prod_obj|default:"0"}}</span>-->
+<!--    </a>-->
+<!--         <div class="language-and-wishlist menu-padding">-->
+
+
+<!--      <a id="wishlist" href="{% url  'wishlist' %}" class="d-flex flex-column align-items-center ">-->
+<!--          <span class="heart" style="color:red;"><i class="fa fa-heart" aria-hidden="true"></i></span>-->
+<!--         <span class="text-white">Wishlist</span>-->
+
+<!--       </a>-->
+
+<!--    </div>-->
+<!--      </div>-->
+
+
+
+<!--      </div>-->
+<!--  </div>-->
 
 {% block content %}
   {% endblock %}
