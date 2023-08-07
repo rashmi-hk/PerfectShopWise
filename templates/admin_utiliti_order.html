@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<header>
+<header style="background-color:black;">
     <div style="display: flex; align-items: center; justify-content: space-between;">
         <div>
             <i class="fa fa-shopping-cart cart-icon" style="font-size: 48px; color: red;"></i>
-            <span style="color: black; font-weight: bold; font-size: 32px; font-family: cursive;">Shopwise</span>
+            <span style="color: white; font-weight: bold; font-size: 32px; font-family: cursive;">Shopwise</span>
         </div>
 
         <div>
-            <a href="{% url 'admin_utility_logout' %}" style="margin-right: 10px;font-size: 20px;">Logout</a>
+            <a href="{% url 'admin_utility_logout' %}" style="margin-right: 10px;font-size: 20px;color:white;padding-right:30px;">Logout</a>
         </div>
     </div>
 </header>
@@ -60,6 +60,31 @@
                             <td colspan="4" class="text-right"><strong>Discount Amount:</strong></td>
                             <td>${{ order_data.order_details.discount_amount }}</td>
                         </tr>
+                        <tr>
+                            <td colspan="4" class="text-right"><strong>Update Delivery status:</strong></td>
+
+
+                         <td>
+                            <select name="status" id="status_{{ order_id }}">
+                                {% if order_data.order_details.current_status in order_data.order_details.status %}
+                                    {% for status_choice in order_data.order_details.status %}
+                                        <option value="{{ status_choice }}" {% if order_data.order_details.current_status == status_choice %}selected{% endif %}>
+                                            {{ status_choice }}
+                                        </option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="">{{ order_data.order_details.current_status }}</option>
+                                    {% for status_choice in order_data.order_details.status %}
+                                        <option value="{{ status_choice }}" {% if order_data.order_details.current_status == status_choice %}selected{% endif %}>
+                                            {{ status_choice }}
+                                        </option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                            <button onclick="updateStatus('{{ order_id }}')">Update</button>
+                        </td>
+
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -71,5 +96,45 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+     function updateStatus(orderId) {
+        const dropdown = document.getElementById("status_" + orderId);
+        const selectedStatus = dropdown.value;
+        console.log("***", selectedStatus)
+
+          fetch('/admin_order_detail', {
+                method: 'PATCH',
+                body: JSON.stringify({ order_id: orderId ,
+                                        status:selectedStatus}),
+
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                     const selectedOption = dropdown.querySelector(`option[value="${selectedStatus}"]`);
+                    if (selectedOption) {
+                        dropdown.selectedIndex = selectedOption.index;
+                    }
+
+                     alert('Order status updated');
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error  order status updated', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error order status updated', error);
+            });
+        // Here, you can use JavaScript to update the status via an API call or other means.
+        // For simplicity, this example just alerts the selected status.
+
+    }
+</script>
 </body>
 </html>
